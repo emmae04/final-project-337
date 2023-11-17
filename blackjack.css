@@ -1,0 +1,42 @@
+@import url('https://fonts.cdnfonts.com/css/casino');
+
+body {
+    background-image: url("./backjack-backround.png");
+    background-repeat: no-repeat;
+    background-size: 150vh;
+    font-family: 'Casino', sans-serif;
+
+}
+
+#player-2 {
+    background-color: green;
+    border: 2px solid black;
+    top: 0;
+    text-align: center;
+}
+
+#player-1 {
+    position: absolute;
+    width: 95vw;
+    background-color: green;
+    border: 2px solid black;
+    bottom: 0;
+    text-align: center;
+    margin-bottom: 2vh;
+}
+
+#rules {
+    position:absolute;
+    top: 30vh;
+    left: 75vw;
+}
+
+#card-deck {
+    position: absolute;
+    background-image: url(playing-card.png);
+    background-size: 100% 100%;
+    width: 150;
+    height: 200;
+    top: 35vh;
+    left: 75vw;
+}
