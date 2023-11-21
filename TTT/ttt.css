@@ -1,0 +1,79 @@
+body {
+    background-color: palevioletred;
+}
+
+h1 {
+    text-align: center;
+}
+
+td {
+    width: 120px;
+    height: 120px;
+    border: 3px solid maroon;
+    background-color: pink;
+}
+
+table {
+    text-align: center;
+    font-family: monospace;
+    display: inline-block;
+    font-size: 100px;
+    top: 29%;
+    margin-left: 50%;
+    position: fixed;
+    border: 3px solid maroon;
+}
+
+#rulesDiv {
+    display: inline-block;
+    position: fixed;
+    height: 380px;
+    width: 380px;
+    top: 30%;
+    text-align: center;
+    text-overflow: wrap;
+    left: 20%;
+    border: 3px solid maroon;
+    background-color: #FC6C85;
+
+}
+
+#topP {
+    padding-top: 30px;
+}
+
+#label {
+    text-align: center;
+    background-color: #FC6C85;
+    border: 3px solid maroon;
+    width:400px;
+    height:20px;
+    margin-left:36%;
+   visibility:hidden;
+}
+
+p {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#score{
+    text-align: center;
+    background-color: #FC6C85;
+    border: 3px solid maroon;
+    width:200px;
+    height:20px;
+    margin-left:43%;
+  
+}
+
+#newGame {
+    width: 100px;
+    height: 30px;
+    margin-left: 47%;
+    margin-top: 10px;
+    display: block;
+    position: relative;
+    background-color: plum;
+    font-family: cursive;
+}

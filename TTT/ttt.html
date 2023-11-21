@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<link rel="stylesheet" href="ttt.css">
+
+<body>
+    
+    <H3 style=" text-align: center;">Welcome To Tic Tac Toe</H3>
+    <p id="label"></p>
+    <p id="score">Score:0</p>
+    <div id="rulesDiv">
+
+        <p id="topP">hello and welcome to Tic Tac Toe!
+            To play click any of the empty squares on the board,
+            this will place an X spot for you . The robot will then make
+            its move , an O.
+
+
+        </p>
+        <p>To win , get your X's to be 3 in a row either, vertially
+            horizontally, or diagonally. if the robot gets 3 O's in a row then the robot wins.
+            if all pieces in the board are placed and neither you or the robot has won then it is a tie!</p>
+        <p>
+            Point Breakdown:
+
+        </p>
+        <p>
+
+            Win: 5pts
+        </p>
+        <p> Tie: 2pts</p>
+        <p> Lose: -2 pts</p>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <td class="spot" id="0" onclick="makeTurn()"></td>
+                <td class="spot" id="1" onclick="makeTurn()"></td>
+                <td class="spot" id="2" onclick="makeTurn()"></td>
+            </tr>
+            <tr>
+                <td class="spot" id="3" onclick="makeTurn()"></td>
+                <td class="spot" id="4" onclick="makeTurn()"></td>
+                <td class="spot" id="5" onclick="makeTurn()"></td>
+            </tr>
+            <tr>
+                <td class="spot" id="6" onclick="makeTurn()"></td>
+                <td class="spot" id="7" onclick="makeTurn()"></td>
+                <td class="spot" id="8" onclick="makeTurn()"></td>
+            </tr>
+        </table>
+        <button id="newGame" onclick="newGame()">New Game!</button>
+    </div>
+    <script src="ttt.js"></script>
+</body>
+
+
+</html>
