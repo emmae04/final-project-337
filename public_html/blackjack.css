@@ -1,0 +1,46 @@
+@import url('https://fonts.cdnfonts.com/css/casino');
+
+body {
+    background-color: black;
+    background-repeat: no-repeat;
+    background-size: 150vh;
+    font-family: 'Casino', sans-serif;
+    font-size: 20px
+}
+
+#player-2 {
+    background-color: red;
+    border: 2px dashed yellow;
+    border-radius:75px;
+    top: 0;
+    text-align: center;
+}
+
+#player-1 {
+    position: absolute;
+    width: 95vw;
+    background-color: red;
+    border-radius:75px;
+    border: 2px dashed yellow;
+    bottom: 0;
+    text-align: center;
+    margin-bottom: 2vh;
+}
+
+#drawAnother {
+    position: relative;
+    top: 15vh;
+}
+
+#stick {
+    position: relative;
+    top: 15vh;
+
+}
+
+#countdown {
+    color: white;
+    position: relative;
+    top: 20vh;
+    font-size: 40px;
+}
