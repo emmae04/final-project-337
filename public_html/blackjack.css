@@ -1,5 +1,10 @@
 @import url('https://fonts.cdnfonts.com/css/casino');
 
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
 body {
     background-color: black;
     background-repeat: no-repeat;
@@ -28,19 +33,89 @@ body {
 }
 
 #drawAnother {
-    position: relative;
-    top: 15vh;
+    width: 100px;
+    height: 50px;
 }
 
 #stick {
-    position: relative;
-    top: 15vh;
+    width: 100px;
+    height: 50px;
 
 }
 
-#countdown {
+#secondsLeft {
     color: white;
     position: relative;
-    top: 20vh;
-    font-size: 40px;
+    top: 10vh;
+    font-size: 120px;
 }
+
+#start {
+    position: relative;
+    left: 45vw;
+    border-radius: 75px;
+    height: 60px;
+    width: 85px;
+    background-color: yellow;
+    top: 40vw;
+}
+
+
+#P1Cards {
+    position: absolute;
+    display: inline;
+    top: 70vh;
+    left: 10vw;
+}
+
+#P2Cards {
+    position: absolute;
+    display: inline;
+    left: 10vw;
+    top: 10vh;
+    width: 100vw;
+}
+
+#buttons {
+    position: absolute;
+    display: inline;
+    top:40;
+    height: 50px;
+}
+
+#textbox {
+    color: red;
+    background-color: yellow;
+    padding: 20px;
+    border: 2px solid red;
+    border-radius: 15px;
+    margin-left: 33vw;
+    width:fit-content;
+    font-size: 25px;
+    display: None;
+    top: 30vh;
+    position: absolute;
+
+}
+
+#play-again {
+    top: 40vh;
+    position: absolute;
+    margin-left: 33vw;
+    width: 125px;
+    font-size: 17px;
+    color: green;
+    display: None;
+}
+
+#dont-play-again {
+    top: 40vh;
+    position: absolute;
+    margin-left: 53vw;
+    width: 120px;
+    font-size: 17px;
+    color: green;
+    display: None;
+
+}
+

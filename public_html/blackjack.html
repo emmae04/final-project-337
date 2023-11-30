@@ -10,19 +10,28 @@
             <p>Player 2</p>
         </div>
 
-        <div id="P2Cards">
-        </div>
+        <div id="P2Cards"></div>
 
-        <div id="countdown">
-            <p id="secondsLeft">00:10</p>
-        </div>
-        <div></div>
-            <button id="drawAnother" onClick="pickAnother()">Draw Another</button>
-            <button id="stick" onClick="stick()">Stick</button>
+        
+        <span>
+            <p id="textbox"></p>
+        <span>
+            <button id="play-again" onClick ="startGame()">Another round</button>
+            <button id="dont-play-again" onClick="endGame()">End game</button>
+        </span>
+        </span>
+
+        <div id="buttons">
+            <p id="secondsLeft">10</p>
+            <button id="drawAnother" onClick="pickAnother(1)" disabled="true">Draw Another</button>
+            <button id="stick" onClick="stick()" disabled="true">Stick</button>
         </div>
 
         <div id="P1Cards">
         </div>
+
+        <div><button id="start" onclick="startGame()">Begin</button></div>
+
         
         <div id="player-1">
             <p>Player 1 - You</p>
