@@ -1,0 +1,171 @@
+body {
+    background-color: gray;
+    position: fixed;
+    margin: 0px;
+    height: 100%;
+}
+
+h1 {
+    font-size: 70px;
+    margin-left: 0px;
+    margin-top: 0px;
+    text-align: center;
+    position: relative;
+    position: fixed;
+    background-color: rgb(91, 164, 189);
+    width: 100%;
+    padding: 10px;
+    height: 80px;
+    display: block;
+}
+
+/* 
+.dropbtn {
+    background-color: gray;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    margin: 0px;
+}
+  
+.dropdown {
+    position: absolute;
+    position: fixed;
+    display: block;
+    display: inline-block;
+    top: 95px;
+    width: 100%;
+    height: 10px;
+}
+  
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+  
+  .dropdown-content button {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown-content button:hover {background-color: #f1f1f1;}
+  .dropdown:hover .dropdown-content {display: block;}
+  .dropdown:hover .dropbtn {background-color: rgb(66, 65, 65);} */
+
+
+.dropdown {
+    width: 100%;
+    display: block;
+    right: 0px;
+    left: 0px;
+    top: 82px;
+    position: absolute;
+    position: fixed;
+    height: 5px;
+}
+.dropbtn {
+    padding-top: 15px;
+    background-color: gray;
+    color: white;
+    /* padding: 16px; */
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    display: block;
+    margin-right: 0px;
+    margin-left: 0px;
+    left: 0px;
+    right: 0px;
+    font-size: 18px;
+  }
+  
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+  
+.dropdown-content {
+    display: none;
+    position: absolute;
+    /* right: 100px; */
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+  
+.dropdown-content button {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border: none;
+    background-color: #f1f1f1;
+    width: 100%;
+    text-align: left;
+    font-size: 18px;
+}
+  
+.dropdown-content button:hover {background-color: white;}
+.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropbtn {background-color: rgb(81, 80, 80);}
+
+#games {
+    margin-top: 90px;
+    position: relative;
+    height: 100%;
+    margin-bottom: 0px;
+    bottom: 0px;
+}
+
+#b {
+    float: right;
+    right: 0px;
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    position: fixed;
+    text-align: center;
+    background-color: rgb(181, 101, 181);
+}
+
+#bj {
+    float: right;
+    right: 0px;
+    position: absolute;
+    width: 50%;
+    position: fixed;
+    text-align: center;
+    background-color: rgb(63, 60, 60);
+    height: 50%;
+    margin-top: 25%;
+}
+
+#h {
+    position: absolute;
+    position: fixed;
+    width: 50%;
+    text-align: center;
+    height: 50%;
+    background-color: green;
+}
+
+#t {
+    position: absolute;
+    position: fixed;
+    width: 50%;
+    text-align: center;
+    height: 50%;
+    margin-top: 25%;
+    background-color: pink;
+    
+}

@@ -12,8 +12,6 @@ const db = mongoose.connection;
 const mongoDBURL = 'mongodb://127.0.0.1/cool-math-games';
 mongoose.connect(mongoDBURL, { useNewURLParser: true });
 db.on('error', console.error.bind(console, "MongoDB connection error"));
-
-
 app.use(express.static('public_html'));
 
 var Schema = mongoose.Schema;

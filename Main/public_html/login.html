@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title> MANE Games </title>
+        <link id="cssFile" rel="stylesheet" type="text/css" href="login.css">
+    </head>
+
+    <body>
+        <div id="top">
+        <h1> Welcome to MANE Games! </h1><br>
+        <h3> Login to your account or create a new account below! </h3>
+        </div>
+
+        <div id="login">
+            <h4> Login </h4>
+            <label for="username"> Username </label>
+            <input type="text" id="username" name="username"><br>
+
+            <label for="pw"> Password </label>
+            <input type="text" id="pw" name="pw"><br>
+
+            <button id="lButton" onclick="changeHTML()"> Login </button>
+        </div>
+
+        <div id="create">
+            <h4> Create Account </h4>
+            <label for="usernameC"> Create Username </label>
+            <input type="text" id="usernameC" name="usernameC"><br>
+
+            <label for="pwC"> Create Password </label>
+            <input type="text" id="pwC" name="pwC"><br>
+
+            <button id="cButton" onclick="changeHTML"> Create Account </button>
+        </div>
+        <script src="./login.js"></script>
+    </body>
+</html>
