@@ -1,0 +1,89 @@
+<!-- 
+    file: boggle.html
+    class: csc 337
+    author: Michelle Ramos Hernandez
+    Description: 
+-->
+
+<!DOCTYPE html>
+<HTML lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Boggle</title>
+    <link id="cssFile" rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body id="all">
+    <div id="instrucStart">
+        <p id="instructions">Instructions:<br>
+            Boggle is a game where you must find as many words as possible
+            in the "DiceTray". Once you hit the "Start Game" button you
+            will have 3 minutes to find as many words in the diceTray as
+            possible. You are able to connect letters in all directions
+            but you may not repeat letters you have already used! The longer
+            the words you find the more points you will receive.
+            <br>
+            <br>
+            Points (word Length -> points):<br>
+            2 or below -> 0<br>
+            3 -> 1<br>
+            4 -> 1<br>
+            5 -> 2<br>
+            6 -> 3<br>
+            7 -> 4<br>
+            8 or more -> 11<br>
+        </p>
+        <div id="startButton">
+            <a onclick="startGame();" class="navButton" href="#"> Start Game</a>
+        </div>
+    </div>
+    <div>
+        <table id="diceTray">
+            <tr>
+                <td>_</td>
+                <td>_</td>
+                <td>_</td>
+                <td>_</td>
+            </tr>
+            <tr>
+                <td>_</td>
+                <td>_</td>
+                <td>_</td>
+                <td>_</td>
+            </tr>
+            <tr>
+                <td>_</td>
+                <td>_</td>
+                <td>_</td>
+                <td>_</td>
+            </tr>
+            <tr>
+                <td>_</td>
+                <td>_</td>
+                <td>_</td>
+                <td>_</td>
+            </tr>
+        </table>
+    </div>
+    <div id="scoreLabel">
+        <h2>Score:</h2>
+    </div>
+    <div id="guessLabel"></div>
+    <div id="userEnters">
+        <input type="text" id="guess" value="">
+        <a id="enterGuess" onclick="userGuess();" class="navButton" href="#"> Submit Guess</a>
+    </div>
+    <div id="timer">
+        <span>Timer: </span>
+        <span id= "currTime">3 : 00</span>
+    </div>
+    <div id="allGuesses">
+        <div>
+            All Guesses:<br><br>
+        </div>
+    </div>
+    <script src="./client.js"></script>
+</body>
+
+</html>
