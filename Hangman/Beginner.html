@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title> Beginner Hangman </title>
+        <link id="cssFile" rel="stylesheet" type="text/css" href="hangman.css">
+    </head>
+
+    <body>
+        <div id="hangman">
+            <h1> Hangman - Beginner </h1>
+        </div>
+
+        <img src="HangmanPics/start.jpg" alt="start" width="250" height="300">
+
+        <div id="word">
+            <div id="one">1</div>
+            <div id="two">2</div>
+            <div id="three">3</div>
+            <div id="four">4</div>
+            <div id="five">5</div>
+        </div>
+
+        <div id="guesses">
+            <div id="wrong"> Incorrect Letters Guessed: </div>
+            <div id="guessNum"> Incorrect Guesses Left: 8 </div>
+        </div>
+
+        <div id="input">
+            <input type="text" id="guess" name="guess">
+            <button id="makeGuess" onclick="checkWord()"> Make Guess </button>
+        </div>
+
+        <script src="./functions.js"></script>
+    </body>
+</html>

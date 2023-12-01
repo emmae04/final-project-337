@@ -5,15 +5,26 @@ const fs = require('fs')
 const app = express()
 const parser = require('body-parser')
 const cookieParser = require('cookie-parser');
+<<<<<<< HEAD
 const port = 80
+=======
+const port = 90
+>>>>>>> f1099f29024cd84198e5ae1d690c235c29ffc1aa
 
 // Builds up the database
 const db  = mongoose.connection;
 const mongoDBURL = 'mongodb://127.0.0.1/final';
+<<<<<<< HEAD
 mongoose.connect(mongoDBURL);
 db.on('error', () => { console.log('MongoDB connection error:') });
 
 
+=======
+mongoose.connect(mongoDBURL, { useNewUrlParser: true });
+db.on('error', () => { console.log('MongoDB connection error:') });
+
+app.use(express.static('public_html'))
+>>>>>>> f1099f29024cd84198e5ae1d690c235c29ffc1aa
 app.use(parser.json());
 app.use(cookieParser());
 app.use(express.json());
@@ -38,6 +49,7 @@ var HangmanSchema = new Schema({
 var people = mongoose.model("User", UserSchema);
 var hangman = mongoose.model("Hangman", HangmanSchema);
 
+<<<<<<< HEAD
 app.use(express.static('public_html'))// setting html
 
 let sessions = {};
@@ -146,6 +158,9 @@ app.post("/add/user/", function (req, res) {
     console.log("i posted");
     res.end("SUCCESS");// returning that the code has posted
 });
+=======
+
+>>>>>>> f1099f29024cd84198e5ae1d690c235c29ffc1aa
 
 // ---------------------------- Hangman Server ----------------------------
 
@@ -162,6 +177,10 @@ app.post("/add/user/", function (req, res) {
 
 
 
+<<<<<<< HEAD
 // ---------------------------- Blackjack Server ----------------------------
 app.listen(port, () =>
 console.log(`App listening at http://localhost:${port}`))
+=======
+// ---------------------------- Blackjack Server ----------------------------
+>>>>>>> f1099f29024cd84198e5ae1d690c235c29ffc1aa
