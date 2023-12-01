@@ -6,11 +6,16 @@ function goToTTT() {
   window.location.href = "http://localHost/app/TTT/ttt.html";
 }
 function goToHangman() {
-  window.location.href = "http://localHost/app/Hangman/Beginner.html";
+  window.location.href = "http://localHost/app/HM/Hangman/Beginner.html";
 }
 
 function goToBJ() {
   window.location.href = "http://localHost/app/BJ/blackjack.html";
+  
+}
+function goToBoggle() {
+  window.location.href = "http://localHost/app/BOG/index.html";
+  
 }
 function showDropdown() {
   document.getElementById("myDropdown").classList.toggle("show");
