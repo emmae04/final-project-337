@@ -4,7 +4,7 @@ const guesses = 0;
 const wrong = "";
 const left = 5;
 // const fs = require('fs');
-// const readline = require('readline');
+// const readline = require('readline'); guyouv
 
 function readFile(file) {
     const input = fs.createReadStream(file);
