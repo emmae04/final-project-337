@@ -19,21 +19,23 @@ app.use(parser.json());
 app.use(cookieParser());
 app.use(express.json());
 
-// Creates the mongoose schemas for the ostaa project
+// ------------------------------ Schemas ----------------------------------
 var Schema = mongoose.Schema;
 
 // The schema for users
 var UserSchema = new Schema({
     username: String,
     password: String,
-    games: []
+    friends: [],
+    gameScore: []
 })
 
-// The schema for users
+// The schema for hangman
 var HangmanSchema = new Schema({
+    user: String,
+    word: String,
     guesses: Number,
-    wins: Number,
-    games: []
+    wins: boolean
 })
 
 var people = mongoose.model("User", UserSchema);
