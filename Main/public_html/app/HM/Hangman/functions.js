@@ -3,6 +3,8 @@ const boxes = ["one", "two", "three", "four", "five"];
 const guesses = 0;
 const wrong = "";
 const left = 5;
+// const fs = require('fs');
+// const readline = require('readline');
 
 function readFile(file) {
     const input = fs.createReadStream(file);
