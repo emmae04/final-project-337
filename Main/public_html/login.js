@@ -1,3 +1,4 @@
+// test
 function changeHTML() {
 
   window.location.href = "main.html";
