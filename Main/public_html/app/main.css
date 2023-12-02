@@ -1,4 +1,4 @@
-body {
+/* body {-- UNCOMMENT
     background-color:rgb(255, 255, 255);
     position: fixed;
     margin: 0px;
@@ -19,7 +19,7 @@ h1 {
     height: 80px;
     display: block;
     color:rgb(0, 0, 0);
-}
+} */
 
 /* 
 .dropbtn {
@@ -63,7 +63,7 @@ h1 {
   .dropdown:hover .dropdown-content {display: block;}
   .dropdown:hover .dropbtn {background-color: rgb(66, 65, 65);} */
 
-
+/* ---UNCOMMENT THIS --
 .dropdown {
     width: 100%;
     display: block;
@@ -78,7 +78,7 @@ h1 {
     padding-top: 15px;
     background-color: rgb(255, 255, 255);
     color: rgb(0, 0, 0);
-    /* padding: 16px; */
+   
     font-size: 16px;
     border: none;
     cursor: pointer;
@@ -100,7 +100,7 @@ h1 {
 .dropdown-content {
     display: none;
     position: absolute;
-    /* right: 100px; */
+  
     background-color: #f1f1f1;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -117,12 +117,13 @@ h1 {
     width: 100%;
     text-align: left;
     font-size: 18px;
-}
-  
+} */
+/*  -- uncomment 
 .dropdown-content button:hover {background-color: white;}
 .dropdown:hover .dropdown-content {display: block;}
-.dropdown:hover .dropbtn {background-color: rgb(81, 80, 80);}
+.dropdown:hover .dropbtn {background-color: rgb(81, 80, 80);} */
 
+/*----UNCOMMENT 
 #games {
     margin-top: 90px;
     position: relative;
@@ -182,4 +183,78 @@ h1 {
     margin-top: 21%;
     background-color:#F6FDC3;
     
+} */
+
+
+.column {
+    float: left;
+    background-color: #8ECDDD;
+    margin-top: 10px;
+    border: black 1px;
+    padding: 3px;
+    text-align: center;
+    width: 99.8%;
+}
+
+p {
+    display: flex;
+    font-size: 20px;
+    padding-left: 60px;
+}
+
+h2 {
+    font-size: 30px;
+    display: flex;
+    margin-left: 20px;
+    padding-left: 460px;
+}
+
+
+img {
+    max-height: 200px;
+    width: 200px;
+    display: inline-block;
+    float: left;
+    border-radius: 8px;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+
+    .column.side,
+    .column.middle {
+        width: 100%;
+    }
+}
+
+/* The navbar container */
+.topnav {
+
+    overflow: hidden;
+    margin-top: 0px;
+    height: 70px;
+    background-color: #22668D;
+}
+
+/* Navbar links */
+.topnav a {
+    margin-top: 10px;
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.header {
+    background-color: #FFCC70;
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 0px;
 }
