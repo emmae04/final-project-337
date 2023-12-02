@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const fs = require('fs')
-const app = express()
+
 const parser = require('body-parser')
 const cookieParser = require('cookie-parser');
 
@@ -13,11 +13,6 @@ const db  = mongoose.connection;
 const mongoDBURL = 'mongodb://127.0.0.1/final';
 mongoose.connect(mongoDBURL);
 db.on('error', () => { console.log('MongoDB connection error:') });
-
-
-app.use(parser.json());
-app.use(cookieParser());
-app.use(express.json());
 
 // ------------------------------ Schemas ----------------------------------
 var Schema = mongoose.Schema;
@@ -42,7 +37,7 @@ var people = mongoose.model("User", UserSchema);
 var hangman = mongoose.model("Hangman", HangmanSchema);
 
 
-app.use(express.static('public_html'))// setting html
+
 
 let sessions = {};
 
@@ -75,6 +70,9 @@ function removeSessions() {
 
 setInterval(removeSessions, 2000);// constantly check to remove items
 
+const app = express();
+app.use(cookieParser());    
+app.use(express.json())
 
 function authenticate(req, res, next) {
     let c = req.cookies;
@@ -92,13 +90,14 @@ function authenticate(req, res, next) {
     }
 }
 
+
 app.use('/app/*', authenticate);// authenticate the app folder
 app.get('/app/*', (req, res, next) => {
     console.log('another');
     next();
 });
 
-
+app.use(express.static('public_html'))
 
 /**
  * method handles use logins if the username and password are correct then it sends
@@ -168,7 +167,7 @@ var boggleInfo = new Schema({
 
 var boggleData = mongoose.model('boggleData', boggleInfo);
 
-app.use(express.static('public_html'))
+
 var allBoggleWords = [];
 
 
