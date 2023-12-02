@@ -29,6 +29,3 @@ var User = mongoose.model("User", UserSchema);
 // creates quick link to local host port
 app.listen(port, () => 
   console.log(`App listening at http://localhost:${3000}`))
-
-
-
