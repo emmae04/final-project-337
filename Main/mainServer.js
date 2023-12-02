@@ -30,7 +30,7 @@ var HangmanSchema = new Schema({
     user: String,
     word: String,
     guesses: Number,
-    wins: boolean
+    wins: Boolean
 })
 
 var people = mongoose.model("User", UserSchema);
