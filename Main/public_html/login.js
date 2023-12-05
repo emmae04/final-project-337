@@ -174,11 +174,17 @@ function searchFriends() {
           }else{
             tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOW </button>`;
           }
-          tempDiv = tempDiv + `<div> <button class="statsButton"> SEE STATS </button></div> </div>`;
+          tempDiv = tempDiv + `<div> <button class="statsButton" onclick="updateStatView();"> SEE STATS </button></div> </div>`;
           document.getElementById("searchResult").innerHTML += tempDiv;
         }
         updateButtons();
       })
       .catch((err) => { console.log(err) });
   }
+}
+
+
+function updateStatView(){
+  window.location.href = "http://localHost/app/stats.html";
+
 }

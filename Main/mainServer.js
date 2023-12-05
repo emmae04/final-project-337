@@ -17,7 +17,7 @@ db.on('error', () => { console.log('MongoDB connection error:') });
 
 // ------------------------------ Schemas ----------------------------------
 var Schema = mongoose.Schema;
-
+// made an update here
 // The schema for users
 var UserSchema = new Schema({
     username: String,
