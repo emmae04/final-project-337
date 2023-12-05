@@ -24,6 +24,7 @@ var UserSchema = new Schema({
     password: String,
     image: String,
     friends: [],
+    // game scores in the order : BLACKJACK, BOGGLE, HANGMAN, TIC TAC TOE
     gameScore: []
 })
 
@@ -46,7 +47,22 @@ var boggleInfo = new Schema({
 
 var boggleData = mongoose.model('boggleData', boggleInfo);
 
+/** Profile data */
+app.get("/get/friends/:currUser", (req, res) => {
+    currUser = req.params.currUser;
+    people.findOne({ username: currUser }, 'friends', (user) => {
+        res.send(user.friends);
+    }
+      
+)});
 
+app.get("/get/stats/:currUser", (req, res) => {
+    currUser = req.params.currUser;
+    people.findOne({ username: currUser }, 'friends', (user) => {
+        res.send(user.gameScore);
+    }
+      
+)});
 
 
 let sessions = {};
@@ -121,7 +137,7 @@ app.post('/login/user/pass', (req, res) => {
     p1.then((results) => {
         if (results.length == 0) {
 
-            res.send("FAIL");
+            res.send("FAIL"); 
             res.end();
         } else {
             let sid = addSession(u.username);
