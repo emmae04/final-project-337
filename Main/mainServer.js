@@ -23,7 +23,8 @@ var UserSchema = new Schema({
     username: String,
     password: String,
     image: String,
-    following
+    following: [{type: Schema.Types.ObjectID}],
+    followers: [{type:  Schema.Types.ObjectID}],
     gameScore: []
 })
 
