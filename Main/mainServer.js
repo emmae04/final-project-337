@@ -30,6 +30,7 @@ var UserSchema = new Schema({
 
 // The schema for hangman
 var HangmanSchema = new Schema({
+    level: String,
     user: String,
     word: String,
     guesses: Number,
@@ -261,7 +262,63 @@ app.post("/update/:id", function (req, res) {
 
 // ---------------------------- Hangman Server ----------------------------
 
+const fiveL = [];
+const eightL = [];
+const twelveL = [];
 
+function readFile(file, list) {
+    const input = fs.createReadStream(file);
+    const rl = readline.createInterface({
+        input: input,
+        terminal: false
+    });
+
+    rl.on('line', function(line) {
+        list.push(line);
+    });
+    rl.on('close', function(close) { 
+        // console.log(fiveL);
+        console.log(list.length);
+        return list;
+    })
+    return list;
+}
+readFile('public_html/app/HM/Hangman/five.txt', fiveL);
+readFile('public_html/app/HM/Hangman/eight.txt', eightL);
+readFile('public_html/app/HM/Hangman/twelve.txt', twelveL);
+
+app.post('/get/word', (req, res) => {
+    // let list = readFile('public_html/app/HM/Hangman/five.txt');
+    // console.log("list " +fiveL);
+    var answer = "";
+    console.log("body" +req.body);
+    var level = req.body.level;
+    console.log("level:" + level);
+    if (level == "Beginner") {
+        answer = fiveL[Math.floor(Math.random() * (fiveL.length - 1))].toUpperCase();
+    }
+    if (level == "Intermediate") {
+        answer = eightL[Math.floor(Math.random() * (eightL.length - 1))].toUpperCase();
+    }
+    else {
+        answer = twelveL[Math.floor(Math.random() * (twelveL.length - 1))].toUpperCase();
+    }
+    
+    res.json(answer);
+})
+
+app.post('/new/score', (req, res) => {
+    let newHangman = new hangman({
+        level: req.body.level,
+        user: "name",
+        word: req.body.word,
+        guesses: req.body.guesses,
+        wins: req.body.wins
+    })
+    newHangman.save().then(() => {
+        console.log("saved");
+    })
+})
 
 
 // ---------------------------- Boggle Server ----------------------------
