@@ -168,13 +168,13 @@ function searchFriends() {
           // updates the html to add the items on the sceen
           var tempDiv = `<div id="item"> <div>${name}</div>`;
           if (stat.startsWith("FOLLOWER")) {
-            tempDiv = tempDiv + `<div>${stat} </div></div>`
+            tempDiv = tempDiv + `<div>${stat} </div>`
           } else if(stat.startsWith("FOLLOWING")){
-            tempDiv = tempDiv + `<button class="buttons" id =${id}> UNFOLLOW </button></div>`;
+            tempDiv = tempDiv + `<button class="buttons" id =${id}> UNFOLLOW </button>`;
           }else{
-            tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOW </button></div>`;
+            tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOW </button>`;
           }
-          tempDiv = tempDiv + `<button> SEE STATS </button></div>`;
+          tempDiv = tempDiv + `<div> <button class="statsButton"> SEE STATS </button></div> </div>`;
           document.getElementById("searchResult").innerHTML += tempDiv;
         }
         updateButtons();

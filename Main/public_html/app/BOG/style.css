@@ -77,7 +77,6 @@ td {
     padding: 8px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     background-color: rgb(55, 195, 174);
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 #timer{
@@ -108,4 +107,9 @@ td {
     color: white;
     top: 65%;
     left: 45%;
+}
+
+#back{
+    background-color: rgb(55, 195, 174);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }

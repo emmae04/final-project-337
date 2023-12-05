@@ -24,17 +24,16 @@ body{
 }
 
 #searchResult{
-    position: fixed;
+    position: block;
     border: 2px solid;
     font-size: medium;
     overflow-y: scroll;
     text-align: center;
-    top: 30%;
-    left: 20%;
-    bottom: 10%;
-    right: 20%;
+    height: 500px;
     padding: 10px;
+    margin: 25px;
     border-radius: 25px;
+    background-color: rgb(195, 242, 245);
 }
 
 #search{
@@ -42,4 +41,35 @@ body{
     padding: 10px;
     background-color: aqua;
     color:black;
+}
+
+.buttons{
+    border: 2px solid;
+    color:black;
+    background-color: aliceblue;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#item{
+    margin-top: 5px;
+    margin-left: 38%;
+    padding: 20px;
+    width: 310px;
+    padding-bottom: 10px;
+    border: 2px solid;
+    border-color: rgb(39, 39, 118);
+    border-radius: 25px;
+    text-align: center;
+    word-break: break-all;
+    font-size: larger;
+    
+}
+
+.statsButton{
+    border: 2px solid;
+    color:black;
+    background-color: aliceblue;
+    padding: 5px;
 }

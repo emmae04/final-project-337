@@ -210,10 +210,8 @@ app.get('/search/users/:keyword/', function (req, res) {
                     //user.stat = "FRIEND";
                 } else if (user.followers.includes(id)) {
                     temp.push({ user: user.username, stat: "FOLLOWING", id: user._id })
-                    //user.stat = "FRIEND";
                 } else {
                     temp.push({ user: user.username, stat: "", id: user._id })
-                    // user.stat = "";
                 }
             }
             res.status(200);
@@ -224,29 +222,10 @@ app.get('/search/users/:keyword/', function (req, res) {
 });
 
 
-// app.get('/update/:id', function (req, res) {
-//     console.log("in update");
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     let current = (req.cookies).login.username;
-//     console.log("this is current :");
-//     console.log(current);
-//     let userSearch = people.find({ "_id": { $regex: req.params.id } });
-//     console.log("this is usersearch");
-//     console.log(userSearch);
-
-//     current.friends.push(userSearch);
-//     res.status(200).send("GOOD");
-//     //add the id to the users frineds list
-//     // add the username to the other persons friend list
-// });
-
-
 app.post("/update/:id", function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
 
     user = people.findById(req.params.id);
-    // userfriend = people.find({ "_id": req.params.id });
-    // curUser = people.find({ "_id":  sessions[req.cookies['login']].id});
     var curUser;
     var message = "user Posted";
     // finding the given user with the given username 
@@ -272,17 +251,9 @@ app.post("/update/:id", function (req, res) {
             });
         } else {
             message = "user not found";
-            //res.send("USER NOT FOUND")
         }
 
     });
-    // console.log("got user");
-    // console.log(documents);
-    // documents[0].friends.push(sessions[req.cookies['login'].username].id);
-    // sessions[req.cookies['login'].username].friends.push(documents.id);
-    // document[0].save();
-    // sessions[req.cookies['login'].username].save();
-    // sending the json objects as a string and formattedd nicely
     res.send(message);
 });
 
