@@ -28,7 +28,9 @@ var UserSchema = new Schema({
     password: String,
     image: String,
 
-    friends: [],
+    following: [{ type: Schema.Types.ObjectId }],
+    followers: [{ type: Schema.Types.ObjectId }],
+
     gameScore: []
 })
 
@@ -93,7 +95,7 @@ function authenticate(req, res, next) {
     let c = req.cookies;
     console.log('auth request:');
     console.log(req.cookies);
-    if (c != undefined) {
+    if (c != undefined && c.login != undefined) {
         if (sessions[c.login.username] != undefined &&
             sessions[c.login.username].id == c.login.sessionID) {// if the session and cookie match
             next();
@@ -111,6 +113,8 @@ app.get('/app/*', (req, res, next) => {
     console.log('another');
     next();
 });
+app.use('/update/:id', authenticate);
+app.use('/search/users/:keyword', authenticate);
 
 app.use(express.static('public_html'))
 
@@ -213,6 +217,7 @@ app.post("/add/user/", function (req, res) {
     // let saveUser = new people({ username: req.body.username, password: req.body.password, games: [] })
     // // creating a new user
     let userSearch = people.find({ username: req.body.username }).exec();
+
     // finding the user with the given keyword in the username
 
     userSearch.then((documents) => {// when get the documents
@@ -270,47 +275,99 @@ app.get('/get/curUsers/', function (req, res) {
 
 app.get('/search/users/:keyword/', function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    let userSearch = people.find({ "username": { $regex: req.params.keyword } });
-    // finding the user with the given keyword in the username
-    var temp = [];
-    userSearch.then((documents) => {// when get the documents
-        for (user of documents) {
-            console.log(req.cookies);
-            if (user.friends.includes(sessions[req.cookies['login'].username].id)) {
-                temp.push({ user: user.username, stat: "FRIEND", id: user._id })
-                //user.stat = "FRIEND";
-            } else {
-                temp.push({ user: user.username, stat: "", id: user._id })
-                // user.stat = "";
+
+    let curUser = people.findOne({ "username": req.cookies.login.username });
+    curUser.then((document) => {
+        var id = document._id;
+        let userSearch = people.find({ "username": { $regex: req.params.keyword } });
+        // finding the user with the given keyword in the username
+        var temp = [];
+        userSearch.then((documents) => {// when get the documents
+            for (user of documents) {
+                console.log(req.cookies);
+                if (user.following.includes(id)) {
+                    temp.push({ user: user.username, stat: "FOLLOWER", id: user._id })
+                    //user.stat = "FRIEND";
+                } else if (user.followers.includes(id)) {
+                    temp.push({ user: user.username, stat: "FOLLOWING", id: user._id })
+                    //user.stat = "FRIEND";
+                } else {
+                    temp.push({ user: user.username, stat: "", id: user._id })
+                    // user.stat = "";
+                }
+
             }
-        }
-        res.status(200);
-        res.type('json').send(JSON.stringify(temp, null, 2) + '\n');
+            res.status(200);
+            res.type('json').send(JSON.stringify(temp, null, 2) + '\n');
+        });
     });
+
 });
 
 
-app.get('/update/:username/:id', function (req, rer) {
+// app.get('/update/:id', function (req, res) {
+//     console.log("in update");
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     let current = (req.cookies).login.username;
+//     console.log("this is current :");
+//     console.log(current);
+//     let userSearch = people.find({ "_id": { $regex: req.params.id } });
+//     console.log("this is usersearch");
+//     console.log(userSearch);
+
+//     current.friends.push(userSearch);
+//     res.status(200).send("GOOD");
+//     //add the id to the users frineds list
+//     // add the username to the other persons friend list
+// });
+
+
+app.post("/update/:id", function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    let userSearch = people.find({ "_id": { $regex: req.params.keyword } });
-    userSearch.then((documents) => {// when get the documents
-        for (user of documents) {
-            console.log(req.cookies);
-            if (user.friends.includes(sessions[req.cookies['login'].username].id)) {
-                temp.push({ user: user.username, stat: "FRIEND", id: user._id })
-                //user.stat = "FRIEND";
-            } else {
-                temp.push({ user: user.username, stat: "", id: user._id })
-                // user.stat = "";
-            }
-        }
-        res.status(200);
-        res.type('json').send(JSON.stringify(temp, null, 2) + '\n');
-    });
 
-    //add the id to the users frineds list
-    // add the username to the other persons friend list
+    user = people.findById(req.params.id);
+    // userfriend = people.find({ "_id": req.params.id });
+    // curUser = people.find({ "_id":  sessions[req.cookies['login']].id});
+    var curUser;
+    var message = "user Posted";
+    // finding the given user with the given username 
+    user.then((document) => {// when get the documents
+        if (document) {
+            curUser = people.findOne({ username: req.cookies['login'].username });
+            curUser.then((secdoc) => {
+                if (req.body.ftnff) {
+                    secdoc.following.push(document._id);
+                    secdoc.save();
+                    document.followers.push(secdoc._id);
+                    document.save();
+                }else{
+                    let ind = document.followers.indexOf(secdoc._id);
+                    let intdoc = secdoc.following.indexOf(document._id);
+                    secdoc.following.splice(intdoc, 1);
+                    secdoc.save();
+
+                    document.followers.splice(ind, 1);
+                    document.save();
+                }
+                
+            });
+        } else {
+            message = "user not found";
+            //res.send("USER NOT FOUND")
+        }
+
+    });
+    // console.log("got user");
+    // console.log(documents);
+    // documents[0].friends.push(sessions[req.cookies['login'].username].id);
+    // sessions[req.cookies['login'].username].friends.push(documents.id);
+    // document[0].save();
+    // sessions[req.cookies['login'].username].save();
+    // sending the json objects as a string and formattedd nicely
+    res.send(message);
 });
+
+
 // ---------------------------- Hangman Server ----------------------------
 
 
@@ -354,7 +411,6 @@ app.post('/score/', function (req, res) {
 
 
 async function readAllWords() {
-
     data = await fs2.readFile('./words.txt', 'utf-8')
     allBoggleWords = data.split("\n");
     for (var i = 0; i < allBoggleWords.length; i++) {
