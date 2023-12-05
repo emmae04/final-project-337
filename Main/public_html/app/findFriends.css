@@ -1,0 +1,45 @@
+body{
+    text-align: center;
+    position: block;
+    background-color: rgb(109, 120, 246);
+}
+
+#friendsSheet{
+    font-size: xx-large;
+    margin: 50px;
+}
+
+#searchFriend{
+    padding: 15px;
+    font-size: medium;
+}
+
+#backButton{
+    position: fixed;
+    top:0;
+    left:0;
+    padding: 5px;
+    color:rgb(255, 255, 255);
+    background-color: black;
+}
+
+#searchResult{
+    position: fixed;
+    border: 2px solid;
+    font-size: medium;
+    overflow-y: scroll;
+    text-align: center;
+    top: 30%;
+    left: 20%;
+    bottom: 10%;
+    right: 20%;
+    padding: 10px;
+    border-radius: 25px;
+}
+
+#search{
+    margin-left: 50px;
+    padding: 10px;
+    background-color: aqua;
+    color:black;
+}

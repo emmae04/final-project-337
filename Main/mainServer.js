@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const fs = require('fs')
+const fs2 = require('fs').promises
 
 const parser = require('body-parser')
 const cookieParser = require('cookie-parser');
@@ -20,8 +21,13 @@ var Schema = mongoose.Schema;
 // The schema for users
 var UserSchema = new Schema({
     username: String,
+
     hash: String,
     salt: String,
+
+    password: String,
+    image: String,
+
     friends: [],
     gameScore: []
 })
@@ -36,6 +42,17 @@ var HangmanSchema = new Schema({
 
 var people = mongoose.model("User", UserSchema);
 var hangman = mongoose.model("Hangman", HangmanSchema);
+
+
+var Schema = mongoose.Schema;
+var boggleInfo = new Schema({
+    user: { type: String, default: '', trim: true },
+    score: { type: Number, default: 0, min: 0 },
+});
+
+var boggleData = mongoose.model('boggleData', boggleInfo);
+
+
 
 let sessions = {};
 
@@ -173,6 +190,58 @@ app.post("/add/user/", function (req, res) {
 
 });
 
+
+app.get('/get/curUsers/', function (req, res) {
+    console.log("getting current user");
+    res.end((req.cookies).login.username);
+});
+
+
+
+
+app.get('/search/users/:keyword/', function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    let userSearch = people.find({ "username": { $regex: req.params.keyword } });
+    // finding the user with the given keyword in the username
+    var temp = [];
+    userSearch.then((documents) => {// when get the documents
+        for(user of documents){
+            console.log(req.cookies);
+            if(user.friends.includes(sessions[req.cookies['login'].username].id)){
+                temp.push({user: user.username, stat : "FRIEND", id: user._id})
+                //user.stat = "FRIEND";
+            }else{
+                temp.push({user: user.username, stat : "", id: user._id})
+                // user.stat = "";
+            }
+        }
+        res.status(200);
+        res.type('json').send(JSON.stringify(temp, null, 2) + '\n');
+    });
+});
+
+
+app.get('/update/:username/:id', function(req, rer){
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    let userSearch = people.find({ "_id": { $regex: req.params.keyword } });
+    userSearch.then((documents) => {// when get the documents
+        for(user of documents){
+            console.log(req.cookies);
+            if(user.friends.includes(sessions[req.cookies['login'].username].id)){
+                temp.push({user: user.username, stat : "FRIEND", id: user._id})
+                //user.stat = "FRIEND";
+            }else{
+                temp.push({user: user.username, stat : "", id: user._id})
+                // user.stat = "";
+            }
+        }
+        res.status(200);
+        res.type('json').send(JSON.stringify(temp, null, 2) + '\n');
+    });
+
+    //add the id to the users frineds list
+    // add the username to the other persons friend list
+});
 // ---------------------------- Hangman Server ----------------------------
 
 
@@ -181,15 +250,6 @@ app.post("/add/user/", function (req, res) {
 // ---------------------------- Boggle Server ----------------------------
 
 //////////////////////////// BOGGLE ///////////////////////////////////////
-
-var Schema = mongoose.Schema;
-var boggleInfo = new Schema({
-    user: { type: String, default: '', trim: true },
-    score: { type: Number, default: 0, min: 0 },
-});
-
-var boggleData = mongoose.model('boggleData', boggleInfo);
-
 
 var allBoggleWords = [];
 
@@ -225,12 +285,13 @@ app.post('/score/', function (req, res) {
 
 
 async function readAllWords() {
-    data = await fs.readFile('./words.txt', 'utf8')
-    allBoggleWords = data.split("\n");
-    for (var i = 0; i < allBoggleWords.length; i++) {
-        allBoggleWords[i] = allBoggleWords[i].trim();
-    }
 
+    data = await fs2.readFile('./words.txt', 'utf-8') 
+        allBoggleWords = data.split("\n");
+        for (var i = 0; i < allBoggleWords.length; i++) {
+            allBoggleWords[i] = allBoggleWords[i].trim();
+        }
+    
 }
 
 async function findAllCorrectWords(correctBoggleWords, diceTray) {

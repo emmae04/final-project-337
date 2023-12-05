@@ -1,5 +1,7 @@
 // test
 // test 2
+
+const username = document.cookie.username;
 function changeHTML() {
 
   window.location.href = "main.html";
@@ -13,11 +15,11 @@ function goToHangman() {
 
 function goToBJ() {
   window.location.href = "http://localHost/app/BJ/blackjack.html";
-  
+
 }
 function goToBoggle() {
   window.location.href = "http://localHost/app/BOG/index.html";
-  
+
 }
 function showDropdown() {
   document.getElementById("myDropdown").classList.toggle("show");
@@ -97,18 +99,85 @@ function login() {
 
 
 function showDropdown() {
-    document.getElementById("myDropdown").classList.toggle("show");
+  document.getElementById("myDropdown").classList.toggle("show");
 }
 
-window.onclick = function(event) {
-    if (!event.target.matches('.dropbtn')) {
-      var dropdowns = document.getElementsByClassName("myDropdown");
-      var i;
-      for (i = 0; i < dropdowns.length; i++) {
-        var openDropdown = dropdowns[i];
-        if (openDropdown.classList.contains('show')) {
-          openDropdown.classList.remove('show');
-        }
+window.onclick = function (event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("myDropdown");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
       }
     }
   }
+}
+
+
+function follow(id) {
+  console.log('HERE');
+  console.log(id);
+  // fetches the username of current user
+  fetch("/get/curUsers/")
+      .then((res) => {
+          return res.text();
+      }).then((USERNAME) => {
+          // sends the user and the id
+          fetch(`/update/${USERNAME}/${id}`, {
+              method: "POST",
+          }).then((res) => {
+              return res.text();
+          }).catch((err) => { console.log(err) });
+      });
+
+}
+
+function updateButtons() {
+  var buts = document.getElementsByClassName("buttons");
+  for (let i = 0; i < buts.length; i++) {
+      buts[i].onclick = (e) => { follow(e.target.id) };
+
+  }
+}
+
+
+function searchFriends() {
+  let input = document.getElementById('searchFriend').value;
+  document.getElementById('searchFriend').value = "";
+  console.log("INPUT = " + input);
+  if (input != "") {
+    fetch(`/search/users/${input}`)
+      .then((res) => {
+        return res.text();
+      }).then((res) => {
+        console.log("res: " + res);
+        let parsed = JSON.parse(res);
+        // let parsed = res;
+        console.log(parsed);
+        document.getElementById("searchResult").innerHTML = "";
+        // gets all attibutes of the item
+        for (let i = 0; i < parsed.length; i++) {
+          console.log(parsed[i]);
+          let name = parsed[i].user;
+          let id = parsed[i].id;
+          let stat = parsed[i].stat;
+          console.log(parsed.length);
+          console.log("name: " + name);
+          //console.log("id: " + id);
+          // updates the html to add the items on the sceen
+          var tempDiv = `<div id="item"> <div>${name}</div>`;
+          if (stat == "FRIEND") {
+            tempDiv = tempDiv + `<div>${stat} </div></div>`
+          } else {
+            tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOW </button></div>`;
+          }
+          tempDiv = tempDiv + `<button> SEE PROFILE </button></div>`;
+          document.getElementById("searchResult").innerHTML += tempDiv;
+        }
+        updateButtons();
+      })
+      .catch((err) => { console.log(err) });
+  }
+}
