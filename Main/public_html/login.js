@@ -116,29 +116,31 @@ window.onclick = function (event) {
 }
 
 
-function follow(id) {
-  console.log('HERE');
-  console.log(id);
-  // fetches the username of current user
-  fetch("/get/curUsers/")
-      .then((res) => {
-          return res.text();
-      }).then((USERNAME) => {
-          // sends the user and the id
-          fetch(`/update/${USERNAME}/${id}`, {
-              method: "POST",
-          }).then((res) => {
-              return res.text();
-          }).catch((err) => { console.log(err) });
-      });
-
+function follow(id, ftnff) {
+  // console.log('HERE');
+  // console.log(id);
+  // sends the user and the id
+  fetch(`/update/${id}`, {
+    method: "POST",
+    body: JSON.stringify({ftnff}), 
+    headers: {"Content-Type" : "application/json"}
+  }).then((res) => {
+    console.log("after fetch is done I am here");
+    // document.getElementById(`${id}`).value = "FOLLOWED";
+    // tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOWED </button></div>`;
+    if(ftnff){
+      document.getElementById(`${id}`).innerText = "UNFOLLOW";
+    }else{
+      document.getElementById(`${id}`).innerText = "FOLLOW";
+    }
+    //return res.text();
+  }).catch((err) => { console.log(err) });
 }
 
 function updateButtons() {
   var buts = document.getElementsByClassName("buttons");
   for (let i = 0; i < buts.length; i++) {
-      buts[i].onclick = (e) => { follow(e.target.id) };
-
+    buts[i].onclick = (e) => { console.log(this , e.target.innerText.startsWith("F")); follow(e.target.id, e.target.innerText.startsWith("F")) };
   }
 }
 
@@ -146,34 +148,33 @@ function updateButtons() {
 function searchFriends() {
   let input = document.getElementById('searchFriend').value;
   document.getElementById('searchFriend').value = "";
-  console.log("INPUT = " + input);
+
   if (input != "") {
     fetch(`/search/users/${input}`)
       .then((res) => {
         return res.text();
       }).then((res) => {
-        console.log("res: " + res);
         let parsed = JSON.parse(res);
-        // let parsed = res;
-        console.log(parsed);
+        // console.log(parsed);
         document.getElementById("searchResult").innerHTML = "";
         // gets all attibutes of the item
         for (let i = 0; i < parsed.length; i++) {
-          console.log(parsed[i]);
+          // console.log(parsed[i]);
           let name = parsed[i].user;
           let id = parsed[i].id;
           let stat = parsed[i].stat;
-          console.log(parsed.length);
-          console.log("name: " + name);
-          //console.log("id: " + id);
+          // console.log(parsed.length);
+          // console.log("name: " + name);
           // updates the html to add the items on the sceen
           var tempDiv = `<div id="item"> <div>${name}</div>`;
-          if (stat == "FRIEND") {
+          if (stat.startsWith("FOLLOWER")) {
             tempDiv = tempDiv + `<div>${stat} </div></div>`
-          } else {
+          } else if(stat.startsWith("FOLLOWING")){
+            tempDiv = tempDiv + `<button class="buttons" id =${id}> UNFOLLOW </button></div>`;
+          }else{
             tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOW </button></div>`;
           }
-          tempDiv = tempDiv + `<button> SEE PROFILE </button></div>`;
+          tempDiv = tempDiv + `<button> SEE STATS </button></div>`;
           document.getElementById("searchResult").innerHTML += tempDiv;
         }
         updateButtons();
