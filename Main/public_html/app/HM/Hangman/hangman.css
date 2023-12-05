@@ -1,9 +1,140 @@
 body {
-    background-color: rgb(104, 175, 104);
+    background-color:  #FFCF96;
+    font-family:'Copperplate';
+    margin: 0px;
+    margin-top: 0px;
+    height: 100%;
 }
+
+#top {
+    position: relative;
+    right: 0%;
+    left: 0%;
+    width: 100%;
+}
+
+h2 {
+    font-size: 70px;
+    margin: 0px;
+    text-align: center;
+    /* position: relative; */
+    /* position: fixed; */
+    background-color: rgb(187, 187, 187) ;
+    width: 100%;
+    padding: 10px;
+    height: 80px;
+    /* display: block; */
+    color:rgb(0, 0, 0);
+    
+}
+
+
+
+
+
+.dropdown {
+    width: 100%;
+    display: block;
+    right: 0px;
+    left: 0px;
+    top:0px;
+    height: 5px;
+}
+.dropbtn {
+    padding: 10px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    /* padding: 16px; */
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+   
+    display: block;
+    width:100%;
+    margin-right: 0px;
+    margin-left: 0px;
+    left: 0px;
+    right: 0px;
+    font-size: 18px;
+    text-align: left;
+}
+  
+.dropdown-content {
+    display: none;
+    position: absolute;
+    /* right: 100px; */
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+  
+.dropdown-content button {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border: none;
+    background-color: #f1f1f1;
+    width: 100%;
+    text-align: left;
+    font-size: 18px;
+}
+  
+.dropdown-content button:hover {background-color: #FFCF96;}
+.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropbtn {background-color: #f3bc78;}
+
+
+.htp {
+    display: block;
+    position: absolute;
+    float: right;
+    right: 12px;
+    text-align: center;
+    top: 150px;
+    background-color: #FFCF96;
+}
+
+.htpHeader {
+    font-size: 30px;
+    width: 30px;
+    float: right;
+    right: 15px;
+    text-align: cneter;
+}
+.htpContent {
+    width: 350px;
+    position: absolute;
+    top: 35px;
+    right: 15px;
+    text-align: center;
+    display: none;
+    background-color: white;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+.htp div {
+    color: black;
+    
+}
+
+.htpContent div:hover {background-color: white;}
+.htp:hover .htpContent {display: block;}
+.htp:hover .htpHeader {background-color: #f3bc78;}
+
+
+
 
 h1 {
     text-align: center;
+}
+
+#hangman {
+    top: 130px;
+    position: absolute;
+    text-align: center;
+    left: 10%;
+    right: 10%;
 }
 
 img {
@@ -18,11 +149,11 @@ img {
     text-align: center;
 }
 
-#one, #two, #three, #four {
+#one, #two, #three, #four, #five, #six, #seven, #eight, #nine, #ten, #eleven, #twelve {
     margin-right: 5px;
 }
 
-#one, #two, #three, #four, #five {
+#one, #two, #three, #four, #five, #six, #seven, #eight, #nine, #ten, #eleven, #twelve {
     background-color: white;
     padding-left: 20px;
     padding-right: 20px;
@@ -31,14 +162,17 @@ img {
     display: inline-block;
     border-radius: 10px;
     font-size: 25px;
+    height: 20px;
+    width: 20px;
 }
 
 #guesses {
     text-align: center;
-    line-height: 30px;
+    line-height: 20px;
 }
 
 #input {
-    margin-top: 30px;
+    margin-top: 20px;
     text-align: center;
+    margin-bottom: 30px;
 }
