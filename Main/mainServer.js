@@ -122,7 +122,7 @@ app.post('/login/user/pass', (req, res) => {
     console.log(sessions);
     console.log("tried to login");
     let u = req.body;
-    let p1 = people.find({username: u.username}).exec();
+    let p1 = people.find({ username: u.username }).exec();
     p1.then((results) => {
         if (results.length == 0) {
             res.send("FAIL");
@@ -148,6 +148,62 @@ app.post('/login/user/pass', (req, res) => {
     });
 });
 
+
+app.post('/logout/:user/', (req, res) => {
+
+    removeCertainSession(req, res);
+    res.end();
+});
+
+function removeCertainSession(req, res) {
+    let c = req.cookies;
+    console.log('auth request:');
+    console.log(req.cookies);
+    if (c != undefined) {
+        if (sessions[c.login.username] != undefined &&
+            sessions[c.login.username].id == c.login.sessionID) {// if the session and cookie match
+            delete sessions[c.login.username]
+            res.redirect('http://localhost/index.html');
+        } else {
+            res.redirect('http://localhost/index.html');
+        }
+    } else {
+        res.redirect('http://localhost/index.html');
+    }
+}
+
+app.post('/changePassword/user', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    let userSearch = people.find({ username: req.body.username }).exec();
+
+    userSearch.then((documents) => {// when get the documents
+        if (documents.length == 1) {
+            let newSalt = '' + Math.floor(Math.random() * 10000000000);
+            let toHash = req.body.password + newSalt;
+            let h = crypto.createHash('sha3-256');
+            let data = h.update(toHash, 'utf-8');
+            let result = data.digest('hex');
+            documents[0].hash = result;
+            documents[0].salt = newSalt;
+
+            let p = document[0].save();
+            p.then(() => {
+                res.end('SUCCESS');
+            });
+            p.catch(() => {
+                console.log("save fail")
+                res.end('FAIL');
+            });
+        }
+        else {
+            console.log("find fail")
+            res.end('FAIL');
+        }
+    });
+
+});
+
+
 /**
  * post request handles creating a new User. the 
  * elements of the JSON User are in the body of the request
@@ -156,7 +212,7 @@ app.post("/add/user/", function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     // let saveUser = new people({ username: req.body.username, password: req.body.password, games: [] })
     // // creating a new user
-    let userSearch = people.find({username: req.body.username}).exec();
+    let userSearch = people.find({ username: req.body.username }).exec();
     // finding the user with the given keyword in the username
 
     userSearch.then((documents) => {// when get the documents
@@ -191,9 +247,22 @@ app.post("/add/user/", function (req, res) {
 });
 
 
+
+
 app.get('/get/curUsers/', function (req, res) {
     console.log("getting current user");
-    res.end((req.cookies).login.username);
+    let c = req.cookies;
+    console.log(req.cookies);
+    if (c != undefined) {
+        if (sessions[c.login.username] != undefined &&
+            sessions[c.login.username].id == c.login.sessionID) {// if the session and cookie match
+            res.end((req.cookies).login.username);
+        } else {
+            res.end("FAIL");
+        }
+    } else {
+        res.end("FAIL");
+    }
 });
 
 
@@ -205,13 +274,13 @@ app.get('/search/users/:keyword/', function (req, res) {
     // finding the user with the given keyword in the username
     var temp = [];
     userSearch.then((documents) => {// when get the documents
-        for(user of documents){
+        for (user of documents) {
             console.log(req.cookies);
-            if(user.friends.includes(sessions[req.cookies['login'].username].id)){
-                temp.push({user: user.username, stat : "FRIEND", id: user._id})
+            if (user.friends.includes(sessions[req.cookies['login'].username].id)) {
+                temp.push({ user: user.username, stat: "FRIEND", id: user._id })
                 //user.stat = "FRIEND";
-            }else{
-                temp.push({user: user.username, stat : "", id: user._id})
+            } else {
+                temp.push({ user: user.username, stat: "", id: user._id })
                 // user.stat = "";
             }
         }
@@ -221,17 +290,17 @@ app.get('/search/users/:keyword/', function (req, res) {
 });
 
 
-app.get('/update/:username/:id', function(req, rer){
+app.get('/update/:username/:id', function (req, rer) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     let userSearch = people.find({ "_id": { $regex: req.params.keyword } });
     userSearch.then((documents) => {// when get the documents
-        for(user of documents){
+        for (user of documents) {
             console.log(req.cookies);
-            if(user.friends.includes(sessions[req.cookies['login'].username].id)){
-                temp.push({user: user.username, stat : "FRIEND", id: user._id})
+            if (user.friends.includes(sessions[req.cookies['login'].username].id)) {
+                temp.push({ user: user.username, stat: "FRIEND", id: user._id })
                 //user.stat = "FRIEND";
-            }else{
-                temp.push({user: user.username, stat : "", id: user._id})
+            } else {
+                temp.push({ user: user.username, stat: "", id: user._id })
                 // user.stat = "";
             }
         }
@@ -286,12 +355,12 @@ app.post('/score/', function (req, res) {
 
 async function readAllWords() {
 
-    data = await fs2.readFile('./words.txt', 'utf-8') 
-        allBoggleWords = data.split("\n");
-        for (var i = 0; i < allBoggleWords.length; i++) {
-            allBoggleWords[i] = allBoggleWords[i].trim();
-        }
-    
+    data = await fs2.readFile('./words.txt', 'utf-8')
+    allBoggleWords = data.split("\n");
+    for (var i = 0; i < allBoggleWords.length; i++) {
+        allBoggleWords[i] = allBoggleWords[i].trim();
+    }
+
 }
 
 async function findAllCorrectWords(correctBoggleWords, diceTray) {
