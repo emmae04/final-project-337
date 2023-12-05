@@ -23,8 +23,8 @@ var UserSchema = new Schema({
     username: String,
     password: String,
     image: String,
-    following: [{ type: Schema.Types.ObjectId }],
-    followers: [{ type: Schema.Types.ObjectId }],
+    following: [{type: Schema.Types.ObjectID}],
+    followers: [{type:  Schema.Types.ObjectID}],
     gameScore: []
 })
 
@@ -47,7 +47,30 @@ var boggleInfo = new Schema({
 
 var boggleData = mongoose.model('boggleData', boggleInfo);
 
+/** Profile data */
+app.get("/get/followers/:currUser", (req, res) => {
+    currUser = req.params.currUser;
+    people.findOne({ username: currUser }, 'friends', (user) => {
+        res.send(user.friends);
+    }
+      
+)});
 
+app.get("/get/followers/:currUser", (req, res) => {
+    currUser = req.params.currUser;
+    people.findOne({ username: currUser }, 'friends', (user) => {
+        res.send(user.friends);
+    }
+      
+)});
+
+app.get("/get/stats/:currUser", (req, res) => {
+    currUser = req.params.currUser;
+    people.findOne({ username: currUser }, 'friends', (user) => {
+        res.send(user.gameScore);
+    }
+      
+)});
 
 
 let sessions = {};
@@ -124,7 +147,7 @@ app.post('/login/user/pass', (req, res) => {
     p1.then((results) => {
         if (results.length == 0) {
 
-            res.send("FAIL");
+            res.send("FAIL"); 
             res.end();
         } else {
             let sid = addSession(u.username);
