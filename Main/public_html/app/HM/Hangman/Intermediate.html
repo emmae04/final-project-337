@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title> Intermediate Hangman </title>
+        <link id="cssFile" rel="stylesheet" type="text/css" href="hangman.css">
+    </head>
+
+    <body onload="getWord()">
+        <div id="top">
+            <h2> MANE Games </h2>
+            <div class="dropdown" id="navbar">
+                <button class="dropbtn"> Menu </button>
+                <div class="dropdown-content">
+                    <button> Profile</button>
+                    <button> Find Friends </button>
+                    <button> Home </button>
+                    <button onclick="setBeginner()"> Beginner </button>
+                    <button> Intermediate </button>
+                    <button onclick="setAdvanced()"> Advanced </button>
+                    <button onclick="setIntermediate()"> New Game </button>
+                </div>
+            </div> 
+            <div class="htp">
+                <div class="htpHeader"> ? </div>
+                <div class="htpContent">
+                    <div>Welcome to hangman! To play, enter your guess in the box.</div>
+                    <div>Your guess must be either a single letter or the length of the word.</div>
+                    <div>You will have 8 incorrect guesses until you lose the game.</div>
+                    <div>To change difficulty, select from the menu your level.</div>
+                    <div>Beginner will display a 5 letter word, Intermediate an 8 letter
+                        word, and Advanced will be a 12 letter word.
+                    </div>
+                </div>
+            </div><br>
+        </div>
+
+        <div id="hangman">
+            <h1 id="level"> Hangman - Intermediate </h1>
+
+            <img src="HangmanPics/start.jpg" alt="start" width="200" height="220" id="hangPic"><br>
+
+            <div id="word">
+                <div id="one"> </div>
+                <div id="two"> </div>
+                <div id="three"> </div>
+                <div id="four"> </div>
+                <div id="five"> </div>
+                <div id="six"> </div>
+                <div id="seven"> </div>
+                <div id="eight"> </div>
+            </div>
+
+            <div id="guesses">
+                <div id="wrong"> Incorrect Letters Guessed: </div>
+                <div id="guessNum"> Incorrect Guesses Left: 8 </div>
+            </div>
+
+            <div id="input">
+                <input type="text" id="guess" name="guess">
+                <button id="makeGuess" onclick="checkWord()"> Make Guess </button>
+            </div>
+        </div>
+
+        <script src="./functions.js"></script>
+    </body>
+</html>
