@@ -29,7 +29,7 @@
     margin-block: 50px;
 }
 
-#friendsButton {
+#followersButton {
     display: block;
     margin: 25px;
     background-color: red;
@@ -45,7 +45,7 @@
     width: 100px;
 }
 
-#profileButton {
+#followingButton {
     display: block;
     margin: 25px;
     background-color: blue;

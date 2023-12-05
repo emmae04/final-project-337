@@ -23,7 +23,7 @@ var UserSchema = new Schema({
     username: String,
     password: String,
     image: String,
-    friends: [],
+    following
     gameScore: []
 })
 
@@ -47,7 +47,15 @@ var boggleInfo = new Schema({
 var boggleData = mongoose.model('boggleData', boggleInfo);
 
 /** Profile data */
-app.get("/get/friends/:currUser", (req, res) => {
+app.get("/get/followers/:currUser", (req, res) => {
+    currUser = req.params.currUser;
+    people.findOne({ username: currUser }, 'friends', (user) => {
+        res.send(user.friends);
+    }
+      
+)});
+
+app.get("/get/followers/:currUser", (req, res) => {
     currUser = req.params.currUser;
     people.findOne({ username: currUser }, 'friends', (user) => {
         res.send(user.friends);
