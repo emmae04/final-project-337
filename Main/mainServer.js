@@ -5,11 +5,11 @@ const fs = require('fs')
 
 const parser = require('body-parser')
 const cookieParser = require('cookie-parser');
-
+const crypto = require('crypto');
 const port = 80
 
 // Builds up the database
-const db  = mongoose.connection;
+const db = mongoose.connection;
 const mongoDBURL = 'mongodb://127.0.0.1/final';
 mongoose.connect(mongoDBURL);
 db.on('error', () => { console.log('MongoDB connection error:') });
@@ -20,7 +20,8 @@ var Schema = mongoose.Schema;
 // The schema for users
 var UserSchema = new Schema({
     username: String,
-    password: String,
+    hash: String,
+    salt: String,
     friends: [],
     gameScore: []
 })
@@ -35,9 +36,6 @@ var HangmanSchema = new Schema({
 
 var people = mongoose.model("User", UserSchema);
 var hangman = mongoose.model("Hangman", HangmanSchema);
-
-
-
 
 let sessions = {};
 
@@ -71,7 +69,7 @@ function removeSessions() {
 setInterval(removeSessions, 2000);// constantly check to remove items
 
 const app = express();
-app.use(cookieParser());    
+app.use(cookieParser());
 app.use(express.json())
 
 function authenticate(req, res, next) {
@@ -107,19 +105,28 @@ app.post('/login/user/pass', (req, res) => {
     console.log(sessions);
     console.log("tried to login");
     let u = req.body;
-    let p1 = people.find({ username: u.username, password: u.password }).exec();
+    let p1 = people.find({username: u.username}).exec();
     p1.then((results) => {
         if (results.length == 0) {
-
             res.send("FAIL");
             res.end();
         } else {
-            let sid = addSession(u.username);
-            res.cookie("login",
-                { username: u.username, sessionID: sid },
-                { maxAge: 60000 * 2 });
-            res.status(200);
-            res.send("SUCCESS");
+            let currentUser = results[0];
+            let toHash = u.password + currentUser.salt;
+            let h = crypto.createHash('sha3-256');
+            let data = h.update(toHash, 'utf-8');
+            let result = data.digest('hex');
+
+            if (result == currentUser.hash) {
+                let sid = addSession(u.username);
+                res.cookie("login",
+                    { username: u.username, sessionID: sid },
+                    { maxAge: 300000 * 2 });
+                res.end('SUCCESS');
+            }
+            else {
+                res.end('FAIL');
+            }
         }
     });
 });
@@ -130,24 +137,40 @@ app.post('/login/user/pass', (req, res) => {
  */
 app.post("/add/user/", function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    let saveUser = new people({ username: req.body.username, password: req.body.password, games: []})
-    // creating a new user
-    let userSearch = people.find({});
+    // let saveUser = new people({ username: req.body.username, password: req.body.password, games: [] })
+    // // creating a new user
+    let userSearch = people.find({username: req.body.username}).exec();
     // finding the user with the given keyword in the username
 
     userSearch.then((documents) => {// when get the documents
-        if (documents.length != 0) {
-            for (let i = 0; i < documents.length; i++) {
-                if (documents[i].username == req.body.username) {
-                    res.end("FAIL")
-                }
-            }
+        if (documents.length == 0) {
+            let newSalt = '' + Math.floor(Math.random() * 10000000000);
+            let toHash = req.body.password + newSalt;
+            let h = crypto.createHash('sha3-256');
+            let data = h.update(toHash, 'utf-8');
+            let result = data.digest('hex');
+            let u = new people({
+                username: req.body.username,
+                hash: result,
+                salt: newSalt,
+                friends: [],
+                games: []
+            });
+            let p = u.save();
+            p.then(() => {
+                res.end('SUCCESS');
+            });
+            p.catch(() => {
+                console.log("save fail")
+                res.end('FAIL');
+            });
+        }
+        else {
+            console.log("find fail")
+            res.end('FAIL');
         }
     });
-    saveUser.save();// saving the new user
-    res.status(200);
-    console.log("i posted");
-    res.end("SUCCESS");// returning that the code has posted
+
 });
 
 // ---------------------------- Hangman Server ----------------------------
@@ -171,8 +194,8 @@ var boggleData = mongoose.model('boggleData', boggleInfo);
 var allBoggleWords = [];
 
 
-app.post('/diceTray/', function (req, res) { 
-    var correctBoggleWords = [];   
+app.post('/diceTray/', function (req, res) {
+    var correctBoggleWords = [];
     var diceTray = new Array(4);
     diceTray = req.body;
     let p = readAllWords();
@@ -186,7 +209,7 @@ app.post('/diceTray/', function (req, res) {
 });
 
 
-app.post('/score/', function(req, res){
+app.post('/score/', function (req, res) {
     score = req.body;
     res.setHeader('Access-Control-Allow-Origin', '*');
 
@@ -202,12 +225,12 @@ app.post('/score/', function(req, res){
 
 
 async function readAllWords() {
-    data = await fs.readFile('./words.txt', 'utf8') 
-        allBoggleWords = data.split("\n");
-        for (var i = 0; i < allBoggleWords.length; i++) {
-            allBoggleWords[i] = allBoggleWords[i].trim();
-        }
-    
+    data = await fs.readFile('./words.txt', 'utf8')
+    allBoggleWords = data.split("\n");
+    for (var i = 0; i < allBoggleWords.length; i++) {
+        allBoggleWords[i] = allBoggleWords[i].trim();
+    }
+
 }
 
 async function findAllCorrectWords(correctBoggleWords, diceTray) {
@@ -362,4 +385,4 @@ function isValid(row, col) {
 
 // ---------------------------- Blackjack Server ----------------------------
 app.listen(port, () =>
-console.log(`App listening at http://localhost:${port}`))
+    console.log(`App listening at http://localhost:${port}`))
