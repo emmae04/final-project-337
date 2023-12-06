@@ -33,6 +33,7 @@ var UserSchema = new Schema({
     salt: String,
     image: String,
     followers: [{ type: Schema.Types.ObjectId }],
+    following: [{ type: Schema.Types.ObjectId }]
 })
 
 // The schema for hangman
@@ -338,6 +339,9 @@ var followerArr = [];
 // this is a helper async funtion to get the people the
 // current user is following - used in the profile.js
 async function getFollowing(person) {
+    if(person == undefined){
+        return [];
+    }
     for (let i = 0; i < person.length; i++) {
         curr = await people.findOne({"_id" : person[i]});
         followingArr.push(curr.username);
@@ -349,6 +353,9 @@ async function getFollowing(person) {
 // this is a helper async funtion to get the current users
 // followrs - used in the profile.js
 async function getFollowers(person) {
+    if(person == undefined){
+        return [];
+    }
     for (let i = 0; i < person.length; i++) {
         curr = await people.findOne({"_id" : person[i]});
         followerArr.push(curr.username);
@@ -442,11 +449,11 @@ app.get(`/get/userSTATS/:user`, function (req, res) {
             stats.push({ username: user2.user, highScore: user2.highScore, currentWinStreak: user2.currentWinStreak });
             let curUserBJ = BJData.findOne({ "user": { $regex: req.params.user } });
             curUserBJ.then((bj) => {
-                let user3 = bj;
+                let user3 = bj[0];
                 stats.push({ username: user3.user, highScore: user3.highScore, currentWinStreak: user3.currentWinStreak });
                 let curUserTic = TTTData.findOne({ "user": { $regex: req.params.user } });
                 curUserTic.then((tic) => {
-                    let user4 = tic;
+                    let user4 = tic[0];
                     stats.push({ username: user4.user, highScore: user4.highestScore, currentWinStreak: user4.currentWinstreak });
                     res.status(200);
                     res.type('json').send(JSON.stringify(stats, null, 2) + '\n');
@@ -626,7 +633,6 @@ app.post('/diceTray/', function (req, res) {
 
 
 app.post('/scoreBoggle', function (req, res) {
-    // let body = JSON.parse(req.body);
     console.log(req.body);
     let bGame = boggleData.find({ user: req.body.username }).exec();
     bGame.then((doc) => {
@@ -808,6 +814,8 @@ app.post('/TTT/Loss/', function (req, res) {
     TTTSearch.then((documents) => {// when get the documents
         if (documents.length != 0) {
             documents[0].score -= 2;
+            documents[0].currentWinstreak=0;
+            documents[0].numberPlays +=1;
         }
         let p = documents[0].save();
         p.then(() => {
@@ -818,9 +826,8 @@ app.post('/TTT/Loss/', function (req, res) {
             res.end('FAIL');
         });
     });
-
-
 });
+
 app.post('/TTT/get/Score/', function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     let username = req.body.username;
@@ -829,9 +836,8 @@ app.post('/TTT/get/Score/', function (req, res) {
     TTTSearch.then((documents) => {// when get the documents
      res.end(documents[0].score.toString());
     });
-
-
 });
+
 app.post('/TTT/Win/', function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     let username = req.body.username;
@@ -841,6 +847,13 @@ app.post('/TTT/Win/', function (req, res) {
     TTTSearch.then((documents) => {// when get the documents
         if (documents.length != 0) {
             documents[0].score += 5;
+            documents[0].currentWinstreak+=1;
+            documents[0].numberPlays +=1;
+            console.log("currnet score"+documents[0].score)
+            console.log("highestScore"  +documents[0].highestScore  )
+           if(documents[0].score >= documents[0].highestScore){
+            documents[0].highestScore = documents[0].score;
+           }
         }
 
         let p = documents[0].save();
@@ -864,6 +877,8 @@ app.post('/TTT/Tie/', function (req, res) {
     TTTSearch.then((documents) => {// when get the documents
         if (documents.length != 0) {
             documents[0].score += 2;
+            documents[0].currentWinstreak=0;
+            documents[0].numberPlays +=1;
         }
         let p = documents[0].save();
         p.then(() => {

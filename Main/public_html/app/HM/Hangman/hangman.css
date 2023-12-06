@@ -6,6 +6,8 @@
     it.
 */
 
+
+
 body {
     background-color:  #FFCF96;
     font-family:'Copperplate';
@@ -47,7 +49,7 @@ h2 {
     right: 0px;
     left: 0px;
     top:0px;
-    height: 5px;
+    height: 40px;
 }
 .dropbtn {
     padding: 10px;
@@ -101,7 +103,7 @@ h2 {
     float: right;
     right: 15px;
     text-align: center;
-    top: 155px;
+    top: 195px;
     background-color: #FFCF96;
     margin: 0px;
 }
@@ -139,7 +141,7 @@ h1 {
 }
 
 #hangman {
-    top: 130px;
+    top: 170px;
     position: absolute;
     text-align: center;
     left: 10%;
@@ -184,4 +186,12 @@ img {
     margin-top: 20px;
     text-align: center;
     margin-bottom: 30px;
+}
+
+h2 {
+    font-family: "Arial";
+    background-color: #1c4963;
+    color: white;
+    padding: 30px;
+    font-size: 60px;
 }
