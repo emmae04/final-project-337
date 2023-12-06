@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title> Beginner Hangman </title>
+        <title> Advanced Hangman </title>
         <link id="cssFile" rel="stylesheet" type="text/css" href="hangman.css">
     </head>
 
@@ -14,12 +14,11 @@
                 <div class="dropdown-content">
                     <button> Profile</button>
                     <button> Find Friends </button>
-                    <button onclick="back()"> Home </button>
-                    <button> Beginner </button>
+                    <button> Home </button>
+                    <button onclick="setBeginner()"> Beginner </button>
                     <button onclick="setIntermediate()"> Intermediate </button>
-                    <button onclick="setAdvanced()"> Advanced </button>
-                    <button onclick="setBeginner()"> New Game </button>
-                    <!-- <button class="htpButton"> How To Play </button> -->
+                    <button> Advanced </button>
+                    <button onclick="setAdvanced()"> New Game </button>
                 </div>
             </div> 
             <div class="htp">
@@ -37,7 +36,7 @@
         </div>
 
         <div id="hangman">
-            <h1 id="level"> Hangman - Beginner </h1>
+            <h1 id="level"> Hangman - Advanced </h1>
 
             <img src="HangmanPics/start.jpg" alt="start" width="200" height="220" id="hangPic"><br>
 
@@ -47,6 +46,13 @@
                 <div id="three"> </div>
                 <div id="four"> </div>
                 <div id="five"> </div>
+                <div id="six"> </div>
+                <div id="seven"> </div>
+                <div id="eight"> </div>
+                <div id="nine"> </div>
+                <div id="ten"> </div>
+                <div id="eleven"> </div>
+                <div id="twelve"> </div>
             </div>
 
             <div id="guesses">
