@@ -5,6 +5,7 @@ const fs = require('fs')
 const fs2 = require('fs').promises
 
 const parser = require('body-parser')
+const readline = require('readline')
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const port = 80
@@ -54,30 +55,6 @@ var boggleInfo = new Schema({
 
 var boggleData = mongoose.model('boggleData', boggleInfo);
 
-/** Profile data */
-app.get("/get/followers/:currUser", (req, res) => {
-    currUser = req.params.currUser;
-    people.findOne({ username: currUser }, 'friends', (user) => {
-        res.send(user.friends);
-    }
-      
-)});
-
-app.get("/get/followers/:currUser", (req, res) => {
-    currUser = req.params.currUser;
-    people.findOne({ username: currUser }, 'friends', (user) => {
-        res.send(user.friends);
-    }
-      
-)});
-
-app.get("/get/stats/:currUser", (req, res) => {
-    currUser = req.params.currUser;
-    people.findOne({ username: currUser }, 'friends', (user) => {
-        res.send(user.gameScore);
-    }
-      
-)});
 
 let sessions = {};
 
@@ -292,6 +269,27 @@ app.get('/get/curUsers/', function (req, res) {
     } else {
         res.end("FAIL");
     }
+});
+
+app.get("/get/followers/", (req, res) => {
+    let curUser = people.findOne({ "username": req.cookies.login.username });
+    console.log(curUser)
+    res.send(curUser.followers);
+      
+});
+
+app.get("/get/following/", (req, res) => {
+    let curUser = people.findOne({ "username": req.cookies.login.username });
+    console.log(curUser)
+    res.send(JSON.stringify(curUser.following));
+      
+});
+
+app.get("/get/stats/", (req, res) => {
+    let curUser = people.findOne({ "username": req.cookies.login.username });
+    console.log(curUser)
+    res.send(curUser.gameScore);
+      
 });
 
 
@@ -621,5 +619,8 @@ function isValid(row, col) {
 
 
 // ---------------------------- Blackjack Server ----------------------------
+
+
+
 app.listen(port, () =>
     console.log(`App listening at http://localhost:${port}`))

@@ -38,12 +38,13 @@ function showFollowers() {
 function showFollowing() {
     col2.innerHTML = "";
     fetch("/get/following/")
-    .then(res => {
-        return res.text(); })
-        .then(text => {
+    .then((res) => {
+        return res.text(); 
+    })
+    .then(text => {
             console.log(text);
-            friendsDiv = document.createElement('div');
-            for (let i = 0; i < text.length; i++) {
+        friendsDiv = document.createElement('div');
+        for (let i = 0; i < text.length; i++) {
                 following = text[i].userName;
                 friendScore = 0;
                 for (let j = 0; j < friendsData[i].gameScore.length; j++) {
