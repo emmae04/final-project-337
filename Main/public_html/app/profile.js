@@ -6,7 +6,7 @@ function getCurrUser() {
     }).then(text =>{
         currUser = text;
         usernameBox = document.getElementById("username");
-        usernameBox.innerText += currUser;
+        usernameBox.innerText += " " + currUser;
     })
     
 }
@@ -15,25 +15,29 @@ const col2 = document.getElementById("column2");
 
 function showFollowers() {
     col2.innerHTML = "";
-    console.log(currUser);
     fetch("/get/followers/")
     .then((res) => {
-        console.log(res)
-        friendsData = res;
-        friendsDiv = document.createElement('div');
-        for (let i = 0; i < friendsData.length; i++) {
-            friendName = friendsData[i].userName;
-            friendScore = 0;
-            for (let j = 0; j < friendsData[i].gameScore.length; j++) {
-                friendsScore += friendsData[i].gameScore[j];
+        return res.text(); 
+    })
+    .then(followers => {
+            data = JSON.parse(followers);
+            topText = document.createElement("div")
+            topText.innerText = 'You have ' + data.length + " followers"
+            col2.appendChild(topText);
+        for (let i = 0; i < data.length; i++) {
+                curr = document.createElement('div');
+                p = document.createElement('p');
+                p.innerText = "Username: " + data[i]
+                curr.appendChild(p)
+                curr.style.height =  "10vh";
+                curr.style.border = "1px solid black"
+                p.style.marginLeft = "25px"
+            
+                col2.appendChild(curr);
             }
-            curr = document.createElement('div');
-            curr.innerText = "Friend : " + friendName + ", Total score: " + friendsScore;
-            friendsDiv.appendChild(curr);
-        }
-        col2.appendChild(friendsDiv);
-    });
-}
+        })
+
+    };
 
 function showFollowing() {
     col2.innerHTML = "";
@@ -41,26 +45,27 @@ function showFollowing() {
     .then((res) => {
         return res.text(); 
     })
-    .then(text => {
-            console.log(text);
-        friendsDiv = document.createElement('div');
-        for (let i = 0; i < text.length; i++) {
-                following = text[i].userName;
-                friendScore = 0;
-                for (let j = 0; j < friendsData[i].gameScore.length; j++) {
-                    friendsScore += friendsData[i].gameScore[j];
-                }
+    .then(following => {
+            data = JSON.parse(following);
+            topText = document.createElement("div")
+            topText.innerText = 'You are following ' + data.length + " users"
+            col2.appendChild(topText);
+        for (let i = 0; i < data.length; i++) {
                 curr = document.createElement('div');
-                curr.innerText = "Friend : " + friendName + ", Total score: " + friendsScore;
-                friendsDiv.appendChild(curr);
+                p = document.createElement('p');
+                p.innerText = "Username: " + data[i]
+                curr.appendChild(p)
+                curr.style.height =  "10vh";
+                curr.style.border = "1px solid black"
+                p.style.marginLeft = "25px"
+            
+                col2.appendChild(curr);
             }
-            col2.appendChild(friendsDiv);
         })
 
     };
 
 function showStats() {
-    getCurrUser();
     col2.innerHTML = "";
     fetch("/get/stats")
     .then(res => {

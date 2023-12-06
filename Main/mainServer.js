@@ -30,9 +30,6 @@ var UserSchema = new Schema({
 
     following: [{ type: Schema.Types.ObjectId }],
     followers: [{ type: Schema.Types.ObjectId }],
-
-
-    gameScore: []
 })
 
 // The schema for hangman
@@ -48,7 +45,7 @@ var people = mongoose.model("User", UserSchema);
 var hangman = mongoose.model("Hangman", HangmanSchema);
 
 
-///// boggles
+///// boggle
 var Schema = mongoose.Schema;
 var boggleInfo = new Schema({
     user: { type: String, default: '', trim: true },
@@ -59,7 +56,7 @@ var boggleInfo = new Schema({
 
 var boggleData = mongoose.model('boggleData', boggleInfo);
 
-////////// black jack
+//////// black jack
 var Schema = mongoose.Schema;
 var BJInfo = new Schema({
     user: { type: String, default: '', trim: true },
@@ -68,7 +65,7 @@ var BJInfo = new Schema({
     currentWinStreak: { type: Number, default: 0, min: 0 }
 });
 
-var BJInfo = mongoose.model('BJData', BJInfo);
+var BJData = mongoose.model('BJData', BJInfo);
 
 ////////// black jack
 var Schema = mongoose.Schema;
@@ -297,28 +294,62 @@ app.get('/get/curUsers/', function (req, res) {
     }
 });
 
+
+var followingArr = [];
+var followerArr = [];
+
+async function getFollowing(person) {
+    for (let i = 0; i < person.length; i++) {
+        curr = await people.findOne({"_id" : person[i]});
+        followingArr.push(curr.username);
+    }
+    console.log(followingArr)
+    return followingArr;
+}
+
+async function getFollowers(person) {
+    for (let i = 0; i < person.length; i++) {
+        curr = await people.findOne({"_id" : person[i]});
+        followerArr.push(curr.username);
+    }
+    console.log(followerArr)
+    return followerArr;
+}
+
 app.get("/get/followers/", (req, res) => {
-    let curUser = people.findOne({ "username": req.cookies.login.username });
-    console.log(curUser)
-    res.send(curUser.followers);
+    followerArr = [];
+    var curUser = people.findOne({ "username": req.cookies.login.username });
+    curUser.then((foundUser) => {
+        return foundUser.followers;
+    }).then((followers) => {
+        return getFollowers(followers);
+    }).then((followers) => {
+        console.log(followers);
+        res.send(followers)});
       
 });
 
+
+
 app.get("/get/following/", (req, res) => {
-    let curUser = people.findOne({ "username": req.cookies.login.username });
-    console.log(curUser)
-    res.send(JSON.stringify(curUser.following));
-      
+    followingArr = [];
+    var curUser = people.findOne({ "username": req.cookies.login.username });
+    curUser.then((foundUser) => {
+        return foundUser.following;
+    }).then((following) => {
+        return getFollowing(following);
+    }).then((follow) => {
+        res.send(follow)});
 });
 
 app.get("/get/stats/", (req, res) => {
     let curUser = people.findOne({ "username": req.cookies.login.username });
-    console.log(curUser)
-    res.send(curUser.gameScore);
+    curUser.then((foundUser) => {
+        console.log(foundUser.gameScore)
+        
+    })
       
 });
-
-
 
 
 app.get('/search/users/:keyword/', function (req, res) {
@@ -384,6 +415,12 @@ app.post("/update/:id", function (req, res) {
 
     });
     res.send(message);
+});
+
+// blackjack server
+
+app.post('/addscoreBJ', function(req, res) {
+    
 });
 
 
