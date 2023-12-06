@@ -12,7 +12,6 @@ const fs2 = require('fs').promises
 
 const readline = require("readline")
 const parser = require('body-parser')
-const readline = require('readline')
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const port = 80
@@ -362,18 +361,22 @@ var followingArr = [];
 var followerArr = [];
 
 async function getFollowing(person) {
-    for (let i = 0; i < person.length; i++) {
-        curr = await people.findOne({"_id" : person[i]});
-        followingArr.push(curr.username);
+    if (person !== undefined) {
+        for (let i = 0; i < person.length; i++) {
+            curr = await people.findOne({"_id" : person[i]});
+            followingArr.push(curr.username);
+        }
     }
     console.log(followingArr)
     return followingArr;
 }
 
 async function getFollowers(person) {
-    for (let i = 0; i < person.length; i++) {
-        curr = await people.findOne({"_id" : person[i]});
-        followerArr.push(curr.username);
+    if (person !== undefined) {
+        for (let i = 0; i < person.length; i++) {
+            curr = await people.findOne({"_id" : person[i]});
+            followerArr.push(curr.username);
+        }
     }
     console.log(followerArr)
     return followerArr;
@@ -383,6 +386,7 @@ app.get("/get/followers/", (req, res) => {
     followerArr = [];
     var curUser = people.findOne({ "username": req.cookies.login.username });
     curUser.then((foundUser) => {
+        console.log(foundUser.followers)
         return foundUser.followers;
     }).then((followers) => {
         return getFollowers(followers);
@@ -398,10 +402,13 @@ app.get("/get/following/", (req, res) => {
     followingArr = [];
     var curUser = people.findOne({ "username": req.cookies.login.username });
     curUser.then((foundUser) => {
+        console.log(foundUser.following)
         return foundUser.following;
     }).then((following) => {
+        console.log(followingArr)
         return getFollowing(following);
     }).then((follow) => {
+        console.log(follow)
         res.send(follow)});
 });
 
@@ -509,8 +516,45 @@ app.post("/update/:id", function (req, res) {
 
 // blackjack server
 
-app.post('/addscoreBJ', function(req, res) {
-    
+// var Schema = mongoose.Schema;
+// var BJInfo = new Schema({
+//     user: { type: String, default: '', trim: true },
+//     highScore: { type: Number, default: 0, min: 0 },
+//     numberOfPlays: { type: Number, default: 0, min: 0 }, 
+//     currentWinStreak: { type: Number, default: 0, min: 0 }
+// });
+
+app.post('/addScoreBJ/', function(req, res) {
+    var gameHigh = req.body.highScore;
+    var gamePlays = req.body.numberOfPlays;
+    console.log("here")
+    console.log(gameHigh);
+    console.log(gamePlays);
+    currGame = BJData.findOne({user : req.cookies.login.username});
+    currGame.then((doc) => {
+        console.log(currGame.name)
+        console.log(doc)
+        // Increase games played
+        let currHigh =
+        doc[0].highScore;
+        if (currHigh > gameHigh) {
+            doc[0].highScore = gameHigh;
+        }
+        var numPlays = doc[0].numberOfplays;
+        numPlays += gamePlays
+        doc[0].numberOfPlays = numPlays;
+        
+        var streak = doc[0].currentWinStreak;
+        if (gameHigh > (gamePlays/2)-1) {
+            streak ++;
+        }
+        else {
+            streak = 0;
+        }
+        doc[0].currWinStreak = streak;
+        doc[0].save();
+
+    })
 });
 
 
@@ -583,7 +627,8 @@ app.get('/get/word/ad', function  (req, res) {
 app.post('/new/win/:name', (req, res) => {
     console.log(req.body.wins);
     let hGame = hangman.find({user: req.params.name}).exec();
-    hGame.then((doc) => {
+    hGame.then(() => {
+        console.log(hGame)
         // Increase games played
         let games = doc[0].gamesPlayed;
         games++;

@@ -2,7 +2,7 @@
     position: absolute;
     width: 50vw;
     height: 100vh;
-    background-color:grey;
+    background-color:#fcc203;
     top: 0;
     left: 0;
 }
@@ -13,7 +13,7 @@
     height: 100vh;
     top: 0;
     left: 50vw;
-    background-color: aqua;
+    background-color: #286bbd;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
     font-size: 20px;
 }
@@ -33,38 +33,77 @@
 
 #followersButton {
     display: block;
-    margin: 25px;
-    background-color: red;
-    height: 40px;
-    width: 100px;
+    margin: 40px;
+    background-color: #3775f0;
+    height: 50px;
+    width:fit-content;
+    font-size: 20px;
 }
 
 #statsButton {
     display: block;
-    margin: 25px;
-    background-color: yellow;
-    height: 40px;
-    width: 100px;
+    margin: 40px;
+    background-color: lightsalmon;
+    height: 50px;
+    width:150px;
+    font-size: 20px;
 }
 
 #followingButton {
     display: block;
-    margin: 25px;
-    background-color: blue;
-    height: 40px;
-    width: 100px;
+    margin: 40px;
+    background-color: lightblue;
+    height: 50px;
+    width:fit-content;
+    font-size: 20px;
+}
+
+#help {
+    display: block;
+    margin: 40px;
+    background-color: orange;
+    height: 50px;
+    width:150px;
+    font-size: 20px;
+}
+
+#logout {
+    display: block;
+    margin: 40px;
+    background-color: #43ace8;
+    height: 50px;
+    width:150px;
+    font-size: 20px;
+}
+
+#changePassword {
+    display: block;
+    margin: 40px;
+    background-color: #f5c264;
+    height: 50px;
+    width:fit-content;
+    font-size: 17px;
+
 }
 
 #avatar {
-    height: 75px;
+    height: 100px;
     border-radius: 50px;
-    margin-left: 10px;
-    margin-top: 25px;
+    margin-left: 15px;
+    margin-top: 50px;
 }
 
 #username {
-    margin-left: 110px;
-    top: 35px;
+    margin-left: 150px;
+    top: 60px;
+    font-size: 22px;
     position: absolute;
 }
+
+body {
+    font-family: 'Times New Roman', Times, serif
+}
+
+
+
 

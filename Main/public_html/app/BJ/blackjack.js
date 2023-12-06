@@ -58,6 +58,7 @@ const playAgain = document.getElementById("play-again");
 const txtbox = document.getElementById("textbox");	
 const startButton = document.getElementById("start");	
 const secondsLeft = document.getElementById("secondsLeft");
+const seeRules = document.getElementById("see-rules")
 var player1Sticks = false;
 var player2Sticks = false;
 var p1Moved = false;
@@ -69,6 +70,7 @@ var player2CardVal = 0;
 var gameOver = false;
 
 function initValues() {
+	seeRules.style.display = "None";
 	drawAnotherButton.disabled = false;
 	stickButton.disabled = false;
 	player1Cards = [];
@@ -301,18 +303,17 @@ function endGame() {
         currUser = text;
     })
 
-	data = {
-		user : currUser,
-		highScore : P1Wins,
-		numberOfPlays : numRounds,
-		currentWinStreak : P1Wins
+	data= {
+		highScore:P1Wins,
+		numberOfPlays:numRounds,
 	}
 
-	fetch(`/addScoreBJ`, {
+
+	fetch("/addScoreBJ/" , {
 		method: "POST",
 		body: JSON.stringify(data), 
 		headers: {"Content-Type" : "application/json"}
-	});
+	})
 }
 
 function displayCurrScore() {
