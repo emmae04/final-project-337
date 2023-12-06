@@ -1,30 +1,8 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title> MANE Games </title>
-        <link id="cssFile" rel="stylesheet" type="text/css" href="main.css">
-    </head>
-
-    <body>
-        <h1> MANE Games </h1><br>
-        <div class="dropdown" id="navbar">
-            <button class="dropbtn"> Menu </button>
-            <div class="dropdown-content">
-                <button> Profile</button><br>
-                <button> Find Friends </button>
-            </div>
-        </div>
-
-        <div id="games">
-            <p onclick = "goToHangman() "id="h" > Hangman </p>
-            <p onclick = "goToBoggle()"id="b"> Boggle </p> <br>
-            <p onclick = "goToTTT()" id="t"> Tic Tac Toe </p>
-            <p onclick = "goToBJ()" id="bj"> Black Jack</p>
-        </div>
-        <script src="../login.js"></script>
-    </body>
-</html> -->
+<!-- 
+    This file contains the html that supports the home page of our website. It
+    has the option to go to your profile, find friends, look at leader boards,
+    and play different games.
+ -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -37,41 +15,40 @@
 
 <body>
     <h1 class="header"> MANE Games </h1>
-    <button onclick = "logOut()">logout</button>
-    <button onclick = "changePassword()">changePassword</button>
+  
     <div class="topnav">
-        <a href="./profile.html">Profile</a>
-        <a href="#">Global Leaderboard</a>
-        <a href="./findFriends.html">Find Friends</a>
+        <a href="./profile.html" id="profile">Profile</a>
+        <a href="#" id="leader">Global Leaderboard</a>
+        <a href="./findFriends.html" id="friends">Find Friends</a>
     </div>
 
-    <div class="column">
+    <div class="column" id="bj" onclick="goToBJ()">
         <img src="card image.png" alt="Italian Trulli">
         <h2><a href="http://localHost/app/BJ/blackjack.html">Blackjack</a></h2>
        
-        <p>a gambling card game in which players try to acquire cards with a face value as close as possible to 21 without going over.</p>
+        <p class="info">a gambling card game in which players try to acquire cards with a face value as close as possible to 21 without going over.</p>
     </div>
-    <div class="column">
+    <div class="column" id="bg" onclick="goToBoggle()">
         <img src="boggle image.jpg" alt="Italian Trulli">
         <h2> <a href="http://localHost/app/BOG/index.html">Boggle</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis
+        <p class="info">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis
             velit nec neque ultricies, eget elementum magna tristique. Quisque vehicula, risus eget aliquam placerat,
             purus leo tincidunt eros, eget luctus quam orci in velit. Praesent scelerisque tortor sed accumsan
             convallis.</p>
     </div>
-    <div class="column">
+    <div class="column" id="h" onclick="goToHangman()">
         <img src="hangman image.jpg"alt="Italian Trulli">
         <h2><a href="http://localHost/app/HM/Hangman/Beginner.html">Hangman</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis
-            velit nec neque ultricies, eget elementum magna tristique. Quisque vehicula, risus eget aliquam placerat,
-            purus leo tincidunt eros, eget luctus quam orci in velit. Praesent scelerisque tortor sed accumsan
-            convallis.</p>
+        <p class="info">This is a classic game of hangman! Pick between three levels: beginner,
+            intermediate, and advanced. Enter your letter or word guesses to guess
+            the word. But don't get more than 8 wrong answers, otherwise you lose!
+        </p>
     </div>
-    <div class="column">
+    <div class="column" id="t" onclick="goToTTT()">
         <img src="TTT image.jpg" alt="Italian Trulli">
         <h2><a href= "http://localHost/app/TTT/ttt.html">Tic Tac Toe</a></h2>
        
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis
+        <p class="info">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis
             velit nec neque ultricies, eget elementum magna tristique. Quisque vehicula, risus eget aliquam placerat,
             purus leo tincidunt eros, eget luctus quam orci in velit. Praesent scelerisque tortor sed accumsan
             convallis.</p>

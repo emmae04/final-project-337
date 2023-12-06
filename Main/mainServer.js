@@ -81,33 +81,6 @@ var BJInfo = new Schema({
 
 var BJData = mongoose.model('BJData', BJInfo);
 
-/** Profile data */
-// app.get("/get/followers/:currUser", (req, res) => {
-//     currUser = req.params.currUser;
-//     people.findOne({ username: currUser }, 'friends', (user) => {
-//         res.send(user.friends);
-//     }
-
-// )});
-
-// app.get("/get/followers/:currUser", (req, res) => {
-//     currUser = req.params.currUser;
-//     people.findOne({ username: currUser }, 'friends', (user) => {
-//         res.send(user.friends);
-//     }
-
-
-// )});
-
-// app.get("/get/stats/:currUser", (req, res) => {
-//     currUser = req.params.currUser;
-//     people.findOne({ username: currUser }, 'friends', (user) => {
-//         res.send(user.gameScore);
-//     }
-
-
-// )});
-
 let sessions = {};
 
 /**
@@ -207,27 +180,20 @@ app.post('/login/user/pass', (req, res) => {
 });
 
 
-app.post('/logout/:user/', (req, res) => {
-
+app.post('/logout/user/', (req, res) => {
+    console.log("go tto this logout")
     removeCertainSession(req, res);
-    res.end();
+  
 });
 
 function removeCertainSession(req, res) {
     let c = req.cookies;
-    console.log('auth request:');
+    console.log('logout request');
     console.log(req.cookies);
     if (c != undefined) {
-        if (sessions[c.login.username] != undefined &&
-            sessions[c.login.username].id == c.login.sessionID) {// if the session and cookie match
-            delete sessions[c.login.username]
-            res.redirect('http://localhost/index.html');
-        } else {
-            res.redirect('http://localhost/index.html');
-        }
-    } else {
-        res.redirect('http://localhost/index.html');
-    }
+        delete sessions[c.login.username];
+        res.end("SUCCESS");
+    } 
 }
 
 app.post('/changePassword/user', (req, res) => {
@@ -363,7 +329,12 @@ app.get('/get/curUsers/', function (req, res) {
 var followingArr = [];
 var followerArr = [];
 
+// this is a helper async funtion to get the people the
+// current user is following - used in the profile.js
 async function getFollowing(person) {
+    if(person == undefined){
+        return [];
+    }
     for (let i = 0; i < person.length; i++) {
         curr = await people.findOne({ "_id": person[i] });
         followingArr.push(curr.username);
@@ -372,7 +343,12 @@ async function getFollowing(person) {
     return followingArr;
 }
 
+// this is a helper async funtion to get the current users
+// followrs - used in the profile.js
 async function getFollowers(person) {
+    if(person == undefined){
+        return [];
+    }
     for (let i = 0; i < person.length; i++) {
         curr = await people.findOne({ "_id": person[i] });
         followerArr.push(curr.username);
@@ -381,6 +357,8 @@ async function getFollowers(person) {
     return followerArr;
 }
 
+// this is a get request to get the followers of the current user- 
+// used in profil.js
 app.get("/get/followers/", (req, res) => {
     followerArr = [];
     var curUser = people.findOne({ "username": req.cookies.login.username });
@@ -397,7 +375,8 @@ app.get("/get/followers/", (req, res) => {
 });
 
 
-
+// this is a get request to get the people the current user is following
+// used in profile.js
 app.get("/get/following/", (req, res) => {
     followingArr = [];
     var curUser = people.findOne({ "username": req.cookies.login.username });
@@ -830,6 +809,8 @@ app.post('/TTT/Loss/', function (req, res) {
     TTTSearch.then((documents) => {// when get the documents
         if (documents.length != 0) {
             documents[0].score -= 2;
+            documents[0].currentWinstreak=0;
+            documents[0].numberPlays +=1;
         }
         let p = documents[0].save();
         p.then(() => {
@@ -840,9 +821,8 @@ app.post('/TTT/Loss/', function (req, res) {
             res.end('FAIL');
         });
     });
-
-
 });
+
 app.post('/TTT/get/Score/', function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     let username = req.body.username;
@@ -851,9 +831,8 @@ app.post('/TTT/get/Score/', function (req, res) {
     TTTSearch.then((documents) => {// when get the documents
         res.end(documents[0].score.toString());
     });
-
-
 });
+
 app.post('/TTT/Win/', function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     let username = req.body.username;
@@ -863,6 +842,13 @@ app.post('/TTT/Win/', function (req, res) {
     TTTSearch.then((documents) => {// when get the documents
         if (documents.length != 0) {
             documents[0].score += 5;
+            documents[0].currentWinstreak+=1;
+            documents[0].numberPlays +=1;
+            console.log("currnet score"+documents[0].score)
+            console.log("highestScore"  +documents[0].highestScore  )
+           if(documents[0].score >= documents[0].highestScore){
+            documents[0].highestScore = documents[0].score;
+           }
         }
 
         let p = documents[0].save();
@@ -886,6 +872,8 @@ app.post('/TTT/Tie/', function (req, res) {
     TTTSearch.then((documents) => {// when get the documents
         if (documents.length != 0) {
             documents[0].score += 2;
+            documents[0].currentWinstreak=0;
+            documents[0].numberPlays +=1;
         }
         let p = documents[0].save();
         p.then(() => {

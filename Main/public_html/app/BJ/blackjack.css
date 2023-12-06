@@ -1,4 +1,9 @@
-@import url('https://fonts.cdnfonts.com/css/casino');
+/* Author: Emma Elliott
+This is the css for the main blackjack page
+ */
+
+/* importing font and some animation */
+ @import url('https://fonts.cdnfonts.com/css/casino');
 
 @keyframes fadeIn {
     0% { opacity: 0; }

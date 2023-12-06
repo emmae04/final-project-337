@@ -1,8 +1,13 @@
+<!-- Author: Emma Elliott
+This html will create the profile page
+on the website -->
+
 <!DOCTYPE html>
 <html>
     <head>
         <link href="profile.css" rel="stylesheet">
     </head>
+    <!-- will display current users username -->
     <body onload="getCurrUser()">
         <div id="column1">
             <div id="row1">
@@ -26,7 +31,8 @@
                 <button id="help" onclick="window.location.href = 'help.html'">
                     Help
                 </button>
-                <button id="logout" >
+                <button onclick = "logOut()" id="logout" >
+
                     Logout
                 </button>
                 <!-- <button id="changePassword">
@@ -38,6 +44,6 @@
         <div id="column2">
         </div>
 
-    <script src="profile.js"></script>
+    <script src="./profile.js"></script>
     </body>
 </html>

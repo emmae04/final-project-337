@@ -1,11 +1,43 @@
 body {
     background-color: palevioletred;
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0px;
+    height: 100%;
+    font-family: "Arial";
 }
 
 h1 {
     text-align: center;
+  
 }
-
+#backButton{
+       display: inline-block;
+       margin-top:140px;
+       width:60px;
+       height:40px;
+       border-radius: 8px;
+       background-color: #FC6C85;
+}
+.header {
+    background-color: #1c4963;
+    text-align: center;
+    padding: 30px;
+    margin-bottom: 0px;
+    color: white;
+    top: 0px;
+    left:0px;
+    margin-top: 0px;
+    position:absolute;
+    width:100%;
+    font-size: 60px;
+    border-bottom: solid 3px white;
+}
+h3{
+   display:inline-block;
+   margin-left:40%;
+margin-top:110px;
+}
 td {
     width: 120px;
     height: 120px;
@@ -19,7 +51,8 @@ table {
     display: inline-block;
     font-size: 100px;
     top: 29%;
-    margin-left: 50%;
+    margin-left: 56%;
+    margin-top:45px;
     position: fixed;
     border: 3px solid maroon;
 }
@@ -30,8 +63,10 @@ table {
     height: 380px;
     width: 380px;
     top: 30%;
+    margin-top:40px;
     text-align: center;
     text-overflow: wrap;
+    margin-left:0%;
     left: 20%;
     border: 3px solid maroon;
     background-color: #FC6C85;
@@ -44,11 +79,12 @@ table {
 
 #label {
     text-align: center;
+    margin-top:0;
     background-color: #FC6C85;
     border: 3px solid maroon;
     width:400px;
     height:20px;
-    margin-left:36%;
+    margin-left:37%;
    visibility:hidden;
 }
 
@@ -63,14 +99,14 @@ p {
     border: 3px solid maroon;
     width:200px;
     height:20px;
-    margin-left:43%;
+    margin-left:44%;
   
 }
 
 #newGame {
     width: 100px;
     height: 30px;
-    margin-left: 47%;
+    margin-left: 48%;
     margin-top: 10px;
     display: block;
     position: relative;
