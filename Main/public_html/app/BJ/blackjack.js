@@ -1,45 +1,28 @@
-// 1) the game will begin with the current user being
-// given the option to either play with the computer
-// or another player 
-// 2) once the user has selected they will either be assigned another player
-// to play if there are others online. If there are no other players online,
-// then the user will have to play against the computer 
-// 3) the user and the other player will then be dealt 2 cards each from
-// the deck of cards displayed at the side of the page
-// 4) the other player will have 10 seconds to decide whether or not to draw
-// another card or to stick with their current hand. After they have decided, 
-// the current user will have the same choice
-// 5) The time continues until both players have stuck to their cards, 
-// then both cards are revealed to the other player. Then, 1 point is awarded
-// to the player with:
-//  1) if one of the players is "bust" or has a card calue over 21, 
-//     the other player is awarded the point
-//  2) if both players are not "bust", the point is awarded to the player with
-//     the card value closest to 21
-//  3) if the players have a tie, the point is awarded to the player with the most cards
-//  4) if the players have the same amount of cards, the point is awarded to the
-//     player with the highest card value
-// 
-// additional rules : 
-// 1) an ace can either count for an 11 or a 1 - if a player is dealt
-// an ace, they will be given the option to decide if they count it as an 11 or a 1
-// 2) There will be 5 rounds total. The player with the most points after 5 rounds is
-// awarded a win - or if 1 player wins the first 3 rounds 
-// 3) "global scores" will be determined by whichever player has the most points from 
-// playing rounds of the game 
+/** Author: Emma Elliott
+ * This is the client side code for blackjack
+ * GAME OVERVIEW
+ * 1) the game will begin with the user pressing start 
+2) the user and the computer will then be dealt 2 cards each from
+the deck of cards displayed at the side of the page
+3) players will have 10 seconds to decide whether or not to draw
+another card or to stick with their current hand. After they have decided, 
+the other player will have the same choice
+4) The time continues until both players have stuck to their cards, 
+then both cards are revealed to the other player. Then, 1 point is awarded
+as followings:
+ 5) if one of the players is "bust" or has a card calue over 21, 
+    the other player is awarded the point
+ 6) if both players are not "bust", the point is awarded to the player with
+    the card value closest to 21
+ 7) if the players have a tie, the point is awarded to the player with the most cards
+ 8) if the players have the same amount of cards, the point is awarded to the
+    player with the highest card value
+9) "global scores" will be determined by whichever player has the most points from 
+playing rounds of the game 
+ */
 
 var suits = ["S", "D", "C", "H"];
 var rank = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-
-function chooseCard() {
-	
-	var card = deck[Math.floor(Math.random() * 52)];
-	while (!deck.includes(card)) {
-		card = deck[Math.floor(Math.random() * 52)];
-	}
-	currentCards.push(card);
-	return card
-}
 //create a function to initialize values of game
 // deck, current cards
 var numRounds = 0;
@@ -69,6 +52,8 @@ var player1CardVal = 0;
 var player2CardVal = 0;
 var gameOver = false;
 
+// this function will initalize all the values in the game 
+// at the beginning of the round and at the end of each new round
 function initValues() {
 	seeRules.style.display = "None";
 	drawAnotherButton.disabled = false;
@@ -98,7 +83,20 @@ function initValues() {
 }
 
 
-// create a function to choose players first cards
+// this function will randomly choose cards from the deck
+// of cards
+function chooseCard() {
+	var card = deck[Math.floor(Math.random() * 52)];
+	while (!deck.includes(card)) {
+		card = deck[Math.floor(Math.random() * 52)];
+	}
+	currentCards.push(card);
+	return card
+}
+
+
+// this function to choose players first cards, each player
+// will be dealt 2 cards each to begin
 function chooseFirstCards() {
 	player1Cards.push(chooseCard());
 	player1Cards.push(chooseCard());
@@ -106,7 +104,9 @@ function chooseFirstCards() {
 	player2Cards.push(chooseCard());
 }
 
-
+// this function begins the game - it will initialize
+// the intervals for the functions to be called within the
+// game and initializes values
 function startGame() {
 	initValues();
 	intID1 = setInterval(countDown, 1000);
@@ -120,6 +120,8 @@ function startGame() {
 	
 }
 
+// this function will player the computers turn of the game
+// only if the first player has moved or the first player sticks
 function playComputersTurn() {
 	if (p1Moved || player1Sticks) {
 		secondsLeft.innerText = "10"
@@ -129,6 +131,8 @@ function playComputersTurn() {
 	}
 }
 
+// this function is called every 1/2 second and will determine if
+// the game is over to display the scores of the current round
 function isGameOver() {
 	if (player1Sticks && player2Sticks) {
 		stopRound()
@@ -138,17 +142,20 @@ function isGameOver() {
 	}
 }
 
+// this function will make the computer either draw another card 
+// or stick with their current cards
 function computerDraws() {
 	if (tDontD(player2CardVal)) {
 		pickAnother(2)
 	}
 	else {
-		console.log("here")
 		player2Sticks = true;
 	}
 
 }
 
+// this function will randomly choose whether or not the computer
+// will draw another card or stick to their current cards
 function tDontD(player2CardVal) {
 	if (player2CardVal >= 21) {
 		return false;
@@ -157,6 +164,9 @@ function tDontD(player2CardVal) {
 	return random != 1
 }
 
+// this function will be called everytime player 1 or player 2 chooses
+// a card - it takes the parameter of the player number, and will display
+// their new card on the screen
 function pickAnother(player) {
 	let card = chooseCard()
 	var anotherCard = document.createElement('img');
@@ -164,6 +174,7 @@ function pickAnother(player) {
 	anotherCard.style.marginRight = "25px";
 	anotherCard.style.borderRadius = "15px";
 	if (player == 2) {
+		// hides player 2's card 
 		anotherCard.src = "playing-card.png";
 		cardCont2.appendChild(anotherCard);
 		secondsLeft.innerText = 10;
@@ -171,6 +182,8 @@ function pickAnother(player) {
 		addCardVal(2, card);
 	}
 	else {
+		// shows player 1's card
+
 		var cardSrc = String(card).split(" ")[0] + String(card).split(" ")[1];
 		anotherCard.src = "cards/" + cardSrc + ".png"
 		cardCont1.appendChild(anotherCard);
@@ -184,6 +197,8 @@ function pickAnother(player) {
 
 }
 
+// this function will be called if player 1 sticks, and it will
+// disable both action button sof the screen 
 function stick() {
 	player1Sticks = true;
 	p1Moved = true;
@@ -192,7 +207,10 @@ function stick() {
 
 }
 
-
+// this function will be the countdown timer for the game. It will count down
+// from 10. If the timer reaches 0 and the player has not moved, the round will
+// end and the player who didnt move will automatically loose. The countdown timer
+// is reset for every move made ad every new round created
 function countDown() {
 	var countdown = ["10", "9", "8", "7", "6", "4", "5", "3",
 	"2", "1", "0"];
@@ -200,6 +218,7 @@ function countDown() {
 	currIndex = countdown.indexOf(currVal);
 	if (currVal == 0) {
 		if (!p1Moved) {
+			// stops round if p1 did not move 
 			stopRound()
 			secondsLeft.innerText = 0;
 		}
@@ -213,6 +232,10 @@ function countDown() {
 
 }
 
+// this function will be called if one of the players went "bust", a 
+// player ran out of time, or both players have stuck to their cards. 
+// it will determine the winner and create a winner message to display on
+// the screen 
 function stopRound() {
 	winner = whosTheWinner()
 	if (whosTheWinner() == 1) {
@@ -230,6 +253,7 @@ function stopRound() {
 
 	txtbox.style.display = "inline";
 	txtbox.innerText = winnerMsg;
+	// clears intervals until next round starts. 
 	clearInterval(intID1);
 	clearInterval(intID2);
 	displayCurrScore();
@@ -240,12 +264,15 @@ function stopRound() {
 
 }
 
+// this function will determine who is the winner of the game - player 1 or player 2
+// depnded on their card value, and how many cards they have. Players can also tie
 function whosTheWinner() {
 	if (secondsLeft.innerText == "0") {
 		return 2;
 	}
 	if (player1CardVal > 21) {
 		if (player2CardVal > 21) {
+			// tie if both players are bust
 			return 0;
 		}
 		else {
@@ -269,11 +296,16 @@ function whosTheWinner() {
 			return 2;
 		}
 		else {
+			// tie if both players have the same card value and same amount of cards. 
 			return 0;
 		}
 	}	
 }
 
+// this function will end the game after the user has decided they want to stop. 
+// The total rounds the played vs the total round the computer played will be shown
+// and the users wins will be recorded in the server. The user can play again or 
+// navigate back to home.
 function endGame() {
 	if (noPlayButton.innerText == "Go home") {
 		window.location.href = "start_blackjack.html";
@@ -308,7 +340,7 @@ function endGame() {
 		numberOfPlays:numRounds,
 	}
 
-
+	// will add score to the game
 	fetch("/addScoreBJ/" , {
 		method: "POST",
 		body: JSON.stringify(data), 
@@ -316,8 +348,9 @@ function endGame() {
 	})
 }
 
+// this functon will display the current score after the game has been 
+// finished as how many rounds P1 wons vs how many rounds P2 has won
 function displayCurrScore() {
-
 	cards_to_display = cardCont2.getElementsByTagName("img");
 	for (let i = 0; i < cards_to_display.length; i++) {
 		cardSrc = String(player2Cards[i]).split(" ")[0] + String(player2Cards[i]).split(" ")[1]
@@ -329,6 +362,8 @@ function displayCurrScore() {
 }
 
 
+// this function will display player 1's cards - it will pull images from the cards folder inside 
+// this folder. It will then add then to the screen. 
 function displayP1Cards() {
 	var card1Src = String(player1Cards[0]).split(' ')[0] + String(player1Cards[0]).split(' ')[1];
 	var card1 = document.createElement('img');
@@ -349,6 +384,9 @@ function displayP1Cards() {
 
 }
 
+// this function will determine the card value of each players card, to be 
+// used later on in determining the winner. Aces count as 1 point, and Queens, 
+// jacks, and kings count as 10 points. 
 function addCardVal(player, card) {
 	cardAmt = String(card).split(" ")[0]
 	console.log(cardAmt)
@@ -370,10 +408,13 @@ function addCardVal(player, card) {
 	}
 }
 
+// checks if a string is number to parse cards in the deck
 function isNumber(obj) {
     return typeof obj === 'number';
 }
 
+// This function will display player 2's cards as the back of 
+// a playing card so it is hidden to the first player. 
 function displayP2Cards() {
 	var card1 = document.createElement('img');
 	card1.src = "playing-card.png";

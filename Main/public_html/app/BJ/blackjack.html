@@ -1,6 +1,10 @@
+<!-- 
+    Author: Emma Elliott
+    This code will create the html for the blackjack game
+ -->
 <!DOCTYPE html>
 <html>
-    <head>
+    <head lang="en">
         <meta charset="utf-8">
         <link rel="stylesheet" href="blackjack.css">
     </head>
@@ -16,6 +20,7 @@
         <span>
             <p id="textbox"></p>
         <span>
+            <!-- choice buttons after round -->
             <button id="play-again" onClick ="startGame()">Another round</button>
             <button id="dont-play-again" onClick="endGame()">End game</button>
         </span>
@@ -23,6 +28,7 @@
 
         <div id="buttons">
             <p id="secondsLeft">10</p>
+            <!-- choice buttons during round -->
             <button id="drawAnother" onClick="pickAnother(1)" disabled="true">Draw Another</button>
             <button id="stick" onClick="stick()" disabled="true">Stick</button>
         </div>
