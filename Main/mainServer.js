@@ -67,7 +67,7 @@ var BJInfo = new Schema({
     currentWinStreak: { type: Number, default: 0, min: 0 }
 });
 
-var BJInfo = mongoose.model('BJData', BJInfo);
+var BJData = mongoose.model('BJData', BJInfo);
 
 /** Profile data */
 app.get("/get/followers/:currUser", (req, res) => {
@@ -267,6 +267,22 @@ app.post("/add/user/", function (req, res) {
             let data = h.update(toHash, 'utf-8');
             let result = data.digest('hex');
             let u = new people({
+                username: req.body.username,
+                hash: result,
+                salt: newSalt,
+                friends: [],
+                games: []
+            });
+
+            let BJ = new BJData({
+                username: req.body.username,
+                hash: result,
+                salt: newSalt,
+                friends: [],
+                games: []
+            });
+
+            let Boggle = new boggleData({
                 username: req.body.username,
                 hash: result,
                 salt: newSalt,
