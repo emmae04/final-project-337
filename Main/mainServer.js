@@ -123,6 +123,9 @@ function authenticate(req, res, next) {
     if (c != undefined && c.login != undefined) {
         if (sessions[c.login.username] != undefined &&
             sessions[c.login.username].id == c.login.sessionID) {// if the session and cookie match
+            let now = Date.now();
+            c.maxAge = 300000 * 2;
+            sessions[c.login.username] = { id: c.login.sessionID, time: now }
             next();
         } else {
             res.redirect('http://localhost/index.html');
@@ -183,7 +186,7 @@ app.post('/login/user/pass', (req, res) => {
 app.post('/logout/user/', (req, res) => {
     console.log("go tto this logout")
     removeCertainSession(req, res);
-  
+
 });
 
 function removeCertainSession(req, res) {
@@ -193,7 +196,7 @@ function removeCertainSession(req, res) {
     if (c != undefined) {
         delete sessions[c.login.username];
         res.end("SUCCESS");
-    } 
+    }
 }
 
 app.post('/changePassword/user', (req, res) => {
@@ -332,7 +335,7 @@ var followerArr = [];
 // this is a helper async funtion to get the people the
 // current user is following - used in the profile.js
 async function getFollowing(person) {
-    if(person == undefined){
+    if (person == undefined) {
         return [];
     }
     for (let i = 0; i < person.length; i++) {
@@ -346,7 +349,7 @@ async function getFollowing(person) {
 // this is a helper async funtion to get the current users
 // followrs - used in the profile.js
 async function getFollowers(person) {
-    if(person == undefined){
+    if (person == undefined) {
         return [];
     }
     for (let i = 0; i < person.length; i++) {
@@ -432,24 +435,24 @@ app.get('/search/users/:keyword/', function (req, res) {
 
 app.get(`/get/userSTATS/:user`, function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    let curUserHang = hangman.findOne({user: req.params.user} ).exec();
+    let curUserHang = hangman.findOne({ user: req.params.user }).exec();
     var stats = [];
     curUserHang.then((hang) => {
         console.log(hang);
         let user = hang;
         stats.push({ username: user.user, highScore: user.wins, currentWinStreak: user.currWinStreak, gamesPlayed: user.gamesPlayed });
-        let curUserBog = boggleData.findOne({ user: req.params.user}).exec();
+        let curUserBog = boggleData.findOne({ user: req.params.user }).exec();
         curUserBog.then((bog) => {
             let user2 = bog;
             stats.push({ username: user2.user, highScore: user2.highScore, currentWinStreak: user2.currentWinStreak, gamesPlayed: user2.numberOfPlays });
             let curUserBJ = BJData.find({ user: { $regex: req.params.user } }).exec();
             curUserBJ.then((bj) => {
                 let user3 = bj[0];
-                stats.push({ username: user3.user, highScore: user3.highScore, currentWinStreak: user3.currentWinStreak,  gamesPlayed: user3.numberOfPlays});
+                stats.push({ username: user3.user, highScore: user3.highScore, currentWinStreak: user3.currentWinStreak, gamesPlayed: user3.numberOfPlays });
                 let curUserTic = TTTData.findOne({ user: { $regex: req.params.user } }).exec();
                 curUserTic.then((tic) => {
                     let user4 = tic;
-                    stats.push({ username: user4.user, highScore: user4.highestScore, currentWinStreak: user4.currentWinstreak, gamesPlayed : user4.numberPlays });
+                    stats.push({ username: user4.user, highScore: user4.highestScore, currentWinStreak: user4.currentWinstreak, gamesPlayed: user4.numberPlays });
                     res.status(200);
                     res.type('json').send(JSON.stringify(stats, null, 2) + '\n');
                 });
@@ -809,8 +812,8 @@ app.post('/TTT/Loss/', function (req, res) {
     TTTSearch.then((documents) => {// when get the documents
         if (documents.length != 0) {
             documents[0].score -= 2;
-            documents[0].currentWinstreak=0;
-            documents[0].numberPlays +=1;
+            documents[0].currentWinstreak = 0;
+            documents[0].numberPlays += 1;
         }
         let p = documents[0].save();
         p.then(() => {
@@ -842,13 +845,13 @@ app.post('/TTT/Win/', function (req, res) {
     TTTSearch.then((documents) => {// when get the documents
         if (documents.length != 0) {
             documents[0].score += 5;
-            documents[0].currentWinstreak+=1;
-            documents[0].numberPlays +=1;
-            console.log("currnet score"+documents[0].score)
-            console.log("highestScore"  +documents[0].highestScore  )
-           if(documents[0].score >= documents[0].highestScore){
-            documents[0].highestScore = documents[0].score;
-           }
+            documents[0].currentWinstreak += 1;
+            documents[0].numberPlays += 1;
+            console.log("currnet score" + documents[0].score)
+            console.log("highestScore" + documents[0].highestScore)
+            if (documents[0].score >= documents[0].highestScore) {
+                documents[0].highestScore = documents[0].score;
+            }
         }
 
         let p = documents[0].save();
@@ -872,8 +875,8 @@ app.post('/TTT/Tie/', function (req, res) {
     TTTSearch.then((documents) => {// when get the documents
         if (documents.length != 0) {
             documents[0].score += 2;
-            documents[0].currentWinstreak=0;
-            documents[0].numberPlays +=1;
+            documents[0].currentWinstreak = 0;
+            documents[0].numberPlays += 1;
         }
         let p = documents[0].save();
         p.then(() => {
