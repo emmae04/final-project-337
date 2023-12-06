@@ -1,3 +1,11 @@
+<!-- 
+    Author: Ariann Velosa
+
+    This file contains the html that builds up the advanced level hangman.
+    It has the headers, menu bar, letter spaced, input area, and guessing
+    info area.
+-->
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -20,19 +28,7 @@
                     <button> Advanced </button>
                     <button onclick="setAdvanced()"> New Game </button>
                 </div>
-            </div> 
-            <div class="htp">
-                <div class="htpHeader"> ? </div>
-                <div class="htpContent">
-                    <div>Welcome to hangman! To play, enter your guess in the box.</div>
-                    <div>Your guess must be either a single letter or the length of the word.</div>
-                    <div>You will have 8 incorrect guesses until you lose the game.</div>
-                    <div>To change difficulty, select from the menu your level.</div>
-                    <div>Beginner will display a 5 letter word, Intermediate an 8 letter
-                        word, and Advanced will be a 12 letter word.
-                    </div>
-                </div>
-            </div><br>
+            </div> <br>
         </div>
 
         <div id="hangman">
@@ -63,6 +59,19 @@
             <div id="input">
                 <input type="text" id="guess" name="guess">
                 <button id="makeGuess" onclick="checkWord()"> Make Guess </button>
+            </div>
+        </div>
+
+        <div class="htp">
+            <div class="htpHeader"> ? </div>
+            <div class="htpContent">
+                <div>Welcome to hangman! To play, enter your guess in the box.</div>
+                <div>Your guess must be either a single letter or the length of the word.</div>
+                <div>You will have 8 incorrect guesses until you lose the game.</div>
+                <div>To change difficulty, select from the menu your level.</div>
+                <div>Beginner will display a 5 letter word, Intermediate an 8 letter
+                    word, and Advanced will be a 12 letter word.
+                </div>
             </div>
         </div>
 
