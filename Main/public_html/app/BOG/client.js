@@ -17,7 +17,9 @@ const dices = [
     ['O', 'B', 'B', 'A', 'O', 'J']
 ];
 
-
+function changeHTML() {
+    window.location.href = "http://localHost/app/main.html"
+}
 // var currentBoard = new Array(4).fill(0).map(() => new Array(4).fill(0));
 var currentBoard = [];
 var userGuesses = [];
