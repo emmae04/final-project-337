@@ -1,3 +1,9 @@
+/**
+ * This file contains the main server that we all use for our game webpage.
+ * It handles cookies, making schemas, and the various requests we make for
+ * our individual games.
+ */
+
 // Initializes the required pieces
 const mongoose = require('mongoose');
 const express = require('express');
@@ -281,7 +287,7 @@ app.post("/add/user/", function (req, res) {
                 gameScore: []
             });
 
-            let H = new HangmanSchema({
+            let H = new hangman({
                 user: req.body.username,
                 gamesPlayed: 0,
                 wins: 0,
@@ -452,7 +458,13 @@ app.post("/update/:id", function (req, res) {
 const fiveL = [];
 const eightL = [];
 const twelveL = [];
-
+/**
+ * This function uses file stream and read line to go through a text file and
+ * put all of the words into a list
+ * @param {*} file - a txt file
+ * @param {*} list - a list for the words
+ * @returns a list of words
+ */
 function readFile(file, list) {
     const input = fs.createReadStream(file);
     const rl = readline.createInterface({
@@ -470,36 +482,56 @@ function readFile(file, list) {
     })
     return list;
 }
+
+// Creating the lists
 readFile('public_html/app/HM/Hangman/five.txt', fiveL);
 readFile('public_html/app/HM/Hangman/eight.txt', eightL);
 readFile('public_html/app/HM/Hangman/twelve.txt', twelveL);
 
+/**
+ * This is a get request that sends back the randomly picked word of the list for
+ * a beginner game.
+ */
 app.get('/get/word/beg', function  (req, res) {
     var answer = fiveL[Math.floor(Math.random() * (fiveL.length - 1))].toUpperCase();
     res.json(answer);
 })
 
+/**
+ * This is a get request that sends back the randomly picked word of the list for
+ * an intermediate game.
+ */
 app.get('/get/word/in', function  (req, res) {
     var answer = eightL[Math.floor(Math.random() * (eightL.length - 1))].toUpperCase();
     res.json(answer);
 })
 
+/**
+ * This is a get request that sends back the randomly picked word of the list for
+ * an advanced game.
+ */
 app.get('/get/word/ad', function  (req, res) {
     var answer = twelveL[Math.floor(Math.random() * (twelveL.length - 1))].toUpperCase();
     res.json(answer);
 })
 
-
+/**
+ * This is a post request that gets ther user sent in the url for when they win.
+ * It updates the hangman schema for this user by incrementing their values.
+ */
 app.post('/new/win/:name', (req, res) => {
     console.log(req.body.wins);
     let hGame = hangman.find({user: req.params.name}).exec();
     hGame.then((doc) => {
+        // Increase games played
         let games = doc[0].gamesPlayed;
         games++;
         doc[0].gamesPlayed = games;
+        // Add to wins
         var win = doc[0].wins;
         win++;
         doc[0].wins = win;
+        // Add to streak
         var streak = doc[0].currWinStreak;
         streak++;
         doc[0].currWinStreak = streak;
@@ -508,6 +540,10 @@ app.post('/new/win/:name', (req, res) => {
     })
 })
 
+/**
+ * This is a post request that gets ther user sent in the url for when they lose.
+ * It updates the hangman schema for this user by resetting their values.
+ */
 app.post('/new/loss/:name', (req, res) => {
     console.log(req.body.wins);
     let hGame = hangman.find({user: req.params.name}).exec();
