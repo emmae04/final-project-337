@@ -4,6 +4,7 @@ const express = require('express');
 const fs = require('fs')
 const fs2 = require('fs').promises
 
+const readline = require("readline")
 const parser = require('body-parser')
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
@@ -355,6 +356,23 @@ app.get('/search/users/:keyword/', function (req, res) {
             res.type('json').send(JSON.stringify(temp, null, 2) + '\n');
         });
     });
+
+});
+
+app.get(`/get/userSTATS/:user`, function(req, res){
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    let curUserHang = hangman.findOne({ "username": req.cookies.login.user });
+    let curUserBog = boggleData.findOne({ "username": req.cookies.login.user });
+    let curUserBJ = BJData.findOne({ "username": req.cookies.login.user });
+    let curUserTic = hangman.findOne({ "username": req.cookies.login.user });
+
+
+
+    var stats = [];
+    curUser.then((document) => {
+        console.log(document);
+    });
+
 
 });
 

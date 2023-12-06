@@ -184,7 +184,16 @@ function searchFriends() {
 }
 
 
-function updateStatView(){
+function updateStatView(user){
   window.location.href = "http://localHost/app/stats.html";
+  fetch(`/get/userSTATS/:${user}`)
+  .then((res) => {
+    return res.text();
+  }).then((res) => {
+    let parsed = JSON.parse(res);
+    
+  })
+  .catch((err) => { console.log(err) });
+
 
 }
