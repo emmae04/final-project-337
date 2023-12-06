@@ -71,29 +71,29 @@ var BJInfo = new Schema({
 var BJData = mongoose.model('BJData', BJInfo);
 
 /** Profile data */
-app.get("/get/followers/:currUser", (req, res) => {
-    currUser = req.params.currUser;
-    people.findOne({ username: currUser }, 'friends', (user) => {
-        res.send(user.friends);
-    }
+// app.get("/get/followers/:currUser", (req, res) => {
+//     currUser = req.params.currUser;
+//     people.findOne({ username: currUser }, 'friends', (user) => {
+//         res.send(user.friends);
+//     }
       
-)});
+// )});
 
-app.get("/get/followers/:currUser", (req, res) => {
-    currUser = req.params.currUser;
-    people.findOne({ username: currUser }, 'friends', (user) => {
-        res.send(user.friends);
-    }
+// app.get("/get/followers/:currUser", (req, res) => {
+//     currUser = req.params.currUser;
+//     people.findOne({ username: currUser }, 'friends', (user) => {
+//         res.send(user.friends);
+//     }
       
-)});
+// )});
 
-app.get("/get/stats/:currUser", (req, res) => {
-    currUser = req.params.currUser;
-    people.findOne({ username: currUser }, 'friends', (user) => {
-        res.send(user.gameScore);
-    }
+// app.get("/get/stats/:currUser", (req, res) => {
+//     currUser = req.params.currUser;
+//     people.findOne({ username: currUser }, 'friends', (user) => {
+//         res.send(user.gameScore);
+//     }
       
-)});
+// )});
 
 let sessions = {};
 
