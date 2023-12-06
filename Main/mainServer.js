@@ -838,7 +838,15 @@ function isValid(row, col) {
 // ---------------------------- TTT Server ----------------------------
 
 
+app.post('/scoreBoggle/', function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    let TTTSearch = TTTData.find({ "user": { $regex: score } });
+    // finding the item with the given keyword in the description
+    TTTSearch.then((documents) => {// when get the documents
+        documents
+    });
 
+});
 
 
 // ---------------------------- Blackjack Server ----------------------------

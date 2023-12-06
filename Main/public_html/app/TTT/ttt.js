@@ -76,27 +76,30 @@ function makeTurn(id) {
                     //console.log("making robot move");
                     robotMove();
                     if (gameWon(0) == true) {
-                        document.getElementById("label").style.visibility = "visible";
-                        score += 5;
-                        scoreLabel.innerText = "Score: " + score;
-                        label.innerText = "YOU WON!";
-                        console.log("HUMAN WON");
+                        // document.getElementById("label").style.visibility = "visible";
+                        // score += 5;
+                        // scoreLabel.innerText = "Score: " + score;
+                        // label.innerText = "YOU WON!";
+                        // console.log("HUMAN WON");
+                        update("WIN");
                         gameOver = true;
                     }
                     else if (gameWon(1) == true) {
-                        document.getElementById("label").style.visibility = "visible";
-                        score -= 2;
-                        scoreLabel.innerText = "Score: " + score;
-                        label.innerText = "YOU LOST!";
-                        console.log("ROBOT WON");
+                        // document.getElementById("label").style.visibility = "visible";
+                        // score -= 2;
+                        // scoreLabel.innerText = "Score: " + score;
+                        // label.innerText = "YOU LOST!";
+                        // console.log("ROBOT WON");
+                        update("LOSS");
                         gameOver = true;
                     }
                     else if (tie() == true) {
-                        document.getElementById("label").style.visibility = "visible";
-                        score += 2;
-                        scoreLabel.innerText = "Score: " + score;
-                        label.innerText = "TIE GAME!";
-                        console.log("TIE");
+                        // document.getElementById("label").style.visibility = "visible";
+                        // score += 2;
+                        // scoreLabel.innerText = "Score: " + score;
+                        // label.innerText = "TIE GAME!";
+                        // console.log("TIE");
+                        update("TIE");
                         gameOver = true;
                     }
                 }
@@ -110,6 +113,42 @@ function makeTurn(id) {
     }
 }
 
+function update(status) {
+    document.getElementById("label").style.visibility = "visible";
+    if (status == "LOSS") {
+        fetch("/TTT/Loss", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' }
+        }).then((res) => {
+            return res.text();
+        }).then((text) => {
+            scoreLabel.innerText = "Score: " + text;
+            label.innerText = "YOU LOST!";
+        }).catch((err) => { console.log(err) });
+    }
+    if (status == "WIN") {
+        fetch("/TTT/Win", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' }
+        }).then((res) => {
+            return res.text();
+        }).then((text) => {
+            scoreLabel.innerText = "Score: " + text;
+            label.innerText = "TIE GAME!";
+        }).catch((err) => { console.log(err) });
+    }
+    if (status == "TIE") {
+        fetch("/TTT/Tie", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' }
+        }).then((res) => {
+            return res.text();
+        }).then((text) => {
+            scoreLabel.innerText = "Score: " + text;
+            label.innerText = "YOU WON!";
+        }).catch((err) => { console.log(err) });
+    }
+}
 
 function tie() {
     let spots = document.getElementsByClassName("spot");
