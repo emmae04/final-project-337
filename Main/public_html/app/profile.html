@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="profile.css" rel="stylesheet">
+    </head>
+    <body onload="getCurrUser()">
+        <div id="column1">
+            <div id="row1">
+                <span id="avatar">
+                    <img id="avatar" src="./default_avatar.png">
+                    <p id="username">Username: </p>
+                </span>
+                <p>
+                </p>
+            </div>
+            <div id="row2">
+                <button id="followersButton" onclick="showFollowers()">
+                    Show followers
+                </button>
+                <button id="followingButton" onclick="showFollowing()">
+                    Show following
+                </button>
+                <button id="statsButton" onclick="showStats()">
+                    Show stats
+                </button>
+                <button id="logout">
+                    Logout
+                </button>
+            </div>
+        </div>
+
+        <div id="column2">
+        </div>
+
+    <script src="profile.js"></script>
+    </body>
+</html>

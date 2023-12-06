@@ -24,8 +24,6 @@ var UserSchema = new Schema({
 
     hash: String,
     salt: String,
-
-    password: String,
     image: String,
 
     following: [{ type: Schema.Types.ObjectId }],
