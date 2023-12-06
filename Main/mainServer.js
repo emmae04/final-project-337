@@ -49,7 +49,7 @@ var Schema = mongoose.Schema;
 var boggleInfo = new Schema({
     user: { type: String, default: '', trim: true },
     highScore: { type: Number, default: 0, min: 0 },
-    numberOfPlays: { type: Number, default: 0, min: 0 },
+    numberOfPlays: { type: Number, default: 0, min: 0 }, 
     currentWinStreak: { type: Number, default: 0, min: 0 }
 });
 
@@ -70,7 +70,7 @@ var Schema = mongoose.Schema;
 var BJInfo = new Schema({
     user: { type: String, default: '', trim: true },
     highScore: { type: Number, default: 0, min: 0 },
-    numberOfPlays: { type: Number, default: 0, min: 0 },
+    numberOfPlays: { type: Number, default: 0, min: 0 }, 
     currentWinStreak: { type: Number, default: 0, min: 0 }
 });
 
@@ -91,6 +91,7 @@ var BJData = mongoose.model('BJData', BJInfo);
 //         res.send(user.friends);
 //     }
 
+
 // )});
 
 // app.get("/get/stats/:currUser", (req, res) => {
@@ -98,6 +99,7 @@ var BJData = mongoose.model('BJData', BJInfo);
 //     people.findOne({ username: currUser }, 'friends', (user) => {
 //         res.send(user.gameScore);
 //     }
+
 
 // )});
 
@@ -283,19 +285,32 @@ app.post("/add/user/", function (req, res) {
 
             let BJ = new BJData({
                 username: req.body.username,
-                hash: result,
-                salt: newSalt,
-                friends: [],
-                games: []
+                user: 0,
+                highScore: 0,
+                numberOfPlays: 0,
+                currentWinStreak: 0
             });
 
             let Boggle = new boggleData({
-                username: req.body.username,
-                hash: result,
-                salt: newSalt,
-                friends: [],
-                games: []
+
+                user: req.body.username,
+                highScore: 0,
+                numberOfPlays: 0,
+                currentWinStreak: 0
             });
+
+            let TTT = new boggleData({
+                user: req.body.username,
+                score: 0,
+                numberPlays: 0,
+                highestScore: 0,
+                currentWinstreak: 0,
+            });
+            
+            TTT.save();
+            Boggle.save();
+            BJ.save();
+
             let p = u.save();
             p.then(() => {
                 res.end('SUCCESS');
@@ -408,7 +423,7 @@ app.post("/update/:id", function (req, res) {
                     secdoc.save();
                     document.followers.push(secdoc._id);
                     document.save();
-                } else {
+                }else{
                     let ind = document.followers.indexOf(secdoc._id);
                     let intdoc = secdoc.following.indexOf(document._id);
                     secdoc.following.splice(intdoc, 1);
@@ -417,7 +432,7 @@ app.post("/update/:id", function (req, res) {
                     document.followers.splice(ind, 1);
                     document.save();
                 }
-
+                
             });
         } else {
             message = "user not found";
@@ -441,10 +456,10 @@ function readFile(file, list) {
         terminal: false
     });
 
-    rl.on('line', function (line) {
+    rl.on('line', function  (line) {
         list.push(line);
     });
-    rl.on('close', function (close) {
+    rl.on('close', function(close) { 
         // console.log(fiveL);
         console.log(list.length);
         return list;
@@ -455,17 +470,17 @@ readFile('public_html/app/HM/Hangman/five.txt', fiveL);
 readFile('public_html/app/HM/Hangman/eight.txt', eightL);
 readFile('public_html/app/HM/Hangman/twelve.txt', twelveL);
 
-app.get('/get/word/beg', function (req, res) {
+app.get('/get/word/beg', function  (req, res) {
     var answer = fiveL[Math.floor(Math.random() * (fiveL.length - 1))].toUpperCase();
     res.json(answer);
 })
 
-app.get('/get/word/in', function (req, res) {
+app.get('/get/word/in', function  (req, res) {
     var answer = eightL[Math.floor(Math.random() * (eightL.length - 1))].toUpperCase();
     res.json(answer);
 })
 
-app.get('/get/word/ad', function (req, res) {
+app.get('/get/word/ad', function  (req, res) {
     var answer = twelveL[Math.floor(Math.random() * (twelveL.length - 1))].toUpperCase();
     res.json(answer);
 })
