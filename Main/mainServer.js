@@ -21,17 +21,11 @@ var Schema = mongoose.Schema;
 // The schema for users
 var UserSchema = new Schema({
     username: String,
-
     hash: String,
     salt: String,
-
-    password: String,
     image: String,
-
     following: [{ type: Schema.Types.ObjectId }],
     followers: [{ type: Schema.Types.ObjectId }],
-
-
     gameScore: []
 })
 
@@ -55,6 +49,19 @@ var boggleInfo = new Schema({
 });
 
 var boggleData = mongoose.model('boggleData', boggleInfo);
+
+
+var TTTSchema = new Schema({
+    user: { type: String, default: '', trim: true },
+    score: { type: Number, default: 0, min: 0 },
+    numberPlays: { type: Number, default: 0, min: 0 },
+    highestScore: { type: Number, default: 0, min: 0 },
+    currentWinstreak: { type: Number, default: 0, min: 0 },
+});
+
+var TTTData = mongoose.model('TTTData', TTTSchema);
+
+
 
 /** Profile data */
 app.get("/get/followers/:currUser", (req, res) => {
