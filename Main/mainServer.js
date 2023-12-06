@@ -80,33 +80,6 @@ var BJInfo = new Schema({
 
 var BJData = mongoose.model('BJData', BJInfo);
 
-/** Profile data */
-// app.get("/get/followers/:currUser", (req, res) => {
-//     currUser = req.params.currUser;
-//     people.findOne({ username: currUser }, 'friends', (user) => {
-//         res.send(user.friends);
-//     }
-
-// )});
-
-// app.get("/get/followers/:currUser", (req, res) => {
-//     currUser = req.params.currUser;
-//     people.findOne({ username: currUser }, 'friends', (user) => {
-//         res.send(user.friends);
-//     }
-
-
-// )});
-
-// app.get("/get/stats/:currUser", (req, res) => {
-//     currUser = req.params.currUser;
-//     people.findOne({ username: currUser }, 'friends', (user) => {
-//         res.send(user.gameScore);
-//     }
-
-
-// )});
-
 let sessions = {};
 
 /**
@@ -362,6 +335,8 @@ app.get('/get/curUsers/', function (req, res) {
 var followingArr = [];
 var followerArr = [];
 
+// this is a helper async funtion to get the people the
+// current user is following - used in the profile.js
 async function getFollowing(person) {
     for (let i = 0; i < person.length; i++) {
         curr = await people.findOne({"_id" : person[i]});
@@ -371,6 +346,8 @@ async function getFollowing(person) {
     return followingArr;
 }
 
+// this is a helper async funtion to get the current users
+// followrs - used in the profile.js
 async function getFollowers(person) {
     for (let i = 0; i < person.length; i++) {
         curr = await people.findOne({"_id" : person[i]});
@@ -380,6 +357,8 @@ async function getFollowers(person) {
     return followerArr;
 }
 
+// this is a get request to get the followers of the current user- 
+// used in profil.js
 app.get("/get/followers/", (req, res) => {
     followerArr = [];
     var curUser = people.findOne({ "username": req.cookies.login.username });
@@ -396,7 +375,8 @@ app.get("/get/followers/", (req, res) => {
 });
 
 
-
+// this is a get request to get the people the current user is following
+// used in profile.js
 app.get("/get/following/", (req, res) => {
     followingArr = [];
     var curUser = people.findOne({ "username": req.cookies.login.username });

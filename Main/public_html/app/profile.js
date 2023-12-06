@@ -1,3 +1,14 @@
+/**
+ * Author : Emma Elliott, 
+ * This javascript will create the functionality for
+ * the profile page. It will allow the users to click
+ * buttons to see infomation about their profile
+ */
+
+
+// this function will get the current users who is using the
+// site, then display their user name in the top right hand corner when
+// the page loads
 var currUser = ""
 function getCurrUser() {
     fetch("/get/curUsers/")
@@ -11,14 +22,21 @@ function getCurrUser() {
     
 }
 
+
+// this function will show the followers that the
+// current users has in the column on the
+// right when the user clicks the "show followers"
+// button
 const col2 = document.getElementById("column2");
 
 function showFollowers() {
     col2.innerHTML = "";
+    // fetch request to get followers from the database
     fetch("/get/followers/")
     .then((res) => {
         return res.text(); 
     })
+    // will display followers on the page
     .then(followers => {
             data = JSON.parse(followers);
             topText = document.createElement("div")
@@ -39,12 +57,18 @@ function showFollowers() {
 
     };
 
+// this function will show the users that the that the
+// current user is following in the column on the
+// right when the user clicks the "show following"
+// button
 function showFollowing() {
     col2.innerHTML = "";
+    // creates a fetch request to get following form the database
     fetch("/get/following/")
     .then((res) => {
         return res.text(); 
     })
+    // will display the following users on the page
     .then(following => {
             data = JSON.parse(following);
             topText = document.createElement("div")
