@@ -281,6 +281,12 @@ app.post("/add/user/", function (req, res) {
                 gameScore: []
             });
 
+            let H = new HangmanSchema({
+                user: req.body.username,
+                gamesPlayed: 0,
+                wins: 0,
+                currWinStreak: 0
+            });
 
             let BJ = new BJData({
                 user: req.body.username,
@@ -307,6 +313,7 @@ app.post("/add/user/", function (req, res) {
             TTT.save();
             Boggle.save();
             BJ.save();
+            H.save();
 
             let p = u.save();
             p.then(() => {
