@@ -365,7 +365,7 @@ var followerArr = [];
 
 async function getFollowing(person) {
     for (let i = 0; i < person.length; i++) {
-        curr = await people.findOne({"_id" : person[i]});
+        curr = await people.findOne({ "_id": person[i] });
         followingArr.push(curr.username);
     }
     console.log(followingArr)
@@ -374,7 +374,7 @@ async function getFollowing(person) {
 
 async function getFollowers(person) {
     for (let i = 0; i < person.length; i++) {
-        curr = await people.findOne({"_id" : person[i]});
+        curr = await people.findOne({ "_id": person[i] });
         followerArr.push(curr.username);
     }
     console.log(followerArr)
@@ -408,7 +408,8 @@ app.get("/get/following/", (req, res) => {
         console.log(followingArr)
         return getFollowing(following);
     }).then((follow) => {
-        res.send(follow)});
+        res.send(follow)
+    });
 });
 
 app.get("/get/stats/", (req, res) => {
@@ -452,23 +453,24 @@ app.get('/search/users/:keyword/', function (req, res) {
 
 app.get(`/get/userSTATS/:user`, function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    let curUserHang = hangman.findOne({ "user": { $regex: req.params.user } });
+    let curUserHang = hangman.findOne({user: req.params.user} ).exec();
     var stats = [];
     curUserHang.then((hang) => {
-        let user = hang[0];
-        stats.push({ username: user.user, highScore: user.highscore, currentWinStreak: user.currentWinStreak });
-        let curUserBog = boggleData.findOne({ "user": { $regex: req.params.user } });
+        console.log(hang);
+        let user = hang;
+        stats.push({ username: user.user, highScore: user.wins, currentWinStreak: user.currWinStreak, gamesPlayed: user.gamesPlayed });
+        let curUserBog = boggleData.findOne({ user: req.params.user}).exec();
         curUserBog.then((bog) => {
-            let user2 = bog[0];
-            stats.push({ username: user2.user, highScore: user2.highScore, currentWinStreak: user2.currentWinStreak });
-            let curUserBJ = BJData.findOne({ "user": { $regex: req.params.user } });
+            let user2 = bog;
+            stats.push({ username: user2.user, highScore: user2.highScore, currentWinStreak: user2.currentWinStreak, gamesPlayed: user2.numberOfPlays });
+            let curUserBJ = BJData.find({ user: { $regex: req.params.user } }).exec();
             curUserBJ.then((bj) => {
                 let user3 = bj[0];
-                stats.push({ username: user3.user, highScore: user3.highScore, currentWinStreak: user3.currentWinStreak });
-                let curUserTic = TTTData.findOne({ "user": { $regex: req.params.user } });
+                stats.push({ username: user3.user, highScore: user3.highScore, currentWinStreak: user3.currentWinStreak,  gamesPlayed: user3.numberOfPlays});
+                let curUserTic = TTTData.findOne({ user: { $regex: req.params.user } }).exec();
                 curUserTic.then((tic) => {
-                    let user4 = tic[0];
-                    stats.push({ username: user4.user, highScore: user4.highestScore, currentWinStreak: user4.currentWinstreak });
+                    let user4 = tic;
+                    stats.push({ username: user4.user, highScore: user4.highestScore, currentWinStreak: user4.currentWinstreak, gamesPlayed : user4.numberPlays });
                     res.status(200);
                     res.type('json').send(JSON.stringify(stats, null, 2) + '\n');
                 });
@@ -515,8 +517,8 @@ app.post("/update/:id", function (req, res) {
 
 // blackjack server
 
-app.post('/addscoreBJ', function(req, res) {
-    
+app.post('/addscoreBJ', function (req, res) {
+
 });
 
 
@@ -588,7 +590,7 @@ app.get('/get/word/ad', function (req, res) {
  */
 app.post('/new/win/:name', (req, res) => {
     console.log(req.body.wins);
-    let hGame = hangman.find({user: req.params.name}).exec();
+    let hGame = hangman.find({ user: req.params.name }).exec();
     hGame.then((doc) => {
         // Increase games played
         let games = doc[0].gamesPlayed;
@@ -822,8 +824,8 @@ function isValid(row, col) {
 app.post('/TTT/Loss/', function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     let username = req.body.username;
-    console.log("tttloss "+username)
-    let TTTSearch = TTTData.find({ "user": username});
+    console.log("tttloss " + username)
+    let TTTSearch = TTTData.find({ "user": username });
     // finding the item with the given keyword in the description
     TTTSearch.then((documents) => {// when get the documents
         if (documents.length != 0) {
@@ -844,10 +846,10 @@ app.post('/TTT/Loss/', function (req, res) {
 app.post('/TTT/get/Score/', function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     let username = req.body.username;
-    let TTTSearch = TTTData.find({ "user": username});
+    let TTTSearch = TTTData.find({ "user": username });
     // finding the item with the given keyword in the description
     TTTSearch.then((documents) => {// when get the documents
-     res.end(documents[0].score.toString());
+        res.end(documents[0].score.toString());
     });
 
 
@@ -855,8 +857,8 @@ app.post('/TTT/get/Score/', function (req, res) {
 app.post('/TTT/Win/', function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     let username = req.body.username;
-    console.log("tttwin "+username)
-    let TTTSearch = TTTData.find({ "user":username});
+    console.log("tttwin " + username)
+    let TTTSearch = TTTData.find({ "user": username });
     // finding the item with the given keyword in the description
     TTTSearch.then((documents) => {// when get the documents
         if (documents.length != 0) {
@@ -878,8 +880,8 @@ app.post('/TTT/Win/', function (req, res) {
 app.post('/TTT/Tie/', function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     let username = req.body.username;
-    console.log("ttttie "+username)
-    let TTTSearch = TTTData.find({ "user":  username  });
+    console.log("ttttie " + username)
+    let TTTSearch = TTTData.find({ "user": username });
     // finding the item with the given keyword in the description
     TTTSearch.then((documents) => {// when get the documents
         if (documents.length != 0) {
