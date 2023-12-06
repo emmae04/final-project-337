@@ -10,23 +10,6 @@ let left = 5;
 
 // If currUser tracked in mainServer, menu bar, how to play, how to go back
 
-
-
-
-function readFile(file) {
-    const input = fs.createReadStream(file);
-    const rl = readline.createInterface({
-        input: input,
-        terminal: false
-    });
-
-    rl.on('line', function(line) {
-        fiveL.push(line);
-    });
-}
-
-readFile('five.txt');
-
 function getWord() {
     return fiveL[Math.floor(Math.random() * fiveL.length)];
 }
@@ -174,20 +157,9 @@ function checkWord() {
     }
 }
 
-function getWord() {
-    var l = document.getElementById("level").innerHTML;
-    var level = l.slice(11, l.length - 1);
-    console.log("." + level);
-    let info = {"level": level};
-    console.log(info);
-    let p = fetch('/get/word', {
-        method: "POST",
-        body: JSON.stringify(info),
-        headers: {"Contect-Type": "application/json"}    
-    });
-
-    // Promises
-    p.then((response) => {
+function getWordB() {
+    let p ='/get/word/beg';
+    fetch(p).then((response) => {
         console.log(response);
         return response.text();
     }).then((text) => {
@@ -198,16 +170,30 @@ function getWord() {
     })
 }
 
-function howToPlay() {
-    var one = document.createElement("div");
-    var two = document.createElement("div");
-    var three = document.createElement("div");
-    var four = document.createElement("div");
-    one.innerHTML = "Welcome to hangman! To play, enter your guess in the box.";
-    two.innerHTML = "Your guess must be either a single letter or the length of the word."
-    three.innerHTML = "You will have 8 incorrect guesses until you lose the game.";
-    four.innerHTML = "To change difficulty, select from the menu your";
-    document.getElementById("input").appendChild(newDiv);
+function getWordI() {
+    let p ='/get/word/in';
+    fetch(p).then((response) => {
+        console.log(response);
+        return response.text();
+    }).then((text) => {
+        text = JSON.parse(text);
+        console.log(text);
+        answer = text;
+        left = answer.length;
+    })
+}
+
+function getWordA() {
+    let p ='/get/word/ad';
+    fetch(p).then((response) => {
+        console.log(response);
+        return response.text();
+    }).then((text) => {
+        text = JSON.parse(text);
+        console.log(text);
+        answer = text;
+        left = answer.length;
+    })
 }
 
 function setBeginner() {
@@ -222,5 +208,5 @@ function setAdvanced() {
 }
 
 function back() {
-    window.location.href = "main.html";
+    window.location.href = "http://localhost/app/main.html";
 }
