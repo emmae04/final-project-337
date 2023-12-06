@@ -31,11 +31,9 @@ var UserSchema = new Schema({
 
 // The schema for hangman
 var HangmanSchema = new Schema({
-    level: String,
     user: String,
-    games: Number,
+    gamesPlayed: Number,
     wins: Number,
-    highscore: Number,
     currWinStreak: Number
 })
 
@@ -484,19 +482,34 @@ app.get('/get/word/ad', function  (req, res) {
     res.json(answer);
 })
 
-app.post('/new/score', (req, res) => {
-    var win = 0;
-    if (req.body.wins) {
-        win = 1;
-    }
-    let newHangman = new hangman({
-        level: req.body.level,
-        user: "name",
-        word: req.body.word,
-        games: 1,
-        wins: win
+
+app.post('/new/win/:name', (req, res) => {
+    console.log(req.body.wins);
+    let hGame = hangman.find({user: req.params.name}).exec();
+    hGame.then((doc) => {
+        let games = doc[0].gamesPlayed;
+        games++;
+        doc[0].gamesPlayed = games;
+        var win = doc[0].wins;
+        win++;
+        doc[0].wins = win;
+        var streak = doc[0].currWinStreak;
+        streak++;
+        doc[0].currWinStreak = streak;
+        doc[0].save();
+        console.log("saved");
     })
-    newHangman.save().then(() => {
+})
+
+app.post('/new/loss/:name', (req, res) => {
+    console.log(req.body.wins);
+    let hGame = hangman.find({user: req.params.name}).exec();
+    hGame.then((doc) => {
+        let games = doc[0].gamesPlayed;
+        games++;
+        doc[0].gamesPlayed = games;
+        doc[0].currWinStreak = 0;
+        doc[0].save();
         console.log("saved");
     })
 })
