@@ -23,8 +23,6 @@ var UserSchema = new Schema({
     username: String,
     hash: String,
     salt: String,
-
-    password: String,
     image: String,
     following: [{ type: Schema.Types.ObjectId }],
     followers: [{ type: Schema.Types.ObjectId }],
@@ -75,7 +73,7 @@ var BJInfo = new Schema({
     currentWinStreak: { type: Number, default: 0, min: 0 }
 });
 
-var BJInfo = mongoose.model('BJData', BJInfo);
+var BJData = mongoose.model('BJData', BJInfo);
 
 /** Profile data */
 app.get("/get/followers/:currUser", (req, res) => {
