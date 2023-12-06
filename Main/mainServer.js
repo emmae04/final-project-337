@@ -1,9 +1,16 @@
+/**
+ * This file contains the main server that we all use for our game webpage.
+ * It handles cookies, making schemas, and the various requests we make for
+ * our individual games.
+ */
+
 // Initializes the required pieces
 const mongoose = require('mongoose');
 const express = require('express');
 const fs = require('fs')
 const fs2 = require('fs').promises
 
+const readline = require("readline")
 const parser = require('body-parser')
 const readline = require('readline')
 const cookieParser = require('cookie-parser');
@@ -22,23 +29,18 @@ var Schema = mongoose.Schema;
 // The schema for users
 var UserSchema = new Schema({
     username: String,
-
     hash: String,
     salt: String,
-
     image: String,
-
-    following: [{ type: Schema.Types.ObjectId }],
     followers: [{ type: Schema.Types.ObjectId }],
 })
 
 // The schema for hangman
 var HangmanSchema = new Schema({
-    level: String,
     user: String,
-    word: String,
-    guesses: Number,
-    wins: Boolean
+    gamesPlayed: Number,
+    wins: Number,
+    currWinStreak: Number
 })
 
 var people = mongoose.model("User", UserSchema);
@@ -56,16 +58,15 @@ var boggleInfo = new Schema({
 
 var boggleData = mongoose.model('boggleData', boggleInfo);
 
-//////// black jack
-var Schema = mongoose.Schema;
-var BJInfo = new Schema({
+var TTTSchema = new Schema({
     user: { type: String, default: '', trim: true },
-    highScore: { type: Number, default: 0, min: 0 },
-    numberOfPlays: { type: Number, default: 0, min: 0 }, 
-    currentWinStreak: { type: Number, default: 0, min: 0 }
+    score: { type: Number, default: 0, min: 0 },
+    numberPlays: { type: Number, default: 0, min: 0 },
+    highestScore: { type: Number, default: 0, min: 0 },
+    currentWinstreak: { type: Number, default: 0, min: 0 },
 });
 
-var BJData = mongoose.model('BJData', BJInfo);
+var TTTData = mongoose.model('TTTData', TTTSchema);
 
 ////////// black jack
 var Schema = mongoose.Schema;
@@ -76,8 +77,34 @@ var BJInfo = new Schema({
     currentWinStreak: { type: Number, default: 0, min: 0 }
 });
 
-var BJInfo = mongoose.model('BJData', BJInfo);
+var BJData = mongoose.model('BJData', BJInfo);
 
+/** Profile data */
+// app.get("/get/followers/:currUser", (req, res) => {
+//     currUser = req.params.currUser;
+//     people.findOne({ username: currUser }, 'friends', (user) => {
+//         res.send(user.friends);
+//     }
+
+// )});
+
+// app.get("/get/followers/:currUser", (req, res) => {
+//     currUser = req.params.currUser;
+//     people.findOne({ username: currUser }, 'friends', (user) => {
+//         res.send(user.friends);
+//     }
+
+
+// )});
+
+// app.get("/get/stats/:currUser", (req, res) => {
+//     currUser = req.params.currUser;
+//     people.findOne({ username: currUser }, 'friends', (user) => {
+//         res.send(user.gameScore);
+//     }
+
+
+// )});
 
 let sessions = {};
 
@@ -252,12 +279,48 @@ app.post("/add/user/", function (req, res) {
             let data = h.update(toHash, 'utf-8');
             let result = data.digest('hex');
             let u = new people({
-                username: req.body.username,
                 hash: result,
                 salt: newSalt,
-                friends: [],
-                games: []
+                username:req.body.username,
+                image: "",
+                followers: [],
+                gameScore: []
             });
+
+            let H = new hangman({
+                user: req.body.username,
+                gamesPlayed: 0,
+                wins: 0,
+                currWinStreak: 0
+            });
+
+            let BJ = new BJData({
+                user: req.body.username,
+                highScore: 0,
+                numberOfPlays: 0,
+                currentWinStreak: 0
+            });
+
+            let Boggle = new boggleData({
+                user: req.body.username,
+                highScore: 0,
+                numberOfPlays: 0,
+                currentWinStreak: 0
+            });
+
+            let TTT = new TTTData({
+                user: req.body.username,
+                score: 0,
+                numberPlays: 0,
+                highestScore: 0,
+                currentWinstreak: 0,
+            });
+
+            TTT.save();
+            Boggle.save();
+            BJ.save();
+            H.save();
+
             let p = u.save();
             p.then(() => {
                 res.end('SUCCESS');
@@ -381,6 +444,33 @@ app.get('/search/users/:keyword/', function (req, res) {
 
 });
 
+// app.get(`/get/userSTATS/:user`, function (req, res) {
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     let curUserHang = hangman.findOne({ "user": { $regex: req.params.user } });
+//     var stats = [];
+//     curUserHang.then((hang) => {
+//         let user = hang[0];
+//         stats.push({ username: user.user, highScore: user.highscore, currentWinStreak: user.currentWinStreak });
+//         let curUserBog = boggleData.findOne({ "user": { $regex: req.params.user } });
+//         curUserBog.then((bog) => {
+//             let user2 = bog[0];
+//             stats.push({ username: user2.user, highScore: user2.highScore, currentWinStreak: user2.currentWinStreak });
+//             let curUserBJ = BJData.findOne({ "user": { $regex: req.params.user } });
+//             curUserBJ.then((bj) => {
+//                 let user3 = bj;
+//                 stats.push({ username: user3.user, highScore: user3.highScore, currentWinStreak: user3.currentWinStreak });
+//                 let curUserTic = TTTData.findOne({ "user": { $regex: req.params.user } });
+//                 curUserTic.then((tic) => {
+//                     let user4 = tic;
+//                     stats.push({ username: user4.user, highScore: user4.highestScore, currentWinStreak: user4.currentWinstreak });
+//                     res.status(200);
+//                     res.type('json').send(JSON.stringify(stats, null, 2) + '\n');
+//                 });
+//             });
+//         });
+//     });
+// });
+
 
 app.post("/update/:id", function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -429,7 +519,13 @@ app.post('/addscoreBJ', function(req, res) {
 const fiveL = [];
 const eightL = [];
 const twelveL = [];
-
+/**
+ * This function uses file stream and read line to go through a text file and
+ * put all of the words into a list
+ * @param {*} file - a txt file
+ * @param {*} list - a list for the words
+ * @returns a list of words
+ */
 function readFile(file, list) {
     const input = fs.createReadStream(file);
     const rl = readline.createInterface({
@@ -437,7 +533,7 @@ function readFile(file, list) {
         terminal: false
     });
 
-    rl.on('line', function(line) {
+    rl.on('line', function  (line) {
         list.push(line);
     });
     rl.on('close', function(close) { 
@@ -447,43 +543,80 @@ function readFile(file, list) {
     })
     return list;
 }
+
+// Creating the lists
 readFile('public_html/app/HM/Hangman/five.txt', fiveL);
 readFile('public_html/app/HM/Hangman/eight.txt', eightL);
 readFile('public_html/app/HM/Hangman/twelve.txt', twelveL);
 
-app.post('/get/word', (req, res) => {
-    // let list = readFile('public_html/app/HM/Hangman/five.txt');
-    // console.log("list " +fiveL);
-    var answer = "";
-    console.log("body" +req.body);
-    var level = req.body.level;
-    console.log("level:" + level);
-    if (level == "Beginner") {
-        answer = fiveL[Math.floor(Math.random() * (fiveL.length - 1))].toUpperCase();
-    }
-    if (level == "Intermediate") {
-        answer = eightL[Math.floor(Math.random() * (eightL.length - 1))].toUpperCase();
-    }
-    else {
-        answer = twelveL[Math.floor(Math.random() * (twelveL.length - 1))].toUpperCase();
-    }
-    
+/**
+ * This is a get request that sends back the randomly picked word of the list for
+ * a beginner game.
+ */
+app.get('/get/word/beg', function  (req, res) {
+    var answer = fiveL[Math.floor(Math.random() * (fiveL.length - 1))].toUpperCase();
     res.json(answer);
 })
 
-app.post('/new/score', (req, res) => {
-    let newHangman = new hangman({
-        level: req.body.level,
-        user: "name",
-        word: req.body.word,
-        guesses: req.body.guesses,
-        wins: req.body.wins
-    })
-    newHangman.save().then(() => {
+/**
+ * This is a get request that sends back the randomly picked word of the list for
+ * an intermediate game.
+ */
+app.get('/get/word/in', function  (req, res) {
+    var answer = eightL[Math.floor(Math.random() * (eightL.length - 1))].toUpperCase();
+    res.json(answer);
+})
+
+/**
+ * This is a get request that sends back the randomly picked word of the list for
+ * an advanced game.
+ */
+app.get('/get/word/ad', function  (req, res) {
+    var answer = twelveL[Math.floor(Math.random() * (twelveL.length - 1))].toUpperCase();
+    res.json(answer);
+})
+
+/**
+ * This is a post request that gets ther user sent in the url for when they win.
+ * It updates the hangman schema for this user by incrementing their values.
+ */
+app.post('/new/win/:name', (req, res) => {
+    console.log(req.body.wins);
+    let hGame = hangman.find({user: req.params.name}).exec();
+    hGame.then((doc) => {
+        // Increase games played
+        let games = doc[0].gamesPlayed;
+        games++;
+        doc[0].gamesPlayed = games;
+        // Add to wins
+        var win = doc[0].wins;
+        win++;
+        doc[0].wins = win;
+        // Add to streak
+        var streak = doc[0].currWinStreak;
+        streak++;
+        doc[0].currWinStreak = streak;
+        doc[0].save();
         console.log("saved");
     })
 })
 
+/**
+ * This is a post request that gets ther user sent in the url for when they lose.
+ * It updates the hangman schema for this user by resetting their values.
+ */
+app.post('/new/loss/:name', (req, res) => {
+    console.log(req.body.wins);
+    let hGame = hangman.find({user: req.params.name}).exec();
+    hGame.then((doc) => {
+        let games = doc[0].gamesPlayed;
+        games++;
+        doc[0].gamesPlayed = games;
+        doc[0].currWinStreak = 0;
+        doc[0].save();
+        console.log("saved");
+    })
+})
 
 // ---------------------------- Boggle Server ----------------------------
 
@@ -507,12 +640,10 @@ app.post('/diceTray/', function (req, res) {
 });
 
 
-app.post('/score/', function (req, res) {
+app.post('/scoreBoggle/', function (req, res) {
     score = req.body;
     res.setHeader('Access-Control-Allow-Origin', '*');
-
-
-    let boggleSearch = boggleData.find({ "user": { $regex: req.params.keyword } });
+    let boggleSearch = boggleData.find({ "user": { $regex: score } });
     // finding the item with the given keyword in the description
     boggleSearch.then((documents) => {// when get the documents
         res.status(200);
@@ -520,6 +651,35 @@ app.post('/score/', function (req, res) {
     });
 
 });
+
+// app.post('/scoreBoggle/', function (req, res) {
+//     const newScore = req.body.highScore;
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+
+//     boggleData.findOneAndUpdate(
+//         { "user": { $regex: req.cookies.login.username } },
+//         {
+//             $max: { highScore: newScore },
+//             $inc: { numberOfPlays: 1 } // Increment numberOfPlays by 1
+//         },
+//         { new: true } // Return the modified document
+//     )
+//     .then((updatedDocument) => {
+//         if (!updatedDocument) {
+//             // Document not found
+//             return res.status(404).send('Document not found');
+//         }
+
+//         res.status(200);
+//         res.type('json').send(JSON.stringify(updatedDocument, null, 2) + '\n');
+//     })
+//     .catch((error) => {
+//         console.error(error);
+//         res.status(500).send('Internal Server Error');
+//     });
+// });
+
+
 
 
 async function readAllWords() {

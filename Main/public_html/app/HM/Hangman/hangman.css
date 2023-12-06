@@ -1,3 +1,11 @@
+/*
+    Author: Arianna Velosa
+
+    This file contains the css for the hangman. It makes it look nice and also
+    allows for the menu bar and help icon to show up when the mouse hovers over
+    it.
+*/
+
 body {
     background-color:  #FFCF96;
     font-family:'Copperplate';
