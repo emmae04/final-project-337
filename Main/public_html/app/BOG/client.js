@@ -91,7 +91,7 @@ function timer() {
         document.getElementById("guessLabel").innerHTML = "Already Guessed";
         gameStart = 0;
 
-        fetch("/score/", {
+        fetch("/scoreBoggle/", {
             method: "POST",
             body: JSON.stringify(score),
             headers: { 'Content-Type': 'application/json' }

@@ -48,7 +48,7 @@ var Schema = mongoose.Schema;
 var boggleInfo = new Schema({
     user: { type: String, default: '', trim: true },
     highScore: { type: Number, default: 0, min: 0 },
-    numberOfPlays: { type: Number, default: 0, min: 0 },
+    numberOfPlays: { type: Number, default: 0, min: 0 }, 
     currentWinStreak: { type: Number, default: 0, min: 0 }
 });
 
@@ -69,7 +69,7 @@ var Schema = mongoose.Schema;
 var BJInfo = new Schema({
     user: { type: String, default: '', trim: true },
     highScore: { type: Number, default: 0, min: 0 },
-    numberOfPlays: { type: Number, default: 0, min: 0 },
+    numberOfPlays: { type: Number, default: 0, min: 0 }, 
     currentWinStreak: { type: Number, default: 0, min: 0 }
 });
 
@@ -90,6 +90,7 @@ var BJData = mongoose.model('BJData', BJInfo);
 //         res.send(user.friends);
 //     }
 
+
 // )});
 
 // app.get("/get/stats/:currUser", (req, res) => {
@@ -97,6 +98,7 @@ var BJData = mongoose.model('BJData', BJInfo);
 //     people.findOne({ username: currUser }, 'friends', (user) => {
 //         res.send(user.gameScore);
 //     }
+
 
 // )});
 
@@ -376,22 +378,32 @@ app.get('/search/users/:keyword/', function (req, res) {
 
 });
 
-app.get(`/get/userSTATS/:user`, function (req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    let curUserHang = hangman.findOne({ "username": req.cookies.login.user });
-    let curUserBog = boggleData.findOne({ "username": req.cookies.login.user });
-    let curUserBJ = BJData.findOne({ "username": req.cookies.login.user });
-    let curUserTic = hangman.findOne({ "username": req.cookies.login.user });
-
-
-
-    var stats = [];
-    curUser.then((document) => {
-        console.log(document);
-    });
-
-
-});
+// app.get(`/get/userSTATS/:user`, function (req, res) {
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     let curUserHang = hangman.findOne({ "user": { $regex: req.params.user } });
+//     var stats = [];
+//     curUserHang.then((hang) => {
+//         let user = hang[0];
+//         stats.push({ username: user.user, highScore: user.highscore, currentWinStreak: user.currentWinStreak });
+//         let curUserBog = boggleData.findOne({ "user": { $regex: req.params.user } });
+//         curUserBog.then((bog) => {
+//             let user2 = bog[0];
+//             stats.push({ username: user2.user, highScore: user2.highScore, currentWinStreak: user2.currentWinStreak });
+//             let curUserBJ = BJData.findOne({ "user": { $regex: req.params.user } });
+//             curUserBJ.then((bj) => {
+//                 let user3 = bj;
+//                 stats.push({ username: user3.user, highScore: user3.highScore, currentWinStreak: user3.currentWinStreak });
+//                 let curUserTic = TTTData.findOne({ "user": { $regex: req.params.user } });
+//                 curUserTic.then((tic) => {
+//                     let user4 = tic;
+//                     stats.push({ username: user4.user, highScore: user4.highestScore, currentWinStreak: user4.currentWinstreak });
+//                     res.status(200);
+//                     res.type('json').send(JSON.stringify(stats, null, 2) + '\n');
+//                 });
+//             });
+//         });
+//     });
+// });
 
 
 app.post("/update/:id", function (req, res) {
@@ -410,7 +422,7 @@ app.post("/update/:id", function (req, res) {
                     secdoc.save();
                     document.followers.push(secdoc._id);
                     document.save();
-                } else {
+                }else{
                     let ind = document.followers.indexOf(secdoc._id);
                     let intdoc = secdoc.following.indexOf(document._id);
                     secdoc.following.splice(intdoc, 1);
@@ -419,7 +431,7 @@ app.post("/update/:id", function (req, res) {
                     document.followers.splice(ind, 1);
                     document.save();
                 }
-
+                
             });
         } else {
             message = "user not found";
@@ -443,10 +455,10 @@ function readFile(file, list) {
         terminal: false
     });
 
-    rl.on('line', function (line) {
+    rl.on('line', function  (line) {
         list.push(line);
     });
-    rl.on('close', function (close) {
+    rl.on('close', function(close) { 
         // console.log(fiveL);
         console.log(list.length);
         return list;
@@ -457,17 +469,17 @@ readFile('public_html/app/HM/Hangman/five.txt', fiveL);
 readFile('public_html/app/HM/Hangman/eight.txt', eightL);
 readFile('public_html/app/HM/Hangman/twelve.txt', twelveL);
 
-app.get('/get/word/beg', function (req, res) {
+app.get('/get/word/beg', function  (req, res) {
     var answer = fiveL[Math.floor(Math.random() * (fiveL.length - 1))].toUpperCase();
     res.json(answer);
 })
 
-app.get('/get/word/in', function (req, res) {
+app.get('/get/word/in', function  (req, res) {
     var answer = eightL[Math.floor(Math.random() * (eightL.length - 1))].toUpperCase();
     res.json(answer);
 })
 
-app.get('/get/word/ad', function (req, res) {
+app.get('/get/word/ad', function  (req, res) {
     var answer = twelveL[Math.floor(Math.random() * (twelveL.length - 1))].toUpperCase();
     res.json(answer);
 })
@@ -511,12 +523,10 @@ app.post('/diceTray/', function (req, res) {
 });
 
 
-app.post('/score/', function (req, res) {
+app.post('/scoreBoggle/', function (req, res) {
     score = req.body;
     res.setHeader('Access-Control-Allow-Origin', '*');
-
-
-    let boggleSearch = boggleData.find({ "user": { $regex: req.params.keyword } });
+    let boggleSearch = boggleData.find({ "user": { $regex: score } });
     // finding the item with the given keyword in the description
     boggleSearch.then((documents) => {// when get the documents
         res.status(200);
@@ -524,6 +534,35 @@ app.post('/score/', function (req, res) {
     });
 
 });
+
+// app.post('/scoreBoggle/', function (req, res) {
+//     const newScore = req.body.highScore;
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+
+//     boggleData.findOneAndUpdate(
+//         { "user": { $regex: req.cookies.login.username } },
+//         {
+//             $max: { highScore: newScore },
+//             $inc: { numberOfPlays: 1 } // Increment numberOfPlays by 1
+//         },
+//         { new: true } // Return the modified document
+//     )
+//     .then((updatedDocument) => {
+//         if (!updatedDocument) {
+//             // Document not found
+//             return res.status(404).send('Document not found');
+//         }
+
+//         res.status(200);
+//         res.type('json').send(JSON.stringify(updatedDocument, null, 2) + '\n');
+//     })
+//     .catch((error) => {
+//         console.error(error);
+//         res.status(500).send('Internal Server Error');
+//     });
+// });
+
+
 
 
 async function readAllWords() {
