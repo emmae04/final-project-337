@@ -25,7 +25,6 @@ var UserSchema = new Schema({
     hash: String,
     salt: String,
     image: String,
-    following: [{ type: Schema.Types.ObjectId }],
     followers: [{ type: Schema.Types.ObjectId }],
     gameScore: []
 })
@@ -274,37 +273,37 @@ app.post("/add/user/", function (req, res) {
             let data = h.update(toHash, 'utf-8');
             let result = data.digest('hex');
             let u = new people({
-                username: req.body.username,
                 hash: result,
                 salt: newSalt,
-                friends: [],
-                games: []
+                username:req.body.username,
+                image: "",
+                followers: [],
+                gameScore: []
             });
 
+
             let BJ = new BJData({
-                username: req.body.username,
-                user: 0,
+                user: req.body.username,
                 highScore: 0,
                 numberOfPlays: 0,
                 currentWinStreak: 0
             });
 
             let Boggle = new boggleData({
-
                 user: req.body.username,
                 highScore: 0,
                 numberOfPlays: 0,
                 currentWinStreak: 0
             });
 
-            let TTT = new boggleData({
+            let TTT = new TTTData({
                 user: req.body.username,
                 score: 0,
                 numberPlays: 0,
                 highestScore: 0,
                 currentWinstreak: 0,
             });
-            
+
             TTT.save();
             Boggle.save();
             BJ.save();
