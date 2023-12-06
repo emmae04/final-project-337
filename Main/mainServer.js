@@ -363,6 +363,9 @@ var followingArr = [];
 var followerArr = [];
 
 async function getFollowing(person) {
+    if(person == undefined){
+        return [];
+    }
     for (let i = 0; i < person.length; i++) {
         curr = await people.findOne({"_id" : person[i]});
         followingArr.push(curr.username);
@@ -372,6 +375,9 @@ async function getFollowing(person) {
 }
 
 async function getFollowers(person) {
+    if(person == undefined){
+        return [];
+    }
     for (let i = 0; i < person.length; i++) {
         curr = await people.findOne({"_id" : person[i]});
         followerArr.push(curr.username);
@@ -828,6 +834,8 @@ app.post('/TTT/Loss/', function (req, res) {
     TTTSearch.then((documents) => {// when get the documents
         if (documents.length != 0) {
             documents[0].score -= 2;
+            documents[0].currentWinstreak=0;
+            documents[0].numberPlays +=1;
         }
         let p = documents[0].save();
         p.then(() => {
@@ -838,9 +846,8 @@ app.post('/TTT/Loss/', function (req, res) {
             res.end('FAIL');
         });
     });
-
-
 });
+
 app.post('/TTT/get/Score/', function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     let username = req.body.username;
@@ -849,9 +856,8 @@ app.post('/TTT/get/Score/', function (req, res) {
     TTTSearch.then((documents) => {// when get the documents
      res.end(documents[0].score.toString());
     });
-
-
 });
+
 app.post('/TTT/Win/', function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     let username = req.body.username;
@@ -861,6 +867,13 @@ app.post('/TTT/Win/', function (req, res) {
     TTTSearch.then((documents) => {// when get the documents
         if (documents.length != 0) {
             documents[0].score += 5;
+            documents[0].currentWinstreak+=1;
+            documents[0].numberPlays +=1;
+            console.log("currnet score"+documents[0].score)
+            console.log("highestScore"  +documents[0].highestScore  )
+           if(documents[0].score >= documents[0].highestScore){
+            documents[0].highestScore = documents[0].score;
+           }
         }
 
         let p = documents[0].save();
@@ -884,6 +897,8 @@ app.post('/TTT/Tie/', function (req, res) {
     TTTSearch.then((documents) => {// when get the documents
         if (documents.length != 0) {
             documents[0].score += 2;
+            documents[0].currentWinstreak=0;
+            documents[0].numberPlays +=1;
         }
         let p = documents[0].save();
         p.then(() => {
