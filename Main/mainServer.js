@@ -33,6 +33,7 @@ var UserSchema = new Schema({
     salt: String,
     image: String,
     followers: [{ type: Schema.Types.ObjectId }],
+    following: [{ type: Schema.Types.ObjectId }]
 })
 
 // The schema for hangman
@@ -468,11 +469,11 @@ app.get(`/get/userSTATS/:user`, function (req, res) {
             stats.push({ username: user2.user, highScore: user2.highScore, currentWinStreak: user2.currentWinStreak });
             let curUserBJ = BJData.findOne({ "user": { $regex: req.params.user } });
             curUserBJ.then((bj) => {
-                let user3 = bj;
+                let user3 = bj[0];
                 stats.push({ username: user3.user, highScore: user3.highScore, currentWinStreak: user3.currentWinStreak });
                 let curUserTic = TTTData.findOne({ "user": { $regex: req.params.user } });
                 curUserTic.then((tic) => {
-                    let user4 = tic;
+                    let user4 = tic[0];
                     stats.push({ username: user4.user, highScore: user4.highestScore, currentWinStreak: user4.currentWinstreak });
                     res.status(200);
                     res.type('json').send(JSON.stringify(stats, null, 2) + '\n');
@@ -652,7 +653,6 @@ app.post('/diceTray/', function (req, res) {
 
 
 app.post('/scoreBoggle', function (req, res) {
-    // let body = JSON.parse(req.body);
     console.log(req.body);
     let bGame = boggleData.find({ user: req.body.username }).exec();
     bGame.then((doc) => {
