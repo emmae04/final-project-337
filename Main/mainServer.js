@@ -25,7 +25,6 @@ var UserSchema = new Schema({
     hash: String,
     salt: String,
 
-    password: String,
     image: String,
 
     following: [{ type: Schema.Types.ObjectId }],
@@ -48,13 +47,27 @@ var people = mongoose.model("User", UserSchema);
 var hangman = mongoose.model("Hangman", HangmanSchema);
 
 
+///// boggles
 var Schema = mongoose.Schema;
 var boggleInfo = new Schema({
     user: { type: String, default: '', trim: true },
-    score: { type: Number, default: 0, min: 0 },
+    highScore: { type: Number, default: 0, min: 0 },
+    numberOfPlays: { type: Number, default: 0, min: 0 }, 
+    currentWinStreak: { type: Number, default: 0, min: 0 }
 });
 
 var boggleData = mongoose.model('boggleData', boggleInfo);
+
+////////// black jack
+var Schema = mongoose.Schema;
+var BJInfo = new Schema({
+    user: { type: String, default: '', trim: true },
+    highScore: { type: Number, default: 0, min: 0 },
+    numberOfPlays: { type: Number, default: 0, min: 0 }, 
+    currentWinStreak: { type: Number, default: 0, min: 0 }
+});
+
+var BJInfo = mongoose.model('BJData', BJInfo);
 
 /** Profile data */
 app.get("/get/followers/:currUser", (req, res) => {
