@@ -16,7 +16,7 @@ function getWord() {
 
 function tellServer(won) {
     // var name = document.getElementById("username");
-    var name = "Arianna";
+    var name = "A";
     console.log(name);
     var l = document.getElementById("level").innerHTML;
     let level = l.slice(11, l.length - 1);
