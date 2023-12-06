@@ -1,0 +1,30 @@
+body {
+    background-color: #6ea4e6;
+    font-family:'Times New Roman', Times, serif;
+    text-align: center;
+}
+
+#header {
+    background-color: #f7ca57;
+    width: 100vw;
+    height: 50px;
+    padding: 10px;
+}
+
+#subheader {
+    background-color: #f5d27a;  
+    width: 100vw;
+    height: 25px;
+    padding: 10px;
+    font-size: 25px;
+}
+
+#p1,#p2,#p3,#p4,#p5 {
+    font-size: 20px;
+}
+
+#back {
+    background-color:#f5d27a;
+    height: 40px;
+
+}

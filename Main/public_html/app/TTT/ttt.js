@@ -21,8 +21,29 @@ var label = document.getElementById("label");
 var scoreLabel = document.getElementById("score");
 var options = ["0", "1", "2", "3", "4", "5", "6", "7", "8"];
 
+fetch('/get/curUsers/')
+    .then((res) => {
+        res.text()
+            .then((res2) => {
+                username = res2;
+                console.log(res2);
+                fetch("/TTT/get/Score/", {
+                    method: "POST",
+                    body: JSON.stringify({ username: res2 }),
+                    headers: { 'Content-Type': 'application/json' }
+                }).then((res) => {
+                    return res.text();
+                }).then((text) => {
+                    scoreLabel.innerText = "Score: " + text;
+
+                }).catch((err) => { console.log(err) });
+
+
+            })
+    });
 
 function newGame() {
+
     document.getElementById("label").style.visibility = "hidden";
     let spots = document.getElementsByClassName("spot");
     for (let i = 0; i < spots.length; i++) {
@@ -45,58 +66,62 @@ function makeTurn(id) {
                 document.getElementById("label").style.visibility = "hidden";
                 console.log("got here");
                 space.innerText = "X";
-
                 turn += 1;
                 if (gameWon(0) == true) {
-                    console.log("HUMAN WON");
-                    score += 5;
-                    scoreLabel.innerText = "Score: " + score;
-                    label.innerText = "YOU WON!";
-
-                    document.getElementById("label").style.visibility = "visible";
+                    // console.log("HUMAN WON");
+                    // score += 5;
+                    // scoreLabel.innerText = "Score: " + score;
+                    // label.innerText = "YOU WON!";
+                    update("WIN");
+                    // document.getElementById("label").style.visibility = "visible";
                     gameOver = true;
                 }
                 else if (gameWon(1) == true) {
-                    document.getElementById("label").style.visibility = "visible";
-                    label.innerText = "YOU LOST!";
-                    score -= 2;
-                    scoreLabel.innerText = "Score: " + score;
-                    console.log("ROBOT WON");
+                    // document.getElementById("label").style.visibility = "visible";
+                    // label.innerText = "YOU LOST!";
+                    // score -= 2;
+                    // scoreLabel.innerText = "Score: " + score;
+                    // console.log("ROBOT WON");
+                    update("LOSS");
                     gameOver = true;
                 }
                 else if (tie() == true) {
-                    document.getElementById("label").style.visibility = "visible";
-                    label.innerText = "TIE GAME!";
-                    score += 2;
-                    scoreLabel.innerText = "Score: " + score;
-                    console.log("TIE");
+                    // document.getElementById("label").style.visibility = "visible";
+                    // label.innerText = "TIE GAME!";
+                    // score += 2;
+                    // scoreLabel.innerText = "Score: " + score;
+                    // console.log("TIE");
+                    update("TIE");
                     gameOver = true;
                 }
                 else {
                     //console.log("making robot move");
                     robotMove();
                     if (gameWon(0) == true) {
-                        document.getElementById("label").style.visibility = "visible";
-                        score += 5;
-                        scoreLabel.innerText = "Score: " + score;
-                        label.innerText = "YOU WON!";
-                        console.log("HUMAN WON");
+                        // document.getElementById("label").style.visibility = "visible";
+                        // score += 5;
+                        // scoreLabel.innerText = "Score: " + score;
+                        // label.innerText = "YOU WON!";
+                        // console.log("HUMAN WON");
+                        update("WIN");
                         gameOver = true;
                     }
                     else if (gameWon(1) == true) {
-                        document.getElementById("label").style.visibility = "visible";
-                        score -= 2;
-                        scoreLabel.innerText = "Score: " + score;
-                        label.innerText = "YOU LOST!";
-                        console.log("ROBOT WON");
+                        // document.getElementById("label").style.visibility = "visible";
+                        // score -= 2;
+                        // scoreLabel.innerText = "Score: " + score;
+                        // label.innerText = "YOU LOST!";
+                        // console.log("ROBOT WON");
+                        update("LOSS");
                         gameOver = true;
                     }
                     else if (tie() == true) {
-                        document.getElementById("label").style.visibility = "visible";
-                        score += 2;
-                        scoreLabel.innerText = "Score: " + score;
-                        label.innerText = "TIE GAME!";
-                        console.log("TIE");
+                        // document.getElementById("label").style.visibility = "visible";
+                        // score += 2;
+                        // scoreLabel.innerText = "Score: " + score;
+                        // label.innerText = "TIE GAME!";
+                        // console.log("TIE");
+                        update("TIE");
                         gameOver = true;
                     }
                 }
@@ -110,6 +135,69 @@ function makeTurn(id) {
     }
 }
 
+function update(status) {
+    document.getElementById("label").style.visibility = "visible";
+    if (status == "LOSS") {
+        fetch('/get/curUsers/')
+            .then((res) => {
+                res.text()
+                    .then((res2) => {
+                        console.log(res2);
+                        fetch("/TTT/Loss/", {
+                            method: "POST",
+                            body: JSON.stringify({ username: res2 }),
+                            headers: { 'Content-Type': 'application/json' }
+                        }).then((res) => {
+                            return res.text();
+                        }).then((text) => {
+                            scoreLabel.innerText = "Score: " + text;
+                            label.innerText = "YOU LOST!";
+                        }).catch((err) => { console.log(err) });
+                    })
+            });
+
+    }
+    if (status == "WIN") {
+        fetch('/get/curUsers/')
+            .then((res) => {
+                res.text()
+                    .then((res2) => {
+                        console.log(res2);
+                        fetch("/TTT/Win/", {
+                            method: "POST",
+                            body: JSON.stringify({ username: res2 }),
+                            headers: { 'Content-Type': 'application/json' }
+                        }).then((res) => {
+                            return res.text();
+                        }).then((text) => {
+                            scoreLabel.innerText = "Score: " + text;
+                            label.innerText = "YOU Won";
+                        }).catch((err) => { console.log(err) });
+                    })
+            });
+
+    }
+    if (status == "TIE") {
+        fetch('/get/curUsers/')
+            .then((res) => {
+                res.text()
+                    .then((res2) => {
+                        console.log(res2);
+                        fetch("/TTT/Tie/", {
+                            method: "POST",
+                            body: JSON.stringify({ username: res2 }),
+                            headers: { 'Content-Type': 'application/json' }
+                        }).then((res) => {
+                            return res.text();
+                        }).then((text) => {
+                            scoreLabel.innerText = "Score: " + text;
+                            label.innerText = "YOU TIED!";
+                        }).catch((err) => { console.log(err) });
+                    })
+            });
+
+    }
+}
 
 function tie() {
     let spots = document.getElementsByClassName("spot");

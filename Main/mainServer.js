@@ -12,6 +12,7 @@ const fs2 = require('fs').promises
 
 const readline = require("readline")
 const parser = require('body-parser')
+
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const port = 80
@@ -53,7 +54,7 @@ var Schema = mongoose.Schema;
 var boggleInfo = new Schema({
     user: { type: String, default: '', trim: true },
     highScore: { type: Number, default: 0, min: 0 },
-    numberOfPlays: { type: Number, default: 0, min: 0 }, 
+    numberOfPlays: { type: Number, default: 0, min: 0 },
     currentWinStreak: { type: Number, default: 0, min: 0 }
 });
 
@@ -74,7 +75,7 @@ var Schema = mongoose.Schema;
 var BJInfo = new Schema({
     user: { type: String, default: '', trim: true },
     highScore: { type: Number, default: 0, min: 0 },
-    numberOfPlays: { type: Number, default: 0, min: 0 }, 
+    numberOfPlays: { type: Number, default: 0, min: 0 },
     currentWinStreak: { type: Number, default: 0, min: 0 }
 });
 
@@ -283,7 +284,7 @@ app.post("/add/user/", function (req, res) {
             let u = new people({
                 hash: result,
                 salt: newSalt,
-                username:req.body.username,
+                username: req.body.username,
                 image: "",
                 followers: [],
                 gameScore: []
@@ -384,13 +385,15 @@ app.get("/get/followers/", (req, res) => {
     followerArr = [];
     var curUser = people.findOne({ "username": req.cookies.login.username });
     curUser.then((foundUser) => {
+        console.log(foundUser.followers)
         return foundUser.followers;
     }).then((followers) => {
         return getFollowers(followers);
     }).then((followers) => {
         console.log(followers);
-        res.send(followers)});
-      
+        res.send(followers)
+    });
+
 });
 
 
@@ -399,8 +402,10 @@ app.get("/get/following/", (req, res) => {
     followingArr = [];
     var curUser = people.findOne({ "username": req.cookies.login.username });
     curUser.then((foundUser) => {
+        console.log(foundUser.following)
         return foundUser.following;
     }).then((following) => {
+        console.log(followingArr)
         return getFollowing(following);
     }).then((follow) => {
         res.send(follow)});
@@ -410,9 +415,9 @@ app.get("/get/stats/", (req, res) => {
     let curUser = people.findOne({ "username": req.cookies.login.username });
     curUser.then((foundUser) => {
         console.log(foundUser.gameScore)
-        
+
     })
-      
+
 });
 
 
@@ -489,7 +494,7 @@ app.post("/update/:id", function (req, res) {
                     secdoc.save();
                     document.followers.push(secdoc._id);
                     document.save();
-                }else{
+                } else {
                     let ind = document.followers.indexOf(secdoc._id);
                     let intdoc = secdoc.following.indexOf(document._id);
                     secdoc.following.splice(intdoc, 1);
@@ -498,7 +503,7 @@ app.post("/update/:id", function (req, res) {
                     document.followers.splice(ind, 1);
                     document.save();
                 }
-                
+
             });
         } else {
             message = "user not found";
@@ -534,10 +539,10 @@ function readFile(file, list) {
         terminal: false
     });
 
-    rl.on('line', function  (line) {
+    rl.on('line', function (line) {
         list.push(line);
     });
-    rl.on('close', function(close) { 
+    rl.on('close', function (close) {
         // console.log(fiveL);
         console.log(list.length);
         return list;
@@ -554,7 +559,7 @@ readFile('public_html/app/HM/Hangman/twelve.txt', twelveL);
  * This is a get request that sends back the randomly picked word of the list for
  * a beginner game.
  */
-app.get('/get/word/beg', function  (req, res) {
+app.get('/get/word/beg', function (req, res) {
     var answer = fiveL[Math.floor(Math.random() * (fiveL.length - 1))].toUpperCase();
     res.json(answer);
 })
@@ -563,7 +568,7 @@ app.get('/get/word/beg', function  (req, res) {
  * This is a get request that sends back the randomly picked word of the list for
  * an intermediate game.
  */
-app.get('/get/word/in', function  (req, res) {
+app.get('/get/word/in', function (req, res) {
     var answer = eightL[Math.floor(Math.random() * (eightL.length - 1))].toUpperCase();
     res.json(answer);
 })
@@ -572,7 +577,7 @@ app.get('/get/word/in', function  (req, res) {
  * This is a get request that sends back the randomly picked word of the list for
  * an advanced game.
  */
-app.get('/get/word/ad', function  (req, res) {
+app.get('/get/word/ad', function (req, res) {
     var answer = twelveL[Math.floor(Math.random() * (twelveL.length - 1))].toUpperCase();
     res.json(answer);
 })
@@ -608,7 +613,7 @@ app.post('/new/win/:name', (req, res) => {
  */
 app.post('/new/loss/:name', (req, res) => {
     console.log(req.body.wins);
-    let hGame = hangman.find({user: req.params.name}).exec();
+    let hGame = hangman.find({ user: req.params.name }).exec();
     hGame.then((doc) => {
         let games = doc[0].gamesPlayed;
         games++;
@@ -643,12 +648,12 @@ app.post('/diceTray/', function (req, res) {
 
 app.post('/scoreBoggle', function (req, res) {
     console.log(req.body);
-    let bGame = boggleData.find({user: req.body.username}).exec();
+    let bGame = boggleData.find({ user: req.body.username }).exec();
     bGame.then((doc) => {
         let games = doc[0].numberOfPlays;
         games++;
         doc[0].numberOfPlays = games;
-        if(req.body.score > doc[0].highScore){
+        if (req.body.score > doc[0].highScore) {
             doc[0].highScore = req.body.score;
         }
         doc[0].save();
@@ -814,7 +819,83 @@ function isValid(row, col) {
 // ---------------------------- TTT Server ----------------------------
 
 
+app.post('/TTT/Loss/', function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    let username = req.body.username;
+    console.log("tttloss "+username)
+    let TTTSearch = TTTData.find({ "user": username});
+    // finding the item with the given keyword in the description
+    TTTSearch.then((documents) => {// when get the documents
+        if (documents.length != 0) {
+            documents[0].score -= 2;
+        }
+        let p = documents[0].save();
+        p.then(() => {
+            res.end(documents[0].score.toString());
+        });
+        p.catch(() => {
+            console.log("save fail")
+            res.end('FAIL');
+        });
+    });
 
+
+});
+app.post('/TTT/get/Score/', function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    let username = req.body.username;
+    let TTTSearch = TTTData.find({ "user": username});
+    // finding the item with the given keyword in the description
+    TTTSearch.then((documents) => {// when get the documents
+     res.end(documents[0].score.toString());
+    });
+
+
+});
+app.post('/TTT/Win/', function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    let username = req.body.username;
+    console.log("tttwin "+username)
+    let TTTSearch = TTTData.find({ "user":username});
+    // finding the item with the given keyword in the description
+    TTTSearch.then((documents) => {// when get the documents
+        if (documents.length != 0) {
+            documents[0].score += 5;
+        }
+
+        let p = documents[0].save();
+        p.then(() => {
+            res.end(documents[0].score.toString());
+        });
+        p.catch(() => {
+            console.log("save fail")
+            res.end('FAIL');
+        });
+
+    });
+
+});
+app.post('/TTT/Tie/', function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    let username = req.body.username;
+    console.log("ttttie "+username)
+    let TTTSearch = TTTData.find({ "user":  username  });
+    // finding the item with the given keyword in the description
+    TTTSearch.then((documents) => {// when get the documents
+        if (documents.length != 0) {
+            documents[0].score += 2;
+        }
+        let p = documents[0].save();
+        p.then(() => {
+            res.end(documents[0].score.toString());
+        });
+        p.catch(() => {
+            console.log("save fail")
+            res.end('FAIL');
+        });
+    });
+
+});
 
 
 // ---------------------------- Blackjack Server ----------------------------
