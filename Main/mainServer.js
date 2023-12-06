@@ -283,18 +283,18 @@ app.post("/add/user/", function (req, res) {
 
             let BJ = new BJData({
                 username: req.body.username,
-                hash: result,
-                salt: newSalt,
-                friends: [],
-                games: []
+                user: 0,
+                highScore: 0,
+                numberOfPlays: 0,
+                currentWinStreak: 0
             });
 
             let Boggle = new boggleData({
-                username: req.body.username,
-                hash: result,
-                salt: newSalt,
-                friends: [],
-                games: []
+
+                user: req.body.username,
+                highScore: 0,
+                numberOfPlays: 0,
+                currentWinStreak: 0
             });
 
             let TTT = new boggleData({
@@ -304,8 +304,11 @@ app.post("/add/user/", function (req, res) {
                 highestScore: 0,
                 currentWinstreak: 0,
             });
-            TTT.save();
             
+            TTT.save();
+            Boggle.save();
+            BJ.save();
+
             let p = u.save();
             p.then(() => {
                 res.end('SUCCESS');
