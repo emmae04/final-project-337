@@ -38,9 +38,10 @@ var UserSchema = new Schema({
 var HangmanSchema = new Schema({
     level: String,
     user: String,
-    word: String,
-    guesses: Number,
-    wins: Boolean
+    games: Number,
+    wins: Number,
+    highscore: Number,
+    currWinStreak: Number
 })
 
 var people = mongoose.model("User", UserSchema);
@@ -405,39 +406,37 @@ readFile('public_html/app/HM/Hangman/five.txt', fiveL);
 readFile('public_html/app/HM/Hangman/eight.txt', eightL);
 readFile('public_html/app/HM/Hangman/twelve.txt', twelveL);
 
-app.post('/get/word', (req, res) => {
-    // let list = readFile('public_html/app/HM/Hangman/five.txt');
-    // console.log("list " +fiveL);
-    var answer = "";
-    console.log("body" +req.body);
-    var level = req.body.level;
-    console.log("level:" + level);
-    if (level == "Beginner") {
-        answer = fiveL[Math.floor(Math.random() * (fiveL.length - 1))].toUpperCase();
-    }
-    if (level == "Intermediate") {
-        answer = eightL[Math.floor(Math.random() * (eightL.length - 1))].toUpperCase();
-    }
-    else {
-        answer = twelveL[Math.floor(Math.random() * (twelveL.length - 1))].toUpperCase();
-    }
-    
+app.get('/get/word/beg', function(req, res) {
+    var answer = fiveL[Math.floor(Math.random() * (fiveL.length - 1))].toUpperCase();
+    res.json(answer);
+})
+
+app.get('/get/word/in', function(req, res) {
+    var answer = eightL[Math.floor(Math.random() * (eightL.length - 1))].toUpperCase();
+    res.json(answer);
+})
+
+app.get('/get/word/ad', function(req, res) {
+    var answer = twelveL[Math.floor(Math.random() * (twelveL.length - 1))].toUpperCase();
     res.json(answer);
 })
 
 app.post('/new/score', (req, res) => {
+    var win = 0;
+    if (req.body.wins) {
+        win = 1;
+    }
     let newHangman = new hangman({
         level: req.body.level,
         user: "name",
         word: req.body.word,
-        guesses: req.body.guesses,
-        wins: req.body.wins
+        games: 1,
+        wins: win
     })
     newHangman.save().then(() => {
         console.log("saved");
     })
 })
-
 
 // ---------------------------- Boggle Server ----------------------------
 
