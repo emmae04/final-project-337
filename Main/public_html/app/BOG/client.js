@@ -24,8 +24,7 @@ function changeHTML() {
 var currentBoard = [];
 var userGuesses = [];
 var gameStart = 0;
-// var time = 180;
-var time = 10;
+var time = 180;
 var points = 0;
 var correctBoggleWords = [];
 
@@ -88,8 +87,7 @@ function startGame() {
         intervalId = setInterval(timer, 1000);
         correctBoggleWords = res;
         console.log(correctBoggleWords);
-        // time = 180;
-        time = 10;
+        time = 180;
         points = 0;
         gameStart = 1;
     }).catch((err) => {
@@ -104,7 +102,6 @@ function timer() {
     if (time == 0) {
         clearInterval(this.intervalId);
         document.getElementById("currTime").innerHTML = "TIMES UP";
-        document.getElementById("guessLabel").innerHTML = "Already Guessed";
         gameStart = 0;
 
         fetch(`/scoreBoggle`, {

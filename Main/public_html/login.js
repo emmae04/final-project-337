@@ -143,6 +143,16 @@ function updateButtons() {
   }
 }
 
+var curUser;
+
+fetch('/get/curUsers/')
+  .then((res) => {
+    res.text()
+      .then((res2) => {
+        curUser = res2;
+      })
+  });
+
 
 function searchFriends() {
   let input = document.getElementById('searchFriend').value;
@@ -159,38 +169,31 @@ function searchFriends() {
         // gets all attibutes of the item
         for (let i = 0; i < parsed.length; i++) {
           // console.log(parsed[i]);
-          let name = parsed[i].user;
-          let id = parsed[i].id;
-          let stat = parsed[i].stat;
-          // console.log(parsed.length);
-          // console.log("name: " + name);
-          // updates the html to add the items on the sceen
-          var tempDiv = `<div id="item"> <div>${name}</div>`;
-          if (stat.startsWith("FOLLOWER")) {
-            tempDiv = tempDiv + `<div>${stat} </div>`
-          } else if (stat.startsWith("FOLLOWING")) {
-            tempDiv = tempDiv + `<button class="buttons" id =${id}> UNFOLLOW </button>`;
-          } else {
-            tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOW </button>`;
+          if (parsed[i].user != curUser) {
+            let name = parsed[i].user;
+            let id = parsed[i].id;
+            let stat = parsed[i].stat;
+            // console.log(parsed.length);
+            // console.log("name: " + name);
+            // updates the html to add the items on the sceen
+            var tempDiv = `<div id="item"> <div>${name}</div>`;
+            if (stat.startsWith("FOLLOWER")) {
+              tempDiv = tempDiv + `<div>${stat} </div>`
+              // tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOW </button>`;
+            } else if (stat.startsWith("FOLLOWING")) {
+              tempDiv = tempDiv + `<button class="buttons" id =${id}> UNFOLLOW </button>`;
+            } else {
+              tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOW </button>`;
+            }
+            tempDiv = tempDiv + `<div> <button class="statsButton" onclick="changeToStat('${parsed[i].user}');"> SEE STATS </button></div> </div>`;
+            document.getElementById("searchResult").innerHTML += tempDiv;
           }
-          tempDiv = tempDiv + `<div> <button class="statsButton" onclick="changeToStat('${parsed[i].user}');"> SEE STATS </button></div> </div>`;
-          document.getElementById("searchResult").innerHTML += tempDiv;
         }
         updateButtons();
       })
       .catch((err) => { console.log(err) });
   }
 }
-
-var curUser;
-
-fetch('/get/curUsers/')
-  .then((res) => {
-    res.text()
-      .then((res2) => {
-        curUser = res2;
-      })
-  });
 
 function changeToStat(user) {
   window.location.href = `http://localHost/app/stats.html?key=${user}`;
