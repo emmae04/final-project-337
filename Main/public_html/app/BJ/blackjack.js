@@ -305,7 +305,7 @@ function endGame() {
 		user : currUser,
 		highScore : P1Wins,
 		numberOfPlays : numRounds,
-		currentWinStreak : P1Wins;
+		currentWinStreak : P1Wins
 	}
 
 	fetch(`/addScoreBJ`, {
