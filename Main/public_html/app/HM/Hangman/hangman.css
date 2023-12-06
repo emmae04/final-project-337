@@ -12,6 +12,7 @@ body {
     margin: 0px;
     margin-top: 0px;
     height: 100%;
+    width: 100%;
 }
 
 #top {
@@ -98,17 +99,16 @@ h2 {
     display: block;
     position: absolute;
     float: right;
-    right: 12px;
+    right: 15px;
     text-align: center;
-    top: 150px;
+    top: 155px;
     background-color: #FFCF96;
+    margin: 0px;
 }
 
 .htpHeader {
     font-size: 30px;
     width: 30px;
-    float: right;
-    right: 15px;
     text-align: cneter;
 }
 .htpContent {
@@ -120,6 +120,7 @@ h2 {
     display: none;
     background-color: white;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    line-height: 20px;
 }
 .htp div {
     color: black;

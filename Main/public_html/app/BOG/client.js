@@ -17,6 +17,7 @@ const dices = [
     ['O', 'B', 'B', 'A', 'O', 'J']
 ];
 
+
 // var currentBoard = new Array(4).fill(0).map(() => new Array(4).fill(0));
 var currentBoard = [];
 var userGuesses = [];
@@ -25,6 +26,17 @@ var gameStart = 0;
 var time = 10;
 var points = 0;
 var correctBoggleWords = [];
+
+var username;
+
+fetch('/get/curUsers/')
+.then((res) => {
+    res.text()
+    .then((res2) => {
+        username = res2;
+        console.log(res2);
+    })
+});
 
 function tableToArray(table) {
     var tableArray = [];
@@ -93,9 +105,9 @@ function timer() {
         document.getElementById("guessLabel").innerHTML = "Already Guessed";
         gameStart = 0;
 
-        fetch("/scoreBoggle/", {
+        fetch(`/scoreBoggle`, {
             method: "POST",
-            body: JSON.stringify(score),
+            body: JSON.stringify({score: points, username: username}),
             headers: { 'Content-Type': 'application/json' }
         }).catch((err) => {
             console.log(err);
