@@ -292,6 +292,27 @@ function endGame() {
 	noPlayButton.innerText = "Go home";
 	playAgain.style.display = "inline";
 	noPlayButton.style.display = "inline";
+
+	var currUser = ""
+	fetch("/get/curUsers/")
+    .then(res => {
+        return res.text();
+    }).then(text =>{
+        currUser = text;
+    })
+
+	data = {
+		user : currUser,
+		highScore : P1Wins,
+		numberOfPlays : numRounds,
+		currentWinStreak : P1Wins
+	}
+
+	fetch(`/addScoreBJ`, {
+		method: "POST",
+		body: JSON.stringify(data), 
+		headers: {"Content-Type" : "application/json"}
+	});
 }
 
 function displayCurrScore() {

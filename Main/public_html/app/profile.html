@@ -3,7 +3,7 @@
     <head>
         <link href="profile.css" rel="stylesheet">
     </head>
-    <body>
+    <body onload="getCurrUser()">
         <div id="column1">
             <div id="row1">
                 <span id="avatar">
@@ -23,10 +23,15 @@
                 <button id="statsButton" onclick="showStats()">
                     Show stats
                 </button>
+                <button id="logout">
+                    Logout
+                </button>
             </div>
         </div>
 
         <div id="column2">
         </div>
+
+    <script src="profile.js"></script>
     </body>
 </html>

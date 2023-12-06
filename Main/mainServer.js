@@ -1,3 +1,9 @@
+/**
+ * This file contains the main server that we all use for our game webpage.
+ * It handles cookies, making schemas, and the various requests we make for
+ * our individual games.
+ */
+
 // Initializes the required pieces
 const mongoose = require('mongoose');
 const express = require('express');
@@ -6,6 +12,7 @@ const fs2 = require('fs').promises
 
 const readline = require("readline")
 const parser = require('body-parser')
+const readline = require('readline')
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const port = 80
@@ -26,7 +33,6 @@ var UserSchema = new Schema({
     salt: String,
     image: String,
     followers: [{ type: Schema.Types.ObjectId }],
-    gameScore: []
 })
 
 // The schema for hangman
@@ -42,7 +48,7 @@ var people = mongoose.model("User", UserSchema);
 var hangman = mongoose.model("Hangman", HangmanSchema);
 
 
-///// boggles
+///// boggle
 var Schema = mongoose.Schema;
 var boggleInfo = new Schema({
     user: { type: String, default: '', trim: true },
@@ -353,6 +359,61 @@ app.get('/get/curUsers/', function (req, res) {
 });
 
 
+var followingArr = [];
+var followerArr = [];
+
+async function getFollowing(person) {
+    for (let i = 0; i < person.length; i++) {
+        curr = await people.findOne({"_id" : person[i]});
+        followingArr.push(curr.username);
+    }
+    console.log(followingArr)
+    return followingArr;
+}
+
+async function getFollowers(person) {
+    for (let i = 0; i < person.length; i++) {
+        curr = await people.findOne({"_id" : person[i]});
+        followerArr.push(curr.username);
+    }
+    console.log(followerArr)
+    return followerArr;
+}
+
+app.get("/get/followers/", (req, res) => {
+    followerArr = [];
+    var curUser = people.findOne({ "username": req.cookies.login.username });
+    curUser.then((foundUser) => {
+        return foundUser.followers;
+    }).then((followers) => {
+        return getFollowers(followers);
+    }).then((followers) => {
+        console.log(followers);
+        res.send(followers)});
+      
+});
+
+
+
+app.get("/get/following/", (req, res) => {
+    followingArr = [];
+    var curUser = people.findOne({ "username": req.cookies.login.username });
+    curUser.then((foundUser) => {
+        return foundUser.following;
+    }).then((following) => {
+        return getFollowing(following);
+    }).then((follow) => {
+        res.send(follow)});
+});
+
+app.get("/get/stats/", (req, res) => {
+    let curUser = people.findOne({ "username": req.cookies.login.username });
+    curUser.then((foundUser) => {
+        console.log(foundUser.gameScore)
+        
+    })
+      
+});
 
 
 app.get('/search/users/:keyword/', function (req, res) {
@@ -447,13 +508,25 @@ app.post("/update/:id", function (req, res) {
     res.send(message);
 });
 
+// blackjack server
+
+app.post('/addscoreBJ', function(req, res) {
+    
+});
+
 
 // ---------------------------- Hangman Server ----------------------------
 
 const fiveL = [];
 const eightL = [];
 const twelveL = [];
-
+/**
+ * This function uses file stream and read line to go through a text file and
+ * put all of the words into a list
+ * @param {*} file - a txt file
+ * @param {*} list - a list for the words
+ * @returns a list of words
+ */
 function readFile(file, list) {
     const input = fs.createReadStream(file);
     const rl = readline.createInterface({
@@ -471,36 +544,56 @@ function readFile(file, list) {
     })
     return list;
 }
+
+// Creating the lists
 readFile('public_html/app/HM/Hangman/five.txt', fiveL);
 readFile('public_html/app/HM/Hangman/eight.txt', eightL);
 readFile('public_html/app/HM/Hangman/twelve.txt', twelveL);
 
+/**
+ * This is a get request that sends back the randomly picked word of the list for
+ * a beginner game.
+ */
 app.get('/get/word/beg', function  (req, res) {
     var answer = fiveL[Math.floor(Math.random() * (fiveL.length - 1))].toUpperCase();
     res.json(answer);
 })
 
+/**
+ * This is a get request that sends back the randomly picked word of the list for
+ * an intermediate game.
+ */
 app.get('/get/word/in', function  (req, res) {
     var answer = eightL[Math.floor(Math.random() * (eightL.length - 1))].toUpperCase();
     res.json(answer);
 })
 
+/**
+ * This is a get request that sends back the randomly picked word of the list for
+ * an advanced game.
+ */
 app.get('/get/word/ad', function  (req, res) {
     var answer = twelveL[Math.floor(Math.random() * (twelveL.length - 1))].toUpperCase();
     res.json(answer);
 })
 
-
+/**
+ * This is a post request that gets ther user sent in the url for when they win.
+ * It updates the hangman schema for this user by incrementing their values.
+ */
 app.post('/new/win/:name', (req, res) => {
     console.log(req.body.wins);
     let hGame = hangman.find({user: req.params.name}).exec();
     hGame.then((doc) => {
+        // Increase games played
         let games = doc[0].gamesPlayed;
         games++;
         doc[0].gamesPlayed = games;
+        // Add to wins
         var win = doc[0].wins;
         win++;
         doc[0].wins = win;
+        // Add to streak
         var streak = doc[0].currWinStreak;
         streak++;
         doc[0].currWinStreak = streak;
@@ -509,6 +602,10 @@ app.post('/new/win/:name', (req, res) => {
     })
 })
 
+/**
+ * This is a post request that gets ther user sent in the url for when they lose.
+ * It updates the hangman schema for this user by resetting their values.
+ */
 app.post('/new/loss/:name', (req, res) => {
     console.log(req.body.wins);
     let hGame = hangman.find({user: req.params.name}).exec();
@@ -722,5 +819,8 @@ function isValid(row, col) {
 
 
 // ---------------------------- Blackjack Server ----------------------------
+
+
+
 app.listen(port, () =>
     console.log(`App listening at http://localhost:${port}`))
