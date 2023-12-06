@@ -279,6 +279,22 @@ app.post("/add/user/", function (req, res) {
                 friends: [],
                 games: []
             });
+
+            let BJ = new BJData({
+                username: req.body.username,
+                hash: result,
+                salt: newSalt,
+                friends: [],
+                games: []
+            });
+
+            let Boggle = new boggleData({
+                username: req.body.username,
+                hash: result,
+                salt: newSalt,
+                friends: [],
+                games: []
+            });
             let p = u.save();
             p.then(() => {
                 res.end('SUCCESS');
