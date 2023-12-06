@@ -25,18 +25,15 @@ var UserSchema = new Schema({
     hash: String,
     salt: String,
     image: String,
-    following: [{ type: Schema.Types.ObjectId }],
     followers: [{ type: Schema.Types.ObjectId }],
     gameScore: []
 })
 
 // The schema for hangman
 var HangmanSchema = new Schema({
-    level: String,
     user: String,
-    games: Number,
+    gamesPlayed: Number,
     wins: Number,
-    highscore: Number,
     currWinStreak: Number
 })
 
@@ -276,40 +273,47 @@ app.post("/add/user/", function (req, res) {
             let data = h.update(toHash, 'utf-8');
             let result = data.digest('hex');
             let u = new people({
-                username: req.body.username,
                 hash: result,
                 salt: newSalt,
-                friends: [],
-                games: []
+                username:req.body.username,
+                image: "",
+                followers: [],
+                gameScore: []
+            });
+
+            let H = new HangmanSchema({
+                user: req.body.username,
+                gamesPlayed: 0,
+                wins: 0,
+                currWinStreak: 0
             });
 
             let BJ = new BJData({
-                username: req.body.username,
-                user: 0,
+                user: req.body.username,
                 highScore: 0,
                 numberOfPlays: 0,
                 currentWinStreak: 0
             });
 
             let Boggle = new boggleData({
-
                 user: req.body.username,
                 highScore: 0,
                 numberOfPlays: 0,
                 currentWinStreak: 0
             });
 
-            let TTT = new boggleData({
+            let TTT = new TTTData({
                 user: req.body.username,
                 score: 0,
                 numberPlays: 0,
                 highestScore: 0,
                 currentWinstreak: 0,
             });
-            
+
             TTT.save();
             Boggle.save();
             BJ.save();
+            H.save();
 
             let p = u.save();
             p.then(() => {
@@ -485,19 +489,34 @@ app.get('/get/word/ad', function  (req, res) {
     res.json(answer);
 })
 
-app.post('/new/score', (req, res) => {
-    var win = 0;
-    if (req.body.wins) {
-        win = 1;
-    }
-    let newHangman = new hangman({
-        level: req.body.level,
-        user: "name",
-        word: req.body.word,
-        games: 1,
-        wins: win
+
+app.post('/new/win/:name', (req, res) => {
+    console.log(req.body.wins);
+    let hGame = hangman.find({user: req.params.name}).exec();
+    hGame.then((doc) => {
+        let games = doc[0].gamesPlayed;
+        games++;
+        doc[0].gamesPlayed = games;
+        var win = doc[0].wins;
+        win++;
+        doc[0].wins = win;
+        var streak = doc[0].currWinStreak;
+        streak++;
+        doc[0].currWinStreak = streak;
+        doc[0].save();
+        console.log("saved");
     })
-    newHangman.save().then(() => {
+})
+
+app.post('/new/loss/:name', (req, res) => {
+    console.log(req.body.wins);
+    let hGame = hangman.find({user: req.params.name}).exec();
+    hGame.then((doc) => {
+        let games = doc[0].gamesPlayed;
+        games++;
+        doc[0].gamesPlayed = games;
+        doc[0].currWinStreak = 0;
+        doc[0].save();
         console.log("saved");
     })
 })

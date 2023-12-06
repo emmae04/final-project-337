@@ -15,10 +15,13 @@ function getWord() {
 }
 
 function tellServer(won) {
+    // var name = document.getElementById("username");
+    var name = "A";
+    console.log(name);
     var l = document.getElementById("level").innerHTML;
     let level = l.slice(11, l.length - 1);
-    let info = {"level": level, "word": answer, "guesses": guesses, "wins": won};
-    let p = fetch('http://localhost/new/score', {
+    let info = {"level": level, "wins": won};
+    let p = fetch(`/new/${won}/${name}`, {
         method: "POST",
         body: JSON.stringify(info),
         headers: {"Contect-Type": "application/json"}    
@@ -41,7 +44,7 @@ function won() {
     newDiv.innerHTML = "You Won! Dare to play again?";
     document.getElementById("input").appendChild(newDiv);
     button.remove();
-    tellServer(true);
+    tellServer("win");
 }
 
 function failed() {
@@ -54,7 +57,7 @@ function failed() {
     var newDiv = document.createElement("div");
     newDiv.innerHTML = "You Failed! Dare to play again?";
     document.getElementById("input").appendChild(newDiv);
-    tellServer(false);
+    tellServer("loss");
 }
 
 function inputUpdate(word) {
