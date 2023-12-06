@@ -5,6 +5,16 @@ body {
 h1 {
     text-align: center;
 }
+#backButton{
+       display: inline-block;
+       border-radius: 8px;
+}
+.header {
+    background-color: rgb(228, 77, 77);
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 0px;
+}
 
 td {
     width: 120px;
@@ -19,7 +29,8 @@ table {
     display: inline-block;
     font-size: 100px;
     top: 29%;
-    margin-left: 50%;
+    margin-left: 54.7%;
+    margin-top:45px;
     position: fixed;
     border: 3px solid maroon;
 }
@@ -30,8 +41,10 @@ table {
     height: 380px;
     width: 380px;
     top: 30%;
+    margin-top:40px;
     text-align: center;
     text-overflow: wrap;
+    margin-left:0%;
     left: 20%;
     border: 3px solid maroon;
     background-color: #FC6C85;
@@ -44,6 +57,7 @@ table {
 
 #label {
     text-align: center;
+    margin-top:0;
     background-color: #FC6C85;
     border: 3px solid maroon;
     width:400px;

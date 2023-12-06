@@ -4,8 +4,11 @@
 <link rel="stylesheet" href="ttt.css">
 
 <body>
-    
-    <H3 style=" text-align: center;">Welcome To Tic Tac Toe</H3>
+    <h1 class="header"> MANE Games </h1>
+    <span>
+        <button id = "backButton">Back</button>
+        <H3 style=" text-align: center;">Welcome To Tic Tac Toe</H3>
+    </span>
     <p id="label"></p>
     <p id="score">Score:0</p>
     <div id="rulesDiv">
@@ -32,7 +35,7 @@
         <p> Lose: -2 pts</p>
     </div>
     <div>
-        <table>
+        <table id="tableDiv">
             <tr>
                 <td class="spot" id="0" onclick="makeTurn()"></td>
                 <td class="spot" id="1" onclick="makeTurn()"></td>
