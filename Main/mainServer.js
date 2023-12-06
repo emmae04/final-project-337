@@ -364,7 +364,7 @@ var followerArr = [];
 
 async function getFollowing(person) {
     for (let i = 0; i < person.length; i++) {
-        curr = await people.findOne({ "_id": person[i] });
+        curr = await people.findOne({"_id" : person[i]});
         followingArr.push(curr.username);
     }
     console.log(followingArr)
@@ -373,7 +373,7 @@ async function getFollowing(person) {
 
 async function getFollowers(person) {
     for (let i = 0; i < person.length; i++) {
-        curr = await people.findOne({ "_id": person[i] });
+        curr = await people.findOne({"_id" : person[i]});
         followerArr.push(curr.username);
     }
     console.log(followerArr)
@@ -384,6 +384,7 @@ app.get("/get/followers/", (req, res) => {
     followerArr = [];
     var curUser = people.findOne({ "username": req.cookies.login.username });
     curUser.then((foundUser) => {
+        console.log(foundUser.followers)
         return foundUser.followers;
     }).then((followers) => {
         return getFollowers(followers);
@@ -400,12 +401,13 @@ app.get("/get/following/", (req, res) => {
     followingArr = [];
     var curUser = people.findOne({ "username": req.cookies.login.username });
     curUser.then((foundUser) => {
+        console.log(foundUser.following)
         return foundUser.following;
     }).then((following) => {
+        console.log(followingArr)
         return getFollowing(following);
     }).then((follow) => {
-        res.send(follow)
-    });
+        res.send(follow)});
 });
 
 app.get("/get/stats/", (req, res) => {
@@ -512,8 +514,8 @@ app.post("/update/:id", function (req, res) {
 
 // blackjack server
 
-app.post('/addscoreBJ', function (req, res) {
-
+app.post('/addscoreBJ', function(req, res) {
+    
 });
 
 
@@ -585,7 +587,7 @@ app.get('/get/word/ad', function (req, res) {
  */
 app.post('/new/win/:name', (req, res) => {
     console.log(req.body.wins);
-    let hGame = hangman.find({ user: req.params.name }).exec();
+    let hGame = hangman.find({user: req.params.name}).exec();
     hGame.then((doc) => {
         // Increase games played
         let games = doc[0].gamesPlayed;
