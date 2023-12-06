@@ -1,0 +1,10 @@
+body{
+    text-align: center;
+    position: block;
+    background-color: rgb(224, 83, 67);
+}
+
+#allInfo{
+    padding: 15px;
+    font-size: medium;
+}

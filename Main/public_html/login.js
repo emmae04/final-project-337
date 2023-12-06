@@ -3,7 +3,6 @@
 
 const username = document.cookie.username;
 function changeHTML() {
-
   window.location.href = "main.html";
 }
 function goToTTT() {
@@ -122,15 +121,15 @@ function follow(id, ftnff) {
   // sends the user and the id
   fetch(`/update/${id}`, {
     method: "POST",
-    body: JSON.stringify({ftnff}), 
-    headers: {"Content-Type" : "application/json"}
+    body: JSON.stringify({ ftnff }),
+    headers: { "Content-Type": "application/json" }
   }).then((res) => {
     console.log("after fetch is done I am here");
     // document.getElementById(`${id}`).value = "FOLLOWED";
     // tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOWED </button></div>`;
-    if(ftnff){
+    if (ftnff) {
       document.getElementById(`${id}`).innerText = "UNFOLLOW";
-    }else{
+    } else {
       document.getElementById(`${id}`).innerText = "FOLLOW";
     }
     //return res.text();
@@ -140,7 +139,7 @@ function follow(id, ftnff) {
 function updateButtons() {
   var buts = document.getElementsByClassName("buttons");
   for (let i = 0; i < buts.length; i++) {
-    buts[i].onclick = (e) => { console.log(this , e.target.innerText.startsWith("F")); follow(e.target.id, e.target.innerText.startsWith("F")) };
+    buts[i].onclick = (e) => { console.log(this, e.target.innerText.startsWith("F")); follow(e.target.id, e.target.innerText.startsWith("F")) };
   }
 }
 
@@ -169,12 +168,12 @@ function searchFriends() {
           var tempDiv = `<div id="item"> <div>${name}</div>`;
           if (stat.startsWith("FOLLOWER")) {
             tempDiv = tempDiv + `<div>${stat} </div>`
-          } else if(stat.startsWith("FOLLOWING")){
+          } else if (stat.startsWith("FOLLOWING")) {
             tempDiv = tempDiv + `<button class="buttons" id =${id}> UNFOLLOW </button>`;
-          }else{
+          } else {
             tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOW </button>`;
           }
-          tempDiv = tempDiv + `<div> <button class="statsButton" onclick="updateStatView();"> SEE STATS </button></div> </div>`;
+          tempDiv = tempDiv + `<div> <button class="statsButton" onclick="changeToStat()"> SEE STATS </button></div> </div>`;
           document.getElementById("searchResult").innerHTML += tempDiv;
         }
         updateButtons();
@@ -183,17 +182,33 @@ function searchFriends() {
   }
 }
 
+var curUser;
 
-function updateStatView(user){
-  window.location.href = "http://localHost/app/stats.html";
-  fetch(`/get/userSTATS/:${user}`)
+fetch('/get/curUsers/')
   .then((res) => {
-    return res.text();
-  }).then((res) => {
-    let parsed = JSON.parse(res);
-    
-  })
-  .catch((err) => { console.log(err) });
+    res.text()
+      .then((res2) => {
+        curUser = res2;
+      })
+  });
 
+function changeToStat() {
+  window.location.href = "http://localHost/app/stats.html";
+}
 
+function updateStatView() {
+  document.getElementById('allInfo').value = "";
+
+  fetch(`/get/userSTATS/:${curUser}`)
+    .then((res) => {
+      return res.text();
+    }).then((res2) => {
+      document.getElementById('allInfo').innerHTML = `<div> ${res2} </div>`;
+      var p = JSON.parse(res2);
+      console.log("parsed");
+      console.log(p);
+      console.log("normal");
+      console.log(res2);
+    })
+    .catch((err) => { console.log(err) });
 }
