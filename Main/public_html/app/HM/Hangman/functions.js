@@ -1,3 +1,9 @@
+/**
+ * This file contains the client side js for hangman. It gets the random word,
+ * it tracks the guesses that the user makes, and handles when the user either
+ * wins or loses.
+ */
+
 const fiveL = [];
 const boxes = ["one", "two", "three", "four", "five", "six", "seve", "eight", "nine",
     "ten", "eleven", "twelve"];
