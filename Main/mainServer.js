@@ -207,27 +207,20 @@ app.post('/login/user/pass', (req, res) => {
 });
 
 
-app.post('/logout/:user/', (req, res) => {
-
+app.post('/logout/user/', (req, res) => {
+    console.log("go tto this logout")
     removeCertainSession(req, res);
-    res.end();
+  
 });
 
 function removeCertainSession(req, res) {
     let c = req.cookies;
-    console.log('auth request:');
+    console.log('logout request');
     console.log(req.cookies);
     if (c != undefined) {
-        if (sessions[c.login.username] != undefined &&
-            sessions[c.login.username].id == c.login.sessionID) {// if the session and cookie match
-            delete sessions[c.login.username]
-            res.redirect('http://localhost/index.html');
-        } else {
-            res.redirect('http://localhost/index.html');
-        }
-    } else {
-        res.redirect('http://localhost/index.html');
-    }
+        delete sessions[c.login.username];
+        res.end("SUCCESS");
+    } 
 }
 
 app.post('/changePassword/user', (req, res) => {
