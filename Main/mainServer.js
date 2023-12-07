@@ -931,7 +931,7 @@ app.get('/boggle/highestScores/', function (req, res) {
         let num=1;
         for(let i =0; i < doc.length;i++){
             
-            retStr+=num.toString()+": "+doc[i].user+"|Score: "+doc[i].highScore.toString()+"\n";
+            retStr+=num.toString()+": "+doc[i].user+" | High Score: "+doc[i].highScore.toString()+"\n";
             num+=1;
         }
         //JSON.stringify(doc)
