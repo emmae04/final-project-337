@@ -439,3 +439,23 @@ function back() {
     window.location.href = "http://localhost/app/main.html";
 }
 
+
+var username;
+
+fetch('/get/curUsers/')
+.then((res) => {
+    res.text()
+    .then((res2) => {
+        username = res2;
+        console.log(res2);
+    })
+});
+
+fetch(`/BJGame`, {
+	method: "POST",
+	body: JSON.stringify({curScore: P1Wins, username: username, currentWinStreak: something}),
+	headers: { 'Content-Type': 'application/json' }
+}).catch((err) => {
+	console.log(err);
+	console.log("error");
+});

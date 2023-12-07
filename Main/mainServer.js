@@ -434,8 +434,6 @@ app.get('/search/users/:keyword/', function (req, res) {
 
             }
             res.status(200);
-            console.log("HERE IS TEMP__________________________________")
-            console.log(temp);
             res.type('json').send(JSON.stringify(temp, null, 2) + '\n');
         });
     });
@@ -941,6 +939,20 @@ app.post('/TTT/Tie/', function (req, res) {
 
 // ---------------------------- Blackjack Server ----------------------------
 
+app.post('/scoreBJ', function (req, res) {
+    console.log(req.body);
+    let bGame = BJData.find({ user: req.body.username }).exec();
+    bGame.then((doc) => {
+        let games = doc[0].numberOfPlays;
+        games++;
+        doc[0].numberOfPlays = games;
+        if (req.body.curScore > doc[0].highScore) {
+            doc[0].highScore = req.body.curScore;
+        }
+        doc[0].save();
+        console.log("saved");
+    });
+});
 
 
 app.listen(port, () =>

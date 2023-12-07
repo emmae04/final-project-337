@@ -116,11 +116,7 @@ window.onclick = function (event) {
 
 
 function follow(id, ftnff) {
-  // console.log('HERE');
-  // console.log(id);
   // sends the user and the id
-  console.log("WHOS ID IS THIS_______________________________________");
-  console.log(id);
   // the person I want to follow or unfollow
   fetch(`/update/${id}`, {
     method: "POST",
@@ -181,8 +177,6 @@ function searchFriends() {
             let name = parsed[i].user;
             let id = parsed[i].id;
             let stat = parsed[i].stat;
-            console.log("STATS__________________________________________________")
-            console.log(stat);
             // updates the html to add the items on the sceen
             var tempDiv = `<div id="item"> <div>${name}</div>`;
             if (stat.startsWith("FOLLOWER")) {
@@ -220,8 +214,6 @@ function updateStatView() {
       return res.text();
     }).then((res2) => {
       var p = JSON.parse(res2);
-      console.log("parsed --------------------------------------------------");
-      console.log(p);
       var tempDiv = "";
       for (let i = 0; i < p.length; i++) {
         let usern = p[i].username;
@@ -233,13 +225,13 @@ function updateStatView() {
           tempDiv = tempDiv + `<div> ${usern} </div>`;
         }
         if (i == 0) {
-          tempDiv = tempDiv + `<div> HangMan </div>`;
+          tempDiv = tempDiv + `<div> <br>HangMan </div>`;
         } else if (i == 1) {
-          tempDiv = tempDiv + `<div> Boggle </div>`;
+          tempDiv = tempDiv + `<div> <br>Boggle </div>`;
         } else if (i == 2) {
-          tempDiv = tempDiv + `<div> BlackJack </div>`;
+          tempDiv = tempDiv + `<div> <br>BlackJack </div>`;
         } else if (i == 3) {
-          tempDiv = tempDiv + `<div> Tic Tac Toe </div>`;
+          tempDiv = tempDiv + `<div> <br>Tic Tac Toe </div>`;
         }
         tempDiv = tempDiv + `<div> High Score: ${high} </div> <div> Current Win Streak: ${streak} </div> <div> Games Played: ${gamePlays} </div>`;
       }

@@ -1,12 +1,13 @@
 body{
     text-align: center;
     position: block;
-    background-color: rgb(224, 83, 67);
+    background-color: rgb(242, 108, 94);
 }
 
 #allInfo{
     padding: 15px;
-    font-size: medium;
+    font-size: 30px;
+    
 }
 
 #backButton{
