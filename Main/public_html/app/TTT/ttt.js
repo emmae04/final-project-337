@@ -1,6 +1,10 @@
-// function makeTurn(){
-//     console.log("clicked");
-// }
+/**
+ * Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot, Noelle Stewart-Healey
+    this code supports the client side code for the TTT game. this makes the 
+    on event when the board it pressed, calls the server to update the board
+    and displays if a user won , lost , tied, or attemped a space that was
+    already taken
+ */
 
 var turn = 0;
 var player = 0;

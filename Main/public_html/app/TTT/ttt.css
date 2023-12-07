@@ -1,7 +1,11 @@
+/* 
+    Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot, Noelle Stewart-Healey
 
-/* Author: Emma Elliott,Noelle Healey-Stewart, Michelle Ramos Hernandez ,Ariana
-This css will style the Tic Tac Toe game
- */
+    This file has the css that makes the ttt.html look organized.
+    It gives it changes the background color, makes the board and the rules on the left
+    and right, makes the back button styled, has the main website header, and 
+    styles the new game and back button
+*/
 
 body {
     background-color: palevioletred;
