@@ -83,6 +83,17 @@ function initValues() {
 }
 
 
+var username;
+
+fetch('/get/curUsers/')
+.then((res) => {
+    res.text()
+    .then((res2) => {
+        username = res2;
+        console.log(res2);
+    })
+});
+
 // this function will randomly choose cards from the deck
 // of cards
 function chooseCard() {
@@ -341,12 +352,13 @@ function endGame() {
 	}
 
 	// will add score to the game
-	fetch("/addScoreBJ/" , {
+	fetch(`/addScoreBJ/${username}` , {
 		method: "POST",
 		body: JSON.stringify(data), 
 		headers: {"Content-Type" : "application/json"}
 	})
 }
+
 
 // this functon will display the current score after the game has been 
 // finished as how many rounds P1 wons vs how many rounds P2 has won
@@ -432,30 +444,17 @@ function displayP2Cards() {
 
 	addCardVal(2, player2Cards[0]);
 	addCardVal(2, player2Cards[1]);
-
 }
 
 function back() {
     window.location.href = "http://localhost/app/main.html";
 }
 
-
-var username;
-
-fetch('/get/curUsers/')
-.then((res) => {
-    res.text()
-    .then((res2) => {
-        username = res2;
-        console.log(res2);
-    })
-});
-
-fetch(`/BJGame`, {
-	method: "POST",
-	body: JSON.stringify({curScore: P1Wins, username: username, currentWinStreak: something}),
-	headers: { 'Content-Type': 'application/json' }
-}).catch((err) => {
-	console.log(err);
-	console.log("error");
-});
+// fetch(`/BJGame`, {
+// 	method: "POST",
+// 	body: JSON.stringify({curScore: P1Wins, username: username, numberOfPlays: numRounds, currentWinStreak: something}),
+// 	headers: { 'Content-Type': 'application/json' }
+// }).catch((err) => {
+// 	console.log(err);
+// 	console.log("error");
+// });

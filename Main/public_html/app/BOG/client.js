@@ -1,3 +1,12 @@
+/**
+ * Creates a boggle game. This allows the user to play boggle by using
+ * user inputs of words they find in the given tray. It is able to identify
+ * valid, inlaid words given by the user, as well as the words the user did not
+ * find in the tray.
+ *
+ * @author Michelle Ramos Hernandez
+ */
+
 const dices = [
     ['L', 'R', 'Y', 'T', 'T', 'E'],
     ['A', 'N', 'A', 'E', 'E', 'G'],
@@ -17,10 +26,11 @@ const dices = [
     ['O', 'B', 'B', 'A', 'O', 'J']
 ];
 
+// makes button to go back work
 function changeHTML() {
     window.location.href = "http://localHost/app/main.html"
 }
-// var currentBoard = new Array(4).fill(0).map(() => new Array(4).fill(0));
+
 var currentBoard = [];
 var userGuesses = [];
 var gameStart = 0;
@@ -30,6 +40,7 @@ var correctBoggleWords = [];
 
 var username;
 
+// gets current user
 fetch('/get/curUsers/')
 .then((res) => {
     res.text()
@@ -39,6 +50,11 @@ fetch('/get/curUsers/')
     })
 });
 
+/**
+ * makes the displayed table to an array that can be used in the client
+ * @param {*} table, the table that represents the board
+ * @returns table
+ */
 function tableToArray(table) {
     var tableArray = [];
     // goes through all the rows in the table
@@ -52,12 +68,14 @@ function tableToArray(table) {
         }
         tableArray.push(rowArray);
     }
-
     return tableArray;
 }
 
 var intervalId;
 
+/**
+ * initializes the game to start and calls to create the dice tray
+ */
 function startGame() {
     document.getElementById("allGuesses").innerHTML = "<div> All Guesses:<br><br></div>";
     document.getElementById("scoreLabel").innerHTML = "<h2> Score: </h2>";
@@ -76,6 +94,7 @@ function startGame() {
         }
     }
 
+    // creates the dice tray, find the correct words in the dice tray
     fetch("/diceTray/", {
         method: "POST",
         body: JSON.stringify(temp),
@@ -96,6 +115,10 @@ function startGame() {
     });
 }
 
+/**
+ * sets up the timer for 3 minutes in the boggle game
+ * @returns nothing if the game is over, used to exit the timer
+ */
 function timer() {
     var min = time / 60;
     var sec = Math.floor(time - 60 * Math.floor(min));
@@ -104,6 +127,7 @@ function timer() {
         document.getElementById("currTime").innerHTML = "TIMES UP";
         gameStart = 0;
 
+        // gets boggle score
         fetch(`/scoreBoggle`, {
             method: "POST",
             body: JSON.stringify({score: points, username: username}),
@@ -122,10 +146,12 @@ function timer() {
     time--;
 }
 
+/**
+ * updates the score that the user has
+ */
 async function updateScore() {
     document.getElementById("scoreLabel").innerHTML = "<h2> Score: " + points + "</h2>";
 }
-
 function DiceTray() {
     const numbersArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
     const numbersArray2 = [0, 1, 2, 3, 4, 5];

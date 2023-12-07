@@ -1,4 +1,6 @@
 
+// ---------------------NOT USED-----------------------------
+
 
 // mongoose setup
 const mongoose = require('mongoose');
@@ -12,9 +14,6 @@ app.use(parser.json());
 
 // DB stuff
 const db = mongoose.connection;
-//const mongoDBURL = 'mongodb+srv://mramoshernandez:Michelle2.@cluster0.o5nezkr.mongodb.net/?retryWrites=true&w=majority';
-// mongoose.connect(mongoDBURL, { useNewUrlParser: true });
-// db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // schema for the items
 var Schema = mongoose.Schema;
