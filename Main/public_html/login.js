@@ -119,6 +119,9 @@ function follow(id, ftnff) {
   // console.log('HERE');
   // console.log(id);
   // sends the user and the id
+  console.log("WHOS ID IS THIS_______________________________________");
+  console.log(id);
+  // the person I want to follow or unfollow
   fetch(`/update/${id}`, {
     method: "POST",
     body: JSON.stringify({ ftnff }),
@@ -127,6 +130,7 @@ function follow(id, ftnff) {
     console.log("after fetch is done I am here");
     // document.getElementById(`${id}`).value = "FOLLOWED";
     // tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOWED </button></div>`;
+    // if follow true, not follow false
     if (ftnff) {
       document.getElementById(`${id}`).innerText = "UNFOLLOW";
     } else {
@@ -135,6 +139,10 @@ function follow(id, ftnff) {
     //return res.text();
   }).catch((err) => { console.log(err) });
 }
+
+
+
+
 
 function updateButtons() {
   var buts = document.getElementsByClassName("buttons");
@@ -173,18 +181,22 @@ function searchFriends() {
             let name = parsed[i].user;
             let id = parsed[i].id;
             let stat = parsed[i].stat;
-            // console.log(parsed.length);
-            // console.log("name: " + name);
+            console.log("STATS__________________________________________________")
+            console.log(stat);
             // updates the html to add the items on the sceen
             var tempDiv = `<div id="item"> <div>${name}</div>`;
             if (stat.startsWith("FOLLOWER")) {
-              tempDiv = tempDiv + `<div>${stat} </div>`
-            } 
-            //tempDiv = tempDiv + `<div>${stat} </div>`
-            if (stat.startsWith("FOLLOWING")) {
-              tempDiv = tempDiv + `<button class="buttons" id =${id}> UNFOLLOW </button>`;
-            } else {
-              tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOW </button>`;
+              // tempDiv = tempDiv + `<div>${stat} </div>`;
+              tempDiv = tempDiv + `<button onclick="updateButtons();" class="buttons" id =${id}> FOLLOW </button>`;
+            } else if (stat.startsWith("FOLLOWING")) {
+              // tempDiv = tempDiv + `<div>${stat} </div>`;
+              tempDiv = tempDiv + `<button onclick="updateButtons();" class="buttons" id =${id}> UNFOLLOW </button>`;
+            } else if(stat.startsWith("FRIENDS")){
+              // tempDiv = tempDiv + `<div>${stat} </div>`;
+              tempDiv = tempDiv + `<button  onclick="updateButtons();" class="buttons" id =${id}> UNFOLLOW </button>`;
+            }else{
+              // tempDiv = tempDiv + `<div>${stat} </div>`;
+              tempDiv = tempDiv + `<button  onclick="updateButtons();" class="buttons" id =${id}> FOLLOW </button>`;
             }
             tempDiv = tempDiv + `<div> <button class="statsButton" onclick="changeToStat('${parsed[i].user}');"> SEE STATS </button></div> </div>`;
             document.getElementById("searchResult").innerHTML += tempDiv;

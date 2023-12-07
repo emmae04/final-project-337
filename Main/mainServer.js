@@ -316,7 +316,7 @@ app.get('/get/curUsers/', function (req, res) {
     console.log("getting current user");
     let c = req.cookies;
     console.log(req.cookies);
-    if (c != undefined) {
+    if (c != undefined && c.login != undefined) {
         if (sessions[c.login.username] != undefined &&
             sessions[c.login.username].id == c.login.sessionID) {// if the session and cookie match
             res.end((req.cookies).login.username);
@@ -407,26 +407,36 @@ app.get("/get/stats/", (req, res) => {
 app.get('/search/users/:keyword/', function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
 
+    // the person looking at screen
     let curUser = people.findOne({ "username": req.cookies.login.username });
     curUser.then((document) => {
         var id = document._id;
+        // the person I want to follow or unfollow
         let userSearch = people.find({ "username": { $regex: req.params.keyword } });
         // finding the user with the given keyword in the username
         var temp = [];
         userSearch.then((documents) => {// when get the documents
+            //documents -> person I want to follow or unfollow
             for (user of documents) {
                 console.log(req.cookies);
                 if (user.following.includes(id)) {
-                    temp.push({ user: user.username, stat: "FOLLOWER", id: user._id })
+                    //document -> the person looking at screen
+                    if(document.following.includes(user._id)){
+                        temp.push({ user: user.username, stat: "FRIENDS", id: user._id })
+                    }else{
+                        temp.push({ user: user.username, stat: "FOLLOWER", id: user._id })
+                    }
                     //user.stat = "FRIEND";
                 } else if (user.followers.includes(id)) {
                     temp.push({ user: user.username, stat: "FOLLOWING", id: user._id })
                 } else {
-                    temp.push({ user: user.username, stat: "none", id: user._id })
+                    temp.push({ user: user.username, stat: "NOTHING", id: user._id })
                 }
 
             }
             res.status(200);
+            console.log("HERE IS TEMP__________________________________")
+            console.log(temp);
             res.type('json').send(JSON.stringify(temp, null, 2) + '\n');
         });
     });
@@ -464,26 +474,30 @@ app.get(`/get/userSTATS/:user`, function (req, res) {
 
 app.post("/update/:id", function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-
+    //person I want to follow or unfollow
     user = people.findById(req.params.id);
     var curUser;
     var message = "user Posted";
     // finding the given user with the given username 
     user.then((document) => {// when get the documents
         if (document) {
+            // current user looking at the screen
             curUser = people.findOne({ username: req.cookies['login'].username });
             curUser.then((secdoc) => {
+                // if follow true not follow false
                 if (req.body.ftnff) {
+                    // if they want to follow user
                     secdoc.following.push(document._id);
                     secdoc.save();
                     document.followers.push(secdoc._id);
                     document.save();
                 } else {
+                    // dont want to follow
+                    // document is the person I dont want to follow
                     let ind = document.followers.indexOf(secdoc._id);
                     let intdoc = secdoc.following.indexOf(document._id);
                     secdoc.following.splice(intdoc, 1);
                     secdoc.save();
-
                     document.followers.splice(ind, 1);
                     document.save();
                 }
