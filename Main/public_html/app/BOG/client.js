@@ -125,6 +125,7 @@ function timer() {
     if (time == 0) {
         clearInterval(this.intervalId);
         document.getElementById("currTime").innerHTML = "TIMES UP";
+        document.getElementById("guessLabel").innerHTML = "TIMES UP";
         gameStart = 0;
 
         // gets boggle score
