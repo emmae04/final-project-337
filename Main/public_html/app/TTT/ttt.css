@@ -1,3 +1,8 @@
+
+/* Author: Emma Elliott,Noelle Healey-Stewart, Michelle Ramos Hernandez ,Ariana
+This css will style the Tic Tac Toe game
+ */
+
 body {
     background-color: palevioletred;
     overflow-x: hidden;
@@ -37,6 +42,8 @@ h3{
    display:inline-block;
    margin-left:40%;
 margin-top:110px;
+
+/*square of the ttt board*/
 }
 td {
     width: 120px;
@@ -45,6 +52,7 @@ td {
     background-color: pink;
 }
 
+/*full ttt board*/
 table {
     text-align: center;
     font-family: monospace;
@@ -92,7 +100,8 @@ p {
     padding-left: 5px;
     padding-right: 5px;
 }
-
+/*
+*/
 #score{
     text-align: center;
     background-color: #FC6C85;
