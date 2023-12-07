@@ -564,8 +564,30 @@ app.get('/bj/ws/', function (req, res) {
 });
 
 
-app.post('/addscoreBJ', function (req, res) {
-
+app.post('/addscoreBJ/:name', function (req, res) {
+    console.log(req.body.wins);
+    let bjGame = BJData.find({ user: req.params.name }).exec();
+    bjGame.then((doc) => {
+        // Increase games played
+        let games = doc[0].highScore;
+        games = games + req.body.highScore;
+        doc[0].highScore = games;
+        // Add to wins
+        var win = doc[0].numberOfPlays;
+        win = win + req.body.numberOfPlays;
+        doc[0].numberOfPlays = win;
+        // Add to streak
+        var streak = doc[0].currentWinStreak;
+        if (req.body.highScore == 0) {
+            streak = 0;
+        }
+        else {
+            streak = streak + req.body.highScore;
+        }
+        doc[0].currWinStreak = streak;
+        doc[0].save();
+        console.log("saved");
+    })
 });
 
 

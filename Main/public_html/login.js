@@ -1,29 +1,55 @@
-// Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot, Noelle Stewart-Healey
-// test 2
+/**Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot,Noelle Healey-Stewart
+this code handles the logging in for the user, the stat page updates, the dropdown
+menu, the friend search, and the redirecting to the individual games once those
+are pressed
+*/
 
 const username = document.cookie.username;
+/**
+ * method changes the url to the main.html page
+ */
 function changeHTML() {
   window.location.href = "main.html";
 }
+/**
+ * method changes the url to the ttt.html page to play ttt
+ */
 function goToTTT() {
   window.location.href = "http://localHost/app/TTT/ttt.html";
 }
+
+/**
+ * method changes the url to the /Beginner.html page to play hangman
+ */
 function goToHangman() {
   window.location.href = "http://localHost/app/HM/Hangman/Beginner.html";
 }
 
+
+/**
+ * method changes the url to the blackjack.html page to play blackjack
+ */
 function goToBJ() {
   window.location.href = "http://localHost/app/BJ/blackjack.html";
 
 }
+
+/**
+ * method changes the url to the boggle index.html page to play boggle
+ */
 function goToBoggle() {
   window.location.href = "http://localHost/app/BOG/index.html";
 
 }
+/** method shows the dropdown */
 function showDropdown() {
   document.getElementById("myDropdown").classList.toggle("show");
 }
 
+/**
+ * method shows the items in the dropdown
+ * @param {} event 
+ */
 window.onclick = function (event) {
   if (!event.target.matches('.dropbtn')) {
     var dropdowns = document.getElementsByClassName("myDropdown");
@@ -37,37 +63,46 @@ window.onclick = function (event) {
   }
 }
 
-// adds users
+/**
+ * method adds a user if they press the create user button
+ */
 function addUser() {
   let username = document.getElementById('usernameC').value;
   let password = document.getElementById('pwC').value;
-  var usersInfo = {
+  // getting the text field inputs
+  var usersInfo = {// making a json to send the info
     username: username,
     password: password,
   };
   // gets the user post
-  fetch("/add/user/", {
+  fetch("/add/user/", {//calling the fetch to add the user
     method: "POST",
     body: JSON.stringify(usersInfo),
     headers: { 'Content-Type': 'application/json' }
-  }).then((res) => {
+  }).then((res) => {// getting response text
     return res.text();
   }).then((text) => {
-    if (text == "SUCCESS") {
+    if (text == "SUCCESS") {// if user successfully made
       alert("user made");
-    } else {
+    } else {// user not made
       alert("user already exists");
     }
   }).catch((err) => { console.log(err) });
+
+  // clearing the create user input fields
   document.getElementById('usernameC').value = "";
   document.getElementById('pwC').value = "";
 }
 
 
+/**
+ * method attempts to log the user into the website by calling the server
+ */
 function login() {
   let username = document.getElementById('username').value;
   let password = document.getElementById('pw').value;
-  var userInfo = {
+  // getting the text field inputs
+  var userInfo = {// making a json to send the info
     username: username,
     password: password
   }
@@ -84,16 +119,17 @@ function login() {
       window.location.href = "http://localHost/app/main.html";
 
     }
-    else {
+    else {// if not successful loggin
       document.getElementById("warningLabel").innerText = ("ISSUE LOGGING IN WITH THAT INFO");
     }
-  }).catch((err) => {
+  }).catch((err) => {// if gotton error
     alert("user doenst exist");
     window.location.href = "http://localHost/index.html";
     console.log(err)
   });
   document.getElementById('username').value = "";
   document.getElementById('pw').value = "";
+  // resetting the input fields to blank
 }
 
 

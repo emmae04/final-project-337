@@ -1,3 +1,11 @@
+/* 
+    Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot, Noelle Healey-Stewart
+
+    This file has the css that makes the leaderboard html file look organized.
+    it make sthe buttons up top have their own header, it sets the visibility of the
+    specific leaderboard buttons to hidden, it also formats the results section
+*/
+
 body{
 background-color: #f4a261  ;
 }
@@ -17,12 +25,17 @@ p{
 #buttonDiv{
     background-color: #e76f51;
     top:0px;
-    height:60px;
+    height:100px;
     left:0px;
     position:absolute;
     width:73.1%;
     padding-left:400px;
     padding-top:20px;
+}
+button{
+    background-color: #faa307;
+    height:40px;
+    max-width: 200px;
 }
 #boggleButtons{
     visibility: hidden;
@@ -56,12 +69,14 @@ h3{
     margin-top:10px;
 }
 #backButton{
-    margin-top:80px;
+    margin-top:130px;
+    height:40px;
+    width:60px;
 }
 #result{
     padding-top:30px;
     width:1000px;
-    height:500px;
+    height:400px;
     font-size: 40px;
     text-align: center;;
     background-color:#e9c46a;
