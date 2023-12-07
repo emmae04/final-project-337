@@ -1,5 +1,5 @@
 /**
- * Authors: Ariann Velosa, Michelle Ramos-Hernandez, Emma Elliot, Noelle Stewart-Healey
+ * Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot, Noelle Stewart-Healey
  *
  * This file contains the client side js for hangman. It gets the random word,
  * it tracks the guesses that the user makes, and handles when the user either
