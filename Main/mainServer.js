@@ -1,5 +1,4 @@
 /**
- * Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot,Noelle Healey-Stewart
  * This file contains the main server that we all use for our game webpage.
  * It handles cookies, making schemas, and the various requests we make for
  * our individual games.
@@ -51,7 +50,7 @@ var people = mongoose.model("User", UserSchema);
 var hangman = mongoose.model("Hangman", HangmanSchema);
 
 
-///// boggle schema
+///// boggle
 var Schema = mongoose.Schema;
 var boggleInfo = new Schema({
     user: { type: String, default: '', trim: true },
@@ -62,7 +61,6 @@ var boggleInfo = new Schema({
 
 var boggleData = mongoose.model('boggleData', boggleInfo);
 
-// tic tac toe schema
 var TTTSchema = new Schema({
     user: { type: String, default: '', trim: true },
     score: { type: Number, default: 0, min: 0 },
@@ -73,7 +71,7 @@ var TTTSchema = new Schema({
 
 var TTTData = mongoose.model('TTTData', TTTSchema);
 
-////////// black jack schema
+////////// black jack
 var Schema = mongoose.Schema;
 var BJInfo = new Schema({
     user: { type: String, default: '', trim: true },
@@ -84,7 +82,7 @@ var BJInfo = new Schema({
 
 var BJData = mongoose.model('BJData', BJInfo);
 
-let sessions = {};// the sesstions the user has
+let sessions = {};
 
 
 
@@ -123,13 +121,6 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json())
 
-/**
- * method checks if the cookies of the request matches one of the 
- * current sessions
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
- */
 function authenticate(req, res, next) {
     let c = req.cookies;
     console.log('auth request:');
@@ -168,25 +159,25 @@ app.post('/login/user/pass', (req, res) => {
     console.log(sessions);
     console.log("tried to login");
     let u = req.body;
-    let p1 = people.find({ username: u.username }).exec();// looking for a user with the same username
+    let p1 = people.find({ username: u.username }).exec();
     p1.then((results) => {
-        if (results.length == 0) {// if no users bu that name
+        if (results.length == 0) {
             res.send("FAIL");
 
             res.end();
         } else {
-            let currentUser = results[0];// getting current user
-            let toHash = u.password + currentUser.salt;// adding salt to password
+            let currentUser = results[0];
+            let toHash = u.password + currentUser.salt;
             let h = crypto.createHash('sha3-256');
             let data = h.update(toHash, 'utf-8');
-            let result = data.digest('hex');// the finished hashed password
+            let result = data.digest('hex');
 
             if (result == currentUser.hash) {
-                let sid = addSession(u.username);// adding the session
+                let sid = addSession(u.username);
                 console.log(u.username);
                 res.cookie("login",
                     { username: u.username, sessionID: sid },
-                    { maxAge: 300000 * 2 });// making the cookie
+                    { maxAge: 300000 * 2 });
                 res.end('SUCCESS');
             }
             else {
@@ -197,32 +188,52 @@ app.post('/login/user/pass', (req, res) => {
 });
 
 
-/**
- * method logs out the user and removes the session
- */
 app.post('/logout/user/', (req, res) => {
     console.log("go tto this logout")
     removeCertainSession(req, res);
 
 });
 
-/**
- * helper method for logout fetch , deletes the user session 
- * thats equal to the cookies username
- * @param {*} req 
- * @param {*} res 
- */
 function removeCertainSession(req, res) {
     let c = req.cookies;
     console.log('logout request');
     console.log(req.cookies);
-    if (c != undefined &&c.login != undefined) {
+    if (c != undefined) {
         delete sessions[c.login.username];
         res.end("SUCCESS");
     }
 }
 
+app.post('/changePassword/user', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    let userSearch = people.find({ username: req.body.username }).exec();
 
+    userSearch.then((documents) => {// when get the documents
+        if (documents.length == 1) {
+            let newSalt = '' + Math.floor(Math.random() * 10000000000);
+            let toHash = req.body.password + newSalt;
+            let h = crypto.createHash('sha3-256');
+            let data = h.update(toHash, 'utf-8');
+            let result = data.digest('hex');
+            documents[0].hash = result;
+            documents[0].salt = newSalt;
+
+            let p = document[0].save();
+            p.then(() => {
+                res.end('SUCCESS');
+            });
+            p.catch(() => {
+                console.log("save fail")
+                res.end('FAIL');
+            });
+        }
+        else {
+            console.log("find fail")
+            res.end('FAIL');
+        }
+    });
+
+});
 
 
 /**
@@ -239,12 +250,12 @@ app.post("/add/user/", function (req, res) {
 
     userSearch.then((documents) => {// when get the documents
         if (documents.length == 0) {
-            let newSalt = '' + Math.floor(Math.random() * 10000000000);// getting salt
-            let toHash = req.body.password + newSalt;// getting password plus salt
+            let newSalt = '' + Math.floor(Math.random() * 10000000000);
+            let toHash = req.body.password + newSalt;
             let h = crypto.createHash('sha3-256');
             let data = h.update(toHash, 'utf-8');
-            let result = data.digest('hex');// finished salt
-            let u = new people({// making a user with the salt and username
+            let result = data.digest('hex');
+            let u = new people({
                 hash: result,
                 salt: newSalt,
                 username: req.body.username,
@@ -252,7 +263,7 @@ app.post("/add/user/", function (req, res) {
                 followers: [],
                 gameScore: []
             });
-            // making blank schema for the games for the user
+
             let H = new hangman({
                 user: req.body.username,
                 gamesPlayed: 0,
@@ -286,8 +297,7 @@ app.post("/add/user/", function (req, res) {
             Boggle.save();
             BJ.save();
             H.save();
-            // saving the game schemaas
-            let p = u.save();// saving the user
+            let p = u.save();
             p.then(() => {
                 res.end('SUCCESS');
             });
@@ -304,9 +314,7 @@ app.post("/add/user/", function (req, res) {
 
 });
 
-/**
- * method gets the current user based on the websites cookies
- */
+
 app.get('/get/curUsers/', function (req, res) {
     console.log("getting current user");
     let c = req.cookies;
@@ -314,7 +322,7 @@ app.get('/get/curUsers/', function (req, res) {
     if (c != undefined && c.login != undefined) {
         if (sessions[c.login.username] != undefined &&
             sessions[c.login.username].id == c.login.sessionID) {// if the session and cookie match
-            res.end((req.cookies).login.username);// return the username
+            res.end((req.cookies).login.username);
         } else {
             res.end("FAIL");
         }
@@ -506,9 +514,6 @@ app.post("/update/:id", function (req, res) {
 
 // blackjack server
 
-/**
- * method gets the list of users and their highest blackjack score in a string
- */
 app.get('/bj/highest/', function (req, res) {
     console.log("here");
     let retStr = ""
@@ -525,9 +530,6 @@ app.get('/bj/highest/', function (req, res) {
     });
 });
 
-/**
- * method gets the list of users and their number of blackjack games played in a string
- */
 app.get('/bj/plays/', function (req, res) {
     console.log("here");
     let retStr = ""
@@ -544,9 +546,7 @@ app.get('/bj/plays/', function (req, res) {
     });
 });
 
-/**
- * method gets the list of users and their current blackjack win streak in a string
- */
+
 app.get('/bj/ws/', function (req, res) {
     console.log("here");
     let retStr = ""
@@ -564,8 +564,30 @@ app.get('/bj/ws/', function (req, res) {
 });
 
 
-app.post('/addscoreBJ', function (req, res) {
-
+app.post('/addscoreBJ/:name', function (req, res) {
+    console.log(req.body.wins);
+    let bjGame = BJData.find({ user: req.params.name }).exec();
+    bjGame.then((doc) => {
+        // Increase games played
+        let games = doc[0].highScore;
+        games = games + req.body.highScore;
+        doc[0].highScore = games;
+        // Add to wins
+        var win = doc[0].numberOfPlays;
+        win = win + req.body.numberOfPlays;
+        doc[0].numberOfPlays = win;
+        // Add to streak
+        var streak = doc[0].currentWinStreak;
+        if (req.body.highScore == 0) {
+            streak = 0;
+        }
+        else {
+            streak = streak + req.body.highScore;
+        }
+        doc[0].currWinStreak = streak;
+        doc[0].save();
+        console.log("saved");
+    })
 });
 
 
@@ -607,9 +629,7 @@ readFile('public_html/app/HM/Hangman/twelve.txt', twelveL);
 
 
 
-/**
- * gets the users and their current hangman winsteaks in a string
- */
+
 app.get('/Hangman/winstreak/', function (req, res) {
     console.log("here");
     let retStr = ""
@@ -626,9 +646,7 @@ app.get('/Hangman/winstreak/', function (req, res) {
     });
 });
 
-/**
- * gets the users and their number of hangman  wins in a string
- */
+
 app.get('/Hangman/wins/', function (req, res) {
     console.log("here");
     let retStr = ""
@@ -645,9 +663,6 @@ app.get('/Hangman/wins/', function (req, res) {
     });
 });
 
-/**
- * gets the users and their number of hangman games played in a string
- */
 app.get('/Hangman/plays/', function (req, res) {
     console.log("here");
     let retStr = ""
@@ -919,9 +934,7 @@ function isValid(row, col) {
     return row >= 0 && col >= 0 && row < 4 && col < 4;
 }
 
-/**
- * gets the users and their current boggle highscores
- */
+
 app.get('/boggle/highestScores/', function (req, res) {
     console.log("here");
     let retStr = ""
@@ -931,7 +944,7 @@ app.get('/boggle/highestScores/', function (req, res) {
         let num=1;
         for(let i =0; i < doc.length;i++){
             
-            retStr+=num.toString()+": "+doc[i].user+" | High Score: "+doc[i].highScore.toString()+"\n";
+            retStr+=num.toString()+": "+doc[i].user+"|Score: "+doc[i].highScore.toString()+"\n";
             num+=1;
         }
         //JSON.stringify(doc)
@@ -939,9 +952,6 @@ app.get('/boggle/highestScores/', function (req, res) {
     });
 });
 
-/**
- * gets the users and their current boggle number of plays
- */
 app.get('/boggle/numPlays/', function (req, res) {
     console.log("here");
     let retStr = ""
@@ -950,6 +960,7 @@ app.get('/boggle/numPlays/', function (req, res) {
     bGame.then((doc) => {
         let num=1;
         for(let i =0; i < doc.length;i++){
+            
             retStr+=num.toString()+": "+doc[i].user+" | NumPlays: "+doc[i].numberOfPlays.toString()+"\n";
             num+=1;
         }
@@ -966,9 +977,6 @@ app.get('/boggle/numPlays/', function (req, res) {
 
 // ---------------------------- TTT Server ----------------------------
 
-/**
- * gets the users and their number of ttt games played in a string
- */
 app.get('/TTT/numPlays/', function (req, res) {
     console.log("here");
     let retStr = ""
@@ -985,10 +993,6 @@ app.get('/TTT/numPlays/', function (req, res) {
     });
 });
 
-
-/**
- * gets the users and their current ttt win streak in a string
- */
 app.get('/TTT/winstreak/', function (req, res) {
     console.log("here");
     let retStr = ""
@@ -1004,9 +1008,7 @@ app.get('/TTT/winstreak/', function (req, res) {
         res.end( retStr);
     });
 });
-/**
- * gets the users and their current ttt score in a string
- */
+
 app.get('/TTT/scoreLeader/', function (req, res) {
     console.log("here");
     let retStr = ""
@@ -1025,9 +1027,7 @@ app.get('/TTT/scoreLeader/', function (req, res) {
 
 
 
-/**
- * gets the users and their current ttt high score a string
- */
+
 app.get('/TTT/highestScores/', function (req, res) {
     console.log("here");
     let retStr = ""
@@ -1045,10 +1045,7 @@ app.get('/TTT/highestScores/', function (req, res) {
 });
 
 
-/**
- * route lowers the score of the user because of a loss and 
- * sets their currnt winstreak to 0 and increases number of plays by 1
- */
+
 app.post('/TTT/Loss/', function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     let username = req.body.username;
@@ -1072,9 +1069,6 @@ app.post('/TTT/Loss/', function (req, res) {
     });
 });
 
-/**
- * route gets the score of the user
- */
 app.post('/TTT/get/Score/', function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     let username = req.body.username;
@@ -1085,12 +1079,6 @@ app.post('/TTT/get/Score/', function (req, res) {
     });
 });
 
-/**
- * route increases the score of the user because of a win and 
- * sets their currnt winstreak to +=1, and if their current streak is more
- * than their highest win streak then the highest winstreak changes, increses
- * number of games played
- */
 app.post('/TTT/Win/', function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     let username = req.body.username;
@@ -1121,11 +1109,6 @@ app.post('/TTT/Win/', function (req, res) {
     });
 
 });
-
-/**
- * route raises the score of the user a bit because of a tie and 
- * sets their currnt winstreak to 0 and increases number of plays by 1
- */
 app.post('/TTT/Tie/', function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     let username = req.body.username;
