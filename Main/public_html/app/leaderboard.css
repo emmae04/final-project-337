@@ -17,22 +17,24 @@ p{
 #buttonDiv{
     background-color: gold;
     top:0px;
-    height:50px;
+    height:60px;
     left:0px;
     position:absolute;
-    width:100%;
+    width:73.1%;
     padding-left:400px;
-    padding-top:30px;
+    padding-top:20px;
 }
 #boggleButtons{
     visibility: hidden;
     display:none;
     margin-left:202px;
+    margin-top:10px;
 }
 #tttButtons{
     visibility: hidden;
     display:none;
-    margin-left:202px;
+    margin-left:100px;
+    margin-top:10px;
 }
 h3{
     margin-left:auto;
@@ -44,20 +46,23 @@ h3{
 #hangmanButtons{
     visibility: hidden;
     display:none;
-    margin-left:202px;
+    margin-left:160px;
+    margin-top:10px;
 }
 #bjButtons{
     visibility: hidden;
     display:none;
-    margin-left:202px;
+    margin-left:160px;
+    margin-top:10px;
 }
 #result{
+    padding-top:30px;
     width:1000px;
     height:500px;
     font-size: 40px;
     text-align: center;;
     background-color:blue;
-    margin-top:100px;
+    margin-top:60px;
     margin-left:auto;
     margin-right:auto;
     overflow-y: scroll;
