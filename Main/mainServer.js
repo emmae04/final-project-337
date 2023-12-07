@@ -1123,7 +1123,7 @@ app.post('/TTT/Win/', function (req, res) {
 });
 
 /**
- * route raises the score of the user a bit because of a the and 
+ * route raises the score of the user a bit because of a tie and 
  * sets their currnt winstreak to 0 and increases number of plays by 1
  */
 app.post('/TTT/Tie/', function (req, res) {
