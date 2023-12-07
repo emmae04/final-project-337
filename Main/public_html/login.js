@@ -1,4 +1,4 @@
-// test
+// Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot, Noelle Stewart-Healey
 // test 2
 
 const username = document.cookie.username;

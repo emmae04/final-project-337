@@ -15,6 +15,7 @@ const parser = require('body-parser')
 
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
+const { stringify } = require('querystring');
 const port = 80
 
 // Builds up the database
@@ -308,8 +309,6 @@ app.post("/add/user/", function (req, res) {
     });
 
 });
-
-
 
 
 app.get('/get/curUsers/', function (req, res) {
@@ -807,6 +806,41 @@ function testFound(attempt, row, col, visited, diceTray) {
 function isValid(row, col) {
     return row >= 0 && col >= 0 && row < 4 && col < 4;
 }
+
+
+app.get('/boggle/highestScores/', function (req, res) {
+    console.log("here");
+    let retStr = ""
+    let num=0;
+    let bGame = boggleData.find().sort({highScore:-1});
+    bGame.then((doc) => {
+        let num=doc.length;
+        for(let i =0; i < doc.length;i++){
+            
+            retStr+=num.toString()+": "+doc[i].user+"|Score: "+doc[i].highScore.toString()+"\n";
+            num-=1;
+        }
+        //JSON.stringify(doc)
+        res.end( retStr);
+    });
+});
+
+app.get('/boggle/numPlays/', function (req, res) {
+    console.log("here");
+    let retStr = ""
+   
+    let bGame = boggleData.find().sort({numberOfPlays:-1});
+    bGame.then((doc) => {
+        let num=doc.length;
+        for(let i =0; i < doc.length;i++){
+ 
+            retStr+=num.toString()+": "+doc[i].user+"|NumPlays: "+doc[i].numberOfPlays.toString()+"\n";
+            num-=1;
+        }
+        //JSON.stringify(doc)
+        res.end( retStr);
+    });
+});
 
 
 //////////////////////////// BOGGLE END ////////////////////////////////////////////////

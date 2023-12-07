@@ -1,0 +1,49 @@
+<!-- 
+    This file contains the html that supports the home page of our website. It
+    has the option to go to your profile, find friends, look at leader boards,
+    and play different games.
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title> MANE Games </title>
+    <link id="cssFile" rel="stylesheet" type="text/css" href="leaderboard.css">
+</head>
+
+<body>
+    <div id = "buttonDiv">
+        <button onclick="getBoggle()">Boggle Leaderboard</button>
+        <button onclick="getTTT()">Tic Tac Toe Leaderboard</button>
+        <button onclick="getHangman()">Hangman Leaderboard</button>
+        <button onclick="getBJ()">Blackjack Leaderboard</button>  
+        <div id = "boggleButtons">
+            <button onclick = "boggleHighest()">Highest Score</button>
+            <button onclick = "boggleNum()">Number Plays</button>
+        </div>
+        <div id = "tttButtons">
+            <button onclick = "boggleHighest()">Highest Score</button>
+            <button>Number Plays</button>
+            <button>Current Win Streak</button>
+            <button>Current Score</button>
+        </div>
+        <div id = "hangmanButtons">
+            <button onclick = "boggleHighest()">Highest Score</button>
+            <button>Number Plays</button>
+        </div>
+        <div id = "bjButtons">
+            <button onclick = "boggleHighest()">Highest Score</button>
+            <button>Number Plays</button>
+            <button>Number Plays</button>
+        </div>
+    </div>
+    <h3 id = "resultLabel">Click A Button To Get A Leaderboard</h3>
+    <div id = "result">
+       
+    </div>
+    <script src="./leaderboard.js"></script>
+</body>
+
+</html>
