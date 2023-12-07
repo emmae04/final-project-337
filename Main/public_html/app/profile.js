@@ -1,5 +1,5 @@
 /**
- *  Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot, Noelle Stewart-Healey
+ *  Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot,Noelle Healey-Stewart
 
  * This javascript will create the functionality for
  * the profile page. It will allow the users to click

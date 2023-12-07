@@ -1,4 +1,4 @@
-/**Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot, Noelle Stewart-Healey
+/**Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot,Noelle Healey-Stewart
 this code handles the logging in for the user, the stat page updates, the dropdown
 menu, the friend search, and the redirecting to the individual games once those
 are pressed

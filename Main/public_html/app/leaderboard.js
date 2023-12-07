@@ -1,4 +1,13 @@
+/**Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot, Noelle Healey-Stewart
+this code handles the changing button visibility when another leaderboard is pressed,
+ and calling the server to get the leaderboards
+*/
 
+
+/**
+ * if user wants to see boggle leaderboard , hide other leaderboard buttons
+ * and display boggle buttons
+ */
 function getBoggle(){
     document.getElementById("boggleButtons").style.visibility = "visible";
     document.getElementById("boggleButtons").style.display = "block";
@@ -11,6 +20,11 @@ function getBoggle(){
     document.getElementById("tttButtons").style.display = "none";
     document.getElementById("hangmanButtons").style.display = "none";
 }
+
+/**
+ * if user wants to see tic tac toe leaderboard , hide other leaderboard buttons
+ * and display tic tac toe buttons
+ */
 function getTTT(){
     document.getElementById("tttButtons").style.display = "block";
     document.getElementById("tttButtons").style.visibility = "visible";
@@ -22,6 +36,11 @@ function getTTT(){
     document.getElementById("bjButtons").style.display = "none";
     document.getElementById("hangmanButtons").style.display = "none";
 }
+
+/**
+ * if user wants to see hangman leaderboard , hide other leaderboard buttons
+ * and display hangman buttons
+ */
 function getHangman(){
     document.getElementById("tttButtons").style.visibility = "hidden";
     document.getElementById("boggleButtons").style.visibility = "hidden";
@@ -33,6 +52,11 @@ function getHangman(){
     document.getElementById("hangmanButtons").style.visibility = "visible";
     document.getElementById("hangmanButtons").style.display = "block";
 }
+
+/**
+ * if user wants to see blackjack leaderboard , hide other leaderboard buttons
+ * and display blackjack buttons
+ */
 function getBJ(){
     document.getElementById("bjButtons").style.visibility = "visible";
     document.getElementById("bjButtons").style.display = "block";
@@ -45,13 +69,20 @@ function getBJ(){
     document.getElementById("tttButtons").style.display = "none";
     document.getElementById("boggleButtons").style.display = "none";
 }
+
+/**
+ * method to get the leaderboard of the highest scores of the
+ * boggle game
+ */
 function boggleHighest(){
     // '/boggle/highestScores/'
-    fetch( '/boggle/highestScores/', {
+    fetch( '/boggle/highestScores/', {// fetching the high scores
     }).then((res) => {
         return res.text();
     }).then((text) => {
-        document.getElementById("result").innerText = text;
+        document.getElementById("result").innerText = text;// display scores
+
+        // change label
         document.getElementById("resultLabel").innerText = "Boggle Highest Score Leaderboard"
     }).catch((err) => { console.log(err) });
 
@@ -59,8 +90,13 @@ function boggleHighest(){
 function changeHTML() {
     window.location.href = "http://localHost/app/main.html"
 }
+
+
+/**
+ * method to get the "Boggle Most Games Played Leaderboard"
+ */
 function boggleNum(){
-    // '/boggle/highestScores/'
+
     fetch( '/boggle/numPlays/', {
     }).then((res) => {
         return res.text();
@@ -70,6 +106,10 @@ function boggleNum(){
     }).catch((err) => { console.log(err) });
 
 }
+
+/**
+ * method to get the "Tic Tac Toe Highest Score Leaderboard"
+ */
 function TTTHighest(){
     fetch( '/TTT/highestScores/', {
     }).then((res) => {
@@ -79,6 +119,10 @@ function TTTHighest(){
         document.getElementById("resultLabel").innerText = "Tic Tac Toe Highest Score Leaderboard"
     }).catch((err) => { console.log(err) });
 }
+
+/**
+ * method to get the "Tic Tac Toe Most Games Played Leaderboard"
+ */
 function TTTNum(){
     fetch( '/TTT/numPlays/', {
     }).then((res) => {
@@ -89,6 +133,9 @@ function TTTNum(){
     }).catch((err) => { console.log(err) });
 }
 
+/**
+ * method to get the "Tic Tac Toe Current Win Streaks Leaderboard"
+ */
 function TTTWs(){
     fetch( '/TTT/winstreak/', {
     }).then((res) => {
@@ -99,6 +146,9 @@ function TTTWs(){
     }).catch((err) => { console.log(err) });
 }
 
+/**
+ * method to get the "Tic Tac Toe Current Scores Leaderboard"
+ */
 function TTTScore(){
     fetch( '/TTT/scoreLeader/', {
     }).then((res) => {
@@ -109,6 +159,9 @@ function TTTScore(){
     }).catch((err) => { console.log(err) });
 }
 
+/**
+ * method to get the "Hangman Current Win Streaks Leaderboard"
+ */
 function HangmanCurrent(){
     fetch( '/Hangman/winstreak/', {
     }).then((res) => {
@@ -119,7 +172,9 @@ function HangmanCurrent(){
     }).catch((err) => { console.log(err) });
 }
 
-
+/**
+ * method to get the "Hangman Most Games Played Leaderboard"
+ */
 function HangmanPlays(){
     fetch( '/Hangman/plays/', {
     }).then((res) => {
@@ -130,7 +185,9 @@ function HangmanPlays(){
     }).catch((err) => { console.log(err) });
 }
 
-
+/**
+ * method to get the "Hangman Most Games Won Leaderboard"
+ */
 function HangmanWins()
 {
     fetch( '/Hangman/wins/', {
@@ -142,7 +199,9 @@ function HangmanWins()
     }).catch((err) => { console.log(err) });
 }
 
-
+/**
+ * method to get the  "BlackJack Highest Score Leaderboard"
+ */
 function bjHighest()
 {
     fetch( '/bj/highest/', {
@@ -154,6 +213,9 @@ function bjHighest()
     }).catch((err) => { console.log(err) });
 }
 
+/**
+ * method to get the  "BlackJack Most Games Played Leaderboard"
+ */
 function bjNum()
 {
     fetch( '/bj/plays/', {
@@ -165,6 +227,9 @@ function bjNum()
     }).catch((err) => { console.log(err) });
 }
 
+/**
+ * method to get the  "BlackJack Current Win Streaks Leaderboard"
+ */
 function bjWins()
 {
     fetch( '/bj/ws/', {
