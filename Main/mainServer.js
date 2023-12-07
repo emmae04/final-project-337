@@ -84,6 +84,10 @@ var BJData = mongoose.model('BJData', BJInfo);
 
 let sessions = {};
 
+
+
+
+
 /**
  * method to add sessions with a random session number. the time is 
  * set to now to compare the time the session has been active
@@ -510,6 +514,56 @@ app.post("/update/:id", function (req, res) {
 
 // blackjack server
 
+app.get('/bj/highest/', function (req, res) {
+    console.log("here");
+    let retStr = ""
+    let num=1;
+    let bj = BJData.find().sort({  currentWinStreak:-1});
+    bj.then((doc) => {
+        let num=1;
+        for(let i =0; i < doc.length;i++){
+            retStr+=num.toString()+": "+doc[i].user+" | High Score: "+doc[i]. currentWinStreak.toString()+"\n";
+            num+=1;
+        }
+      //  retStr=JSON.stringify(doc)
+        res.end( retStr);
+    });
+});
+
+app.get('/bj/plays/', function (req, res) {
+    console.log("here");
+    let retStr = ""
+    let num=1;
+    let bj = BJData.find().sort({ numberOfPlays:-1});
+    bj.then((doc) => {
+        let num=1;
+        for(let i =0; i < doc.length;i++){
+            retStr+=num.toString()+": "+doc[i].user+" | NumPlays: "+doc[i].numberOfPlays.toString()+"\n";
+            num+=1;
+        }
+      //  retStr=JSON.stringify(doc)
+        res.end( retStr);
+    });
+});
+
+
+app.get('/bj/ws/', function (req, res) {
+    console.log("here");
+    let retStr = ""
+    let num=1;
+    let bj = BJData.find().sort({ numberOfPlays:-1});
+    bj.then((doc) => {
+        let num=1;
+        for(let i =0; i < doc.length;i++){
+            retStr+=num.toString()+": "+doc[i].user+" | Current Streak: "+doc[i].numberOfPlays.toString()+"\n";
+            num+=1;
+        }
+      //  retStr=JSON.stringify(doc)
+        res.end( retStr);
+    });
+});
+
+
 app.post('/addscoreBJ', function (req, res) {
 
 });
@@ -549,6 +603,59 @@ function readFile(file, list) {
 readFile('public_html/app/HM/Hangman/five.txt', fiveL);
 readFile('public_html/app/HM/Hangman/eight.txt', eightL);
 readFile('public_html/app/HM/Hangman/twelve.txt', twelveL);
+
+
+
+
+
+app.get('/Hangman/winstreak/', function (req, res) {
+    console.log("here");
+    let retStr = ""
+    let num=1;
+    let h = hangman.find().sort({ currWinStreak:-1});
+    h.then((doc) => {
+        let num=1;
+        for(let i =0; i < doc.length;i++){
+            retStr+=num.toString()+": "+doc[i].user+" | Current Streak: "+doc[i]. currWinStreak.toString()+"\n";
+            num+=1;
+        }
+      //  retStr=JSON.stringify(doc)
+        res.end( retStr);
+    });
+});
+
+
+app.get('/Hangman/wins/', function (req, res) {
+    console.log("here");
+    let retStr = ""
+    let num=1;
+    let h = hangman.find().sort({  wins:-1});
+    h.then((doc) => {
+        let num=1;
+        for(let i =0; i < doc.length;i++){
+            retStr+=num.toString()+": "+doc[i].user+" | Wins: "+doc[i].wins.toString()+"\n";
+            num+=1;
+        }
+      //  retStr=JSON.stringify(doc)
+        res.end( retStr);
+    });
+});
+
+app.get('/Hangman/plays/', function (req, res) {
+    console.log("here");
+    let retStr = ""
+    let num=1;
+    let h = hangman.find().sort({  gamesPlayed:-1});
+    h.then((doc) => {
+        let num=1;
+        for(let i =0; i < doc.length;i++){
+            retStr+=num.toString()+": "+doc[i].user+" | NumPlays: "+doc[i].gamesPlayed.toString()+"\n";
+            num+=1;
+        }
+      //  retStr=JSON.stringify(doc)
+        res.end( retStr);
+    });
+});
 
 /**
  * This is a get request that sends back the randomly picked word of the list for
@@ -809,14 +916,14 @@ function isValid(row, col) {
 app.get('/boggle/highestScores/', function (req, res) {
     console.log("here");
     let retStr = ""
-    let num=0;
+    let num=1;
     let bGame = boggleData.find().sort({highScore:-1});
     bGame.then((doc) => {
-        let num=doc.length;
+        let num=1;
         for(let i =0; i < doc.length;i++){
             
             retStr+=num.toString()+": "+doc[i].user+"|Score: "+doc[i].highScore.toString()+"\n";
-            num-=1;
+            num+=1;
         }
         //JSON.stringify(doc)
         res.end( retStr);
@@ -826,14 +933,14 @@ app.get('/boggle/highestScores/', function (req, res) {
 app.get('/boggle/numPlays/', function (req, res) {
     console.log("here");
     let retStr = ""
-   
+   let num = 1;
     let bGame = boggleData.find().sort({numberOfPlays:-1});
     bGame.then((doc) => {
-        let num=doc.length;
+        let num=1;
         for(let i =0; i < doc.length;i++){
- 
-            retStr+=num.toString()+": "+doc[i].user+"|NumPlays: "+doc[i].numberOfPlays.toString()+"\n";
-            num-=1;
+            
+            retStr+=num.toString()+": "+doc[i].user+" | NumPlays: "+doc[i].numberOfPlays.toString()+"\n";
+            num+=1;
         }
         //JSON.stringify(doc)
         res.end( retStr);
@@ -847,6 +954,74 @@ app.get('/boggle/numPlays/', function (req, res) {
 
 
 // ---------------------------- TTT Server ----------------------------
+
+app.get('/TTT/numPlays/', function (req, res) {
+    console.log("here");
+    let retStr = ""
+    let num=1;
+    let TTTGame = TTTData.find().sort({numberPlays:-1});
+    TTTGame.then((doc) => {
+        let num=1;
+        for(let i =0; i < doc.length;i++){
+            retStr+=num.toString()+": "+doc[i].user+" | NumPlays: "+doc[i].numberPlays.toString()+"\n";
+            num+=1;
+        }
+      //  retStr=JSON.stringify(doc)
+        res.end( retStr);
+    });
+});
+
+app.get('/TTT/winstreak/', function (req, res) {
+    console.log("here");
+    let retStr = ""
+    let num=1;
+    let TTTGame = TTTData.find().sort({currentWinstreak:-1});
+    TTTGame.then((doc) => {
+        let num=1;
+        for(let i =0; i < doc.length;i++){
+            retStr+=num.toString()+": "+doc[i].user+" | Current Streak: "+doc[i].currentWinstreak.toString()+"\n";
+            num+=1;
+        }
+      //  retStr=JSON.stringify(doc)
+        res.end( retStr);
+    });
+});
+
+app.get('/TTT/scoreLeader/', function (req, res) {
+    console.log("here");
+    let retStr = ""
+    let num=1;
+    let TTTGame = TTTData.find().sort({score:-1});
+    TTTGame.then((doc) => {
+        let num=1;
+        for(let i =0; i < doc.length;i++){
+            retStr+=num.toString()+": "+doc[i].user+" | Current Score: "+doc[i].score.toString()+"\n";
+            num+=1;
+        }
+      //  retStr=JSON.stringify(doc)
+        res.end( retStr);
+    });
+});
+
+
+
+
+app.get('/TTT/highestScores/', function (req, res) {
+    console.log("here");
+    let retStr = ""
+    let num=1;
+    let TTTGame = TTTData.find().sort({highestScore:-1});
+    TTTGame.then((doc) => {
+        let num=1;
+        for(let i =0; i < doc.length;i++){
+            retStr+=num.toString()+": "+doc[i].user+"| High Score: "+doc[i].highestScore.toString()+"\n";
+            num+=1;
+        }
+      //  retStr=JSON.stringify(doc)
+        res.end( retStr);
+    });
+});
+
 
 
 app.post('/TTT/Loss/', function (req, res) {

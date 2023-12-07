@@ -1,3 +1,10 @@
+<!-- 
+    Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot, Noelle Stewart-Healey
+    
+    This file contains the html that supports the TTT game. containing the
+    score label, rules square, ttt board, and the new game button
+ -->
+
 <!DOCTYPE html>
 <html lang="en">
 <meta charset="UTF-8">
@@ -10,8 +17,11 @@
 <button onclick = "changeHTML()" id = "backButton">Back</button> 
         <h3 style=" text-align: center;">Welcome To Tic Tac Toe</h3>
        
+        <!-- label is the win/lose/tie label score is their current score -->
     <p id="label"></p>
     <p id="score">Score:0</p>
+    
+    <!-- the rule box -->
     <div id="rulesDiv">
 
         <p id="topP">hello and welcome to Tic Tac Toe!
@@ -36,6 +46,7 @@
         <p> Lose: -2 pts</p>
     </div>
     <div>
+        <!-- the ttt board if a square is pressed then it makes a turn there -->
         <table id="tableDiv">
             <tr>
                 <td class="spot" id="0" onclick="makeTurn()"></td>
@@ -53,6 +64,7 @@
                 <td class="spot" id="8" onclick="makeTurn()"></td>
             </tr>
         </table>
+        <!-- new game button -->
         <button id="newGame" onclick="newGame()">New Game!</button>
     </div>
     <script src="ttt.js"></script>

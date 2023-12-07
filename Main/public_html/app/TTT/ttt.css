@@ -1,3 +1,12 @@
+/* 
+    Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot, Noelle Stewart-Healey
+
+    This file has the css that makes the ttt.html look organized.
+    It gives it changes the background color, makes the board and the rules on the left
+    and right, makes the back button styled, has the main website header, and 
+    styles the new game and back button
+*/
+
 body {
     background-color: palevioletred;
     overflow-x: hidden;
@@ -37,6 +46,8 @@ h3{
    display:inline-block;
    margin-left:40%;
 margin-top:110px;
+
+/*square of the ttt board*/
 }
 td {
     width: 120px;
@@ -45,6 +56,7 @@ td {
     background-color: pink;
 }
 
+/*full ttt board*/
 table {
     text-align: center;
     font-family: monospace;
@@ -92,7 +104,8 @@ p {
     padding-left: 5px;
     padding-right: 5px;
 }
-
+/*
+*/
 #score{
     text-align: center;
     background-color: #FC6C85;

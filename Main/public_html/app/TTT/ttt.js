@@ -1,6 +1,10 @@
-// function makeTurn(){
-//     console.log("clicked");
-// }
+/**
+ * Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot, Noelle Stewart-Healey
+    this code supports the client side code for the TTT game. this makes the 
+    on event when the board it pressed, calls the server to update the board
+    and displays if a user won , lost , tied, or attemped a space that was
+    already taken
+ */
 
 var turn = 0;
 var player = 0;
@@ -23,6 +27,10 @@ var options = ["0", "1", "2", "3", "4", "5", "6", "7", "8"];
 function changeHTML() {
     window.location.href = "http://localHost/app/main.html"
 }
+
+/**
+ * this intial fetch gets the current users score and displays it 
+ */
 fetch('/get/curUsers/')
     .then((res) => {
         res.text()
@@ -44,6 +52,9 @@ fetch('/get/curUsers/')
             })
     });
 
+    /**
+     * this sets the ttt board to all blank , is called by newgame button
+     */
 function newGame() {
 
     document.getElementById("label").style.visibility = "hidden";
@@ -55,80 +66,53 @@ function newGame() {
     gameOver = false;
 }
 
-
+/**
+ * method makes a turn from the user, first it checks if the spot
+ * is empty , if not then it places the user x there, then makes the robot move
+ * then calls the methods to check if the game is over
+ * @param {} id  , the id of the square that was clicked
+ */
 function makeTurn(id) {
-    if (!gameOver) {
-        console.log('HERE');
-        console.log(id);
+    if (!gameOver) {// if game still going
+    
+     
         let space = document.getElementById(id);
         if (player == 0) {
-            console.log("player 0 turn");
+      
             console.log(space.innerText);
             if (space.innerText == "") {
                 document.getElementById("label").style.visibility = "hidden";
-                console.log("got here");
                 space.innerText = "X";
                 turn += 1;
-                if (gameWon(0) == true) {
-                    // console.log("HUMAN WON");
-                    // score += 5;
-                    // scoreLabel.innerText = "Score: " + score;
-                    // label.innerText = "YOU WON!";
-                    update("WIN");
-                    // document.getElementById("label").style.visibility = "visible";
+                if (gameWon(0) == true) {// if user won after move
+                    update("WIN");// update user score
                     gameOver = true;
                 }
-                else if (gameWon(1) == true) {
-                    // document.getElementById("label").style.visibility = "visible";
-                    // label.innerText = "YOU LOST!";
-                    // score -= 2;
-                    // scoreLabel.innerText = "Score: " + score;
-                    // console.log("ROBOT WON");
-                    update("LOSS");
+                else if (gameWon(1) == true) {// if robot won
+                    update("LOSS");// update user score
                     gameOver = true;
                 }
-                else if (tie() == true) {
-                    // document.getElementById("label").style.visibility = "visible";
-                    // label.innerText = "TIE GAME!";
-                    // score += 2;
-                    // scoreLabel.innerText = "Score: " + score;
-                    // console.log("TIE");
-                    update("TIE");
+                else if (tie() == true) {// if tie
+                    update("TIE");// update user score
                     gameOver = true;
                 }
-                else {
-                    //console.log("making robot move");
+                else {// making the robot move if user didnt win with their move
                     robotMove();
-                    if (gameWon(0) == true) {
-                        // document.getElementById("label").style.visibility = "visible";
-                        // score += 5;
-                        // scoreLabel.innerText = "Score: " + score;
-                        // label.innerText = "YOU WON!";
-                        // console.log("HUMAN WON");
-                        update("WIN");
+                    if (gameWon(0) == true) {// if user won 
+                        update("WIN");// update user score
                         gameOver = true;
                     }
-                    else if (gameWon(1) == true) {
-                        // document.getElementById("label").style.visibility = "visible";
-                        // score -= 2;
-                        // scoreLabel.innerText = "Score: " + score;
-                        // label.innerText = "YOU LOST!";
-                        // console.log("ROBOT WON");
-                        update("LOSS");
+                    else if (gameWon(1) == true) {// if robot won
+                        update("LOSS");// update user score
                         gameOver = true;
                     }
-                    else if (tie() == true) {
-                        // document.getElementById("label").style.visibility = "visible";
-                        // score += 2;
-                        // scoreLabel.innerText = "Score: " + score;
-                        // label.innerText = "TIE GAME!";
-                        // console.log("TIE");
-                        update("TIE");
+                    else if (tie() == true) {// if tie game
+                        update("TIE");// update user score
                         gameOver = true;
                     }
                 }
             } else {
-                if (gameOver == false) {
+                if (gameOver == false) {// if the user couldnt place there and game ongoing
                     label.innerText = "INVALID MOVE SPOT ALREADY TAKEN";
                     document.getElementById("label").style.visibility = "visible";
                 }
@@ -137,41 +121,44 @@ function makeTurn(id) {
     }
 }
 
+/**
+ * method updates the user score in the database and on the screen
+ * @param {*} status , "WIN","LOSS","TIE"
+ */
 function update(status) {
     document.getElementById("label").style.visibility = "visible";
-    if (status == "LOSS") {
-        fetch('/get/curUsers/')
+    if (status == "LOSS") {// if the user lost
+        fetch('/get/curUsers/')// get the current user
             .then((res) => {
                 res.text()
                     .then((res2) => {
-                        console.log(res2);
-                        fetch("/TTT/Loss/", {
+                        fetch("/TTT/Loss/", {// post that they lost
                             method: "POST",
                             body: JSON.stringify({ username: res2 }),
                             headers: { 'Content-Type': 'application/json' }
                         }).then((res) => {
                             return res.text();
-                        }).then((text) => {
-                            scoreLabel.innerText = "Score: " + text;
+                        }).then((text) => {// text is the users score
+                            scoreLabel.innerText = "Score: " + text;// putting score on screen
                             label.innerText = "YOU LOST!";
                         }).catch((err) => { console.log(err) });
                     })
             });
 
     }
-    if (status == "WIN") {
-        fetch('/get/curUsers/')
+    if (status == "WIN") {// if user won
+        fetch('/get/curUsers/')// getting the current user
             .then((res) => {
                 res.text()
                     .then((res2) => {
-                        console.log(res2);
-                        fetch("/TTT/Win/", {
+                        fetch("/TTT/Win/", {// posting that the user won
                             method: "POST",
                             body: JSON.stringify({ username: res2 }),
                             headers: { 'Content-Type': 'application/json' }
                         }).then((res) => {
                             return res.text();
                         }).then((text) => {
+                            // updating the score on screen
                             scoreLabel.innerText = "Score: " + text;
                             label.innerText = "YOU Won";
                         }).catch((err) => { console.log(err) });
@@ -179,19 +166,19 @@ function update(status) {
             });
 
     }
-    if (status == "TIE") {
-        fetch('/get/curUsers/')
+    if (status == "TIE") {// if the user tied
+        fetch('/get/curUsers/')// get the current user
             .then((res) => {
                 res.text()
                     .then((res2) => {
-                        console.log(res2);
-                        fetch("/TTT/Tie/", {
+                        fetch("/TTT/Tie/", {// post that they tied
                             method: "POST",
                             body: JSON.stringify({ username: res2 }),
                             headers: { 'Content-Type': 'application/json' }
                         }).then((res) => {
                             return res.text();
                         }).then((text) => {
+                            // set the score on the screen
                             scoreLabel.innerText = "Score: " + text;
                             label.innerText = "YOU TIED!";
                         }).catch((err) => { console.log(err) });
@@ -201,6 +188,10 @@ function update(status) {
     }
 }
 
+/**
+ * method to check if the user tied by checking if all spots are taken
+ * @returns true if they tied , false else
+ */
 function tie() {
     let spots = document.getElementsByClassName("spot");
     for (let i = 0; i < spots.length; i++) {
@@ -211,19 +202,24 @@ function tie() {
     return true;
 
 }
+/**
+ * checks if the game was won by the given player
+ * @param {} player , X if the user , O if the robot
+ * @returns true if player won , false else
+ */
 function gameWon(player) {
-    let symbol = "X";
-    if (player == 1) {
+    let symbol = "X";//preset to the user
+    if (player == 1) {// if the player is the robot then set so
         symbol = "O";
     }
 
-    if (checkDiagonal(symbol)) {
+    if (checkDiagonal(symbol)) {// check if player won diagonally
         return true;
     }
-    if (checkVertical(symbol)) {
+    if (checkVertical(symbol)) {// check if player won vertically
         return true;
     }
-    if (checkHorizontal(symbol)) {
+    if (checkHorizontal(symbol)) {// check if player won horizontally
         return true;
     }
 
@@ -231,6 +227,11 @@ function gameWon(player) {
 
 }
 
+/**
+ * method checks if the diagonals all contain the given symbol
+ * @param {} symbol , X or O
+ * @returns , true if the diagonals all contain the given symbol false else
+ */
 function checkDiagonal(symbol) {
 
     if (topLeft.innerText == symbol && middleMiddle.innerText == symbol && bottomRight.innerText == symbol) {
@@ -241,7 +242,11 @@ function checkDiagonal(symbol) {
     }
     return false;
 }
-
+/**
+ * method checks if any of the horizontals all contain the given symbol
+ * @param {} symbol , X or O
+ * @returns , true if any of the horizontals all contain the given symbol false else
+ */
 function checkHorizontal(symbol) {
     if (topLeft.innerText == symbol && topMiddle.innerText == symbol && topRight.innerText == symbol) {
         return true;
@@ -256,7 +261,11 @@ function checkHorizontal(symbol) {
     return false;
 }
 
-
+/**
+ * method checks if any of the Verticals all contain the given symbol
+ * @param {} symbol , X or O
+ * @returns , true if any of the Verticals all contain the given symbol false else
+ */
 function checkVertical(symbol) {
     if (topLeft.innerText == symbol && middleLeft.innerText == symbol && bottomLeft.innerText == symbol) {
         return true;
@@ -271,6 +280,9 @@ function checkVertical(symbol) {
     return false;
 }
 
+/**
+ * method makes a random robot move
+ */
 function robotMove() {
     let randomInt = Math.floor(Math.random() * 9)
     let move = document.getElementById(randomInt.toString());
@@ -289,6 +301,9 @@ function robotMove() {
     move.innerText = "O";
 }
 
+/**
+ * method makes all the spaces in the ttt board to have onclicks to make a move
+ */
 function updateButtons() {
     var buts = document.getElementsByClassName("spot");
     for (let i = 0; i < buts.length; i++) {
