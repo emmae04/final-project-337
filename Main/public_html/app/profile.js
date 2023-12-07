@@ -1,5 +1,6 @@
 /**
- * Author : Emma Elliott, 
+ *  Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot, Noelle Stewart-Healey
+
  * This javascript will create the functionality for
  * the profile page. It will allow the users to click
  * buttons to see infomation about their profile

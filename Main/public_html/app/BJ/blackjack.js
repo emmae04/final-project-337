@@ -1,4 +1,5 @@
-/** Author: Emma Elliott
+/** Authors: Arianna Velosa, Michelle Ramos-Hernandez, Emma Elliot, Noelle Stewart-Healey
+
  * This is the client side code for blackjack
  * GAME OVERVIEW
  * 1) the game will begin with the user pressing start 
