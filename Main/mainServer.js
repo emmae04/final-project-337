@@ -739,7 +739,9 @@ app.post('/new/loss/:name', (req, res) => {
 
 var allBoggleWords = [];
 
-
+/**
+ * takes the current dice tray and calls functions to make sure game is set up
+ */
 app.post('/diceTray/', function (req, res) {
     var correctBoggleWords = [];
     var diceTray = new Array(4);
@@ -755,6 +757,9 @@ app.post('/diceTray/', function (req, res) {
 });
 
 
+/**
+ * updates the schema for boggle
+ */
 app.post('/scoreBoggle', function (req, res) {
     console.log(req.body);
     let bGame = boggleData.find({ user: req.body.username }).exec();
@@ -771,7 +776,9 @@ app.post('/scoreBoggle', function (req, res) {
 });
 
 
-
+/**
+ * reads all the words in the words file and stores them in an array
+ */
 async function readAllWords() {
     data = await fs2.readFile('./words.txt', 'utf-8')
     allBoggleWords = data.split("\n");
@@ -781,6 +788,11 @@ async function readAllWords() {
 
 }
 
+/**
+ * finds all the correct words
+ * @param {} correctBoggleWords, teh boggle words found in the dicetray that were correct
+ * @param {*} diceTray, the current diceTray
+ */
 async function findAllCorrectWords(correctBoggleWords, diceTray) {
     for (let i = 0; i < allBoggleWords.length; i++) {
         let s = allBoggleWords[i];
