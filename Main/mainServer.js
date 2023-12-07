@@ -806,6 +806,19 @@ async function findAllCorrectWords(correctBoggleWords, diceTray) {
     }
 }
 
+
+/**
+ * helper function, looks for the word (attempt) that is passed in as the
+ * parameter in the diceTray, by using recursive backtracking. Following the
+ * rules of Boggle.
+ * 
+ * @param attempt, word that is being searched for in the diceTray.
+ * @param row,     row of the letter that is currently being looked at is on.
+ * @param col,     column of the letter that is currently being looked at is on.
+ * @param visited, 2D array organized to keep track of looked at letters and
+ *                 letters found that are in the word.
+ * @return true if the word was found, otherwise false.
+ */
 function found(attempt, diceTray) {
     if (attempt.length < 3) {
         return false;
@@ -828,6 +841,16 @@ function found(attempt, diceTray) {
     return false;
 }
 
+
+/**
+ * Searches for the word (attempt) in the diceTray, following the rules of
+ * Boggle
+ *
+ * @param attempt A word that may be in the DiceTray by connecting consecutive
+ *                letters.
+ * @return True if search is found in the DiceTray or false if not. You need not
+ *         check the dictionary now.
+ */
 function testFound(attempt, row, col, visited, diceTray) {
     let right, rightDown, down, leftDown, left, leftUp, up, rightUp;
     right = rightDown = down = leftDown = left = leftUp = up = rightUp = false;
@@ -930,11 +953,21 @@ function testFound(attempt, row, col, visited, diceTray) {
     return right || rightDown || down || leftDown || left || leftUp || up || rightUp;
 }
 
+/**
+ * check of the row, column given is in the dimensions of the diceTray.
+ * 
+ * @param row, row of the diceTray.
+ * @param col, column of the diceTray.
+ * @return true if the row/column is in the dimensions, otherwise false.
+ */
 function isValid(row, col) {
     return row >= 0 && col >= 0 && row < 4 && col < 4;
 }
 
 
+/**
+ * gets the highest score the user has for boggle
+ */
 app.get('/boggle/highestScores/', function (req, res) {
     console.log("here");
     let retStr = ""
@@ -947,11 +980,13 @@ app.get('/boggle/highestScores/', function (req, res) {
             retStr+=num.toString()+": "+doc[i].user+"|Score: "+doc[i].highScore.toString()+"\n";
             num+=1;
         }
-        //JSON.stringify(doc)
         res.end( retStr);
     });
 });
 
+/**
+ * gets the number of plays the user did
+ */
 app.get('/boggle/numPlays/', function (req, res) {
     console.log("here");
     let retStr = ""

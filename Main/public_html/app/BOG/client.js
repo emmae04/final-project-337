@@ -42,13 +42,13 @@ var username;
 
 // gets current user
 fetch('/get/curUsers/')
-.then((res) => {
-    res.text()
-    .then((res2) => {
-        username = res2;
-        console.log(res2);
-    })
-});
+    .then((res) => {
+        res.text()
+            .then((res2) => {
+                username = res2;
+                console.log(res2);
+            })
+    });
 
 /**
  * makes the displayed table to an array that can be used in the client
@@ -131,7 +131,7 @@ function timer() {
         // gets boggle score
         fetch(`/scoreBoggle`, {
             method: "POST",
-            body: JSON.stringify({score: points, username: username}),
+            body: JSON.stringify({ score: points, username: username }),
             headers: { 'Content-Type': 'application/json' }
         }).catch((err) => {
             console.log(err);
@@ -153,6 +153,11 @@ function timer() {
 async function updateScore() {
     document.getElementById("scoreLabel").innerHTML = "<h2> Score: " + points + "</h2>";
 }
+
+/**
+ * Constructs a random DiceTray object using a hard-coded 2D array of all the
+ * possible chars.
+ */
 function DiceTray() {
     const numbersArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
     const numbersArray2 = [0, 1, 2, 3, 4, 5];
@@ -166,7 +171,7 @@ function DiceTray() {
     console.log(pick2);
 
     let count = 0;
-
+    // sets up the current board with random letters
     for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 4; j++) {
             const val2 = Math.floor(Math.random() * 4);
@@ -179,12 +184,16 @@ function DiceTray() {
     }
 }
 
-
+/**
+ * checks if the user guess is valid, if so it will apear on there guesses board
+ */
 function userGuess() {
     document.getElementById("guessLabel").innerHTML = "";
+    // makes sure they have time to add
     if (gameStart == 1 && time != 0) {
         var userInput = document.getElementById("guess").value;
         userInput = userInput.toLowerCase();
+        // can't add duplicate words
         if (!userGuesses.includes(userInput)) {
             userGuesses.push(userInput);
             var tempDiv = "<div>" + userInput + "</div>";
@@ -193,14 +202,17 @@ function userGuess() {
                 addPoints(userInput);
                 updateScore();
             }
-        }else{
+        } else {
             document.getElementById("guessLabel").innerHTML = "Already Guessed";
         }
     }
     document.getElementById('guess').value = "";
 }
 
-
+/**
+ * adds points to user as necissary when they guess a correct word
+ * @param {} word 
+ */
 function addPoints(word) {
     var len = word.length;
     if (len == 3 || len == 4) {
