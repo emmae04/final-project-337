@@ -10,18 +10,39 @@ This is the css for the main blackjack page
     100% { opacity: 1; }
   }
 
+  
 body {
-    background-color: black;
+    background-color: #2b2727;
     background-repeat: no-repeat;
     background-size: 150vh;
     font-family: 'Casino', sans-serif;
-    font-size: 20px
+    font-size: 20px;
+    width: 100vw;
+    height: 90vw;
+}
+
+#content {
+    height: 90vh;
+    position:relative;
+    top: 25px;
+}
+
+#mane {
+    margin: 10px;
+}
+
+#header {
+    top: 15vh;
+    color: white;
+    background-color: blue;
+    border: 5px solid blue;
 }
 
 #player-2 {
     background-color: red;
     border: 2px dashed yellow;
     border-radius:75px;
+    width: 95vw;
     top: 0;
     text-align: center;
 }
@@ -71,14 +92,15 @@ body {
     border-radius: 75px;
     height: 60px;
     width: 85px;
-    background-color: green;
+    background-color: blue;
     top: 55vh;
+    color: white;
 }
 
 #P1Cards {
     position: absolute;
     display: inline;
-    top: 70vh;
+    top: 60vh;
     left: 10vw;
 }
 
