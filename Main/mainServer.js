@@ -422,7 +422,7 @@ app.get('/search/users/:keyword/', function (req, res) {
                 } else if (user.followers.includes(id)) {
                     temp.push({ user: user.username, stat: "FOLLOWING", id: user._id })
                 } else {
-                    temp.push({ user: user.username, stat: "", id: user._id })
+                    temp.push({ user: user.username, stat: "none", id: user._id })
                 }
 
             }

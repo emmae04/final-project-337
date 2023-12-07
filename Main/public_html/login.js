@@ -179,8 +179,9 @@ function searchFriends() {
             var tempDiv = `<div id="item"> <div>${name}</div>`;
             if (stat.startsWith("FOLLOWER")) {
               tempDiv = tempDiv + `<div>${stat} </div>`
-              // tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOW </button>`;
-            } else if (stat.startsWith("FOLLOWING")) {
+            } 
+            //tempDiv = tempDiv + `<div>${stat} </div>`
+            if (stat.startsWith("FOLLOWING")) {
               tempDiv = tempDiv + `<button class="buttons" id =${id}> UNFOLLOW </button>`;
             } else {
               tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOW </button>`;
