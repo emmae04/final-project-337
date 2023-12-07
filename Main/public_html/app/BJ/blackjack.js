@@ -308,7 +308,7 @@ function whosTheWinner() {
 // navigate back to home.
 function endGame() {
 	if (noPlayButton.innerText == "Go home") {
-		window.location.href = "start_blackjack.html";
+		window.location.href = "http://localhost/app/main.html";;
 	}
 	initValues()
 	txtbox.style.display = "inline"
@@ -433,5 +433,9 @@ function displayP2Cards() {
 	addCardVal(2, player2Cards[0]);
 	addCardVal(2, player2Cards[1]);
 
+}
+
+function back() {
+    window.location.href = "http://localhost/app/main.html";
 }
 
