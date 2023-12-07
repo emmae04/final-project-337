@@ -5,6 +5,7 @@
  */
 
 const fiveL = [];
+const words = [];
 const boxes = ["one", "two", "three", "four", "five", "six", "seve", "eight", "nine",
     "ten", "eleven", "twelve"];
 let guesses = 0;
@@ -89,8 +90,11 @@ function failed() {
     button.remove();
 
     var newDiv = document.createElement("div");
-    newDiv.innerHTML = "You Failed! Dare to play again?";
+    var playAgain = document.createElement("div");
+    newDiv.innerHTML = "You Failed! The word was " + answer + ".";
+    playAgain.innerHTML = "Dare to play again?";
     document.getElementById("input").appendChild(newDiv);
+    document.getElementById("input").appendChild(playAgain);
     tellServer("loss");
 }
 
@@ -151,10 +155,11 @@ function checkWord() {
         }
 
         // Check for no repeats
-        if (wrong.includes(word)) {
+        if (words.includes(word)) {
             window.alert("Already guessed!");
             return false;
         }
+        words.push(word);
 
         // Won
         if (letterCount == answer.length) {
@@ -187,10 +192,11 @@ function checkWord() {
         }
 
         // Check for no repeats
-        if (wrong.includes(word)) {
+        if (words.includes(word)) {
             window.alert("Already guessed!");
             return false;
         }
+        words.push(word);
 
         // Find spot
         for (let i = 0; i < answer.length; i++) {

@@ -143,6 +143,16 @@ function updateButtons() {
   }
 }
 
+var curUser;
+
+fetch('/get/curUsers/')
+  .then((res) => {
+    res.text()
+      .then((res2) => {
+        curUser = res2;
+      })
+  });
+
 
 function searchFriends() {
   let input = document.getElementById('searchFriend').value;
@@ -159,22 +169,25 @@ function searchFriends() {
         // gets all attibutes of the item
         for (let i = 0; i < parsed.length; i++) {
           // console.log(parsed[i]);
-          let name = parsed[i].user;
-          let id = parsed[i].id;
-          let stat = parsed[i].stat;
-          // console.log(parsed.length);
-          // console.log("name: " + name);
-          // updates the html to add the items on the sceen
-          var tempDiv = `<div id="item"> <div>${name}</div>`;
-          if (stat.startsWith("FOLLOWER")) {
-            tempDiv = tempDiv + `<div>${stat} </div>`
-          } else if (stat.startsWith("FOLLOWING")) {
-            tempDiv = tempDiv + `<button class="buttons" id =${id}> UNFOLLOW </button>`;
-          } else {
-            tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOW </button>`;
+          if (parsed[i].user != curUser) {
+            let name = parsed[i].user;
+            let id = parsed[i].id;
+            let stat = parsed[i].stat;
+            // console.log(parsed.length);
+            // console.log("name: " + name);
+            // updates the html to add the items on the sceen
+            var tempDiv = `<div id="item"> <div>${name}</div>`;
+            if (stat.startsWith("FOLLOWER")) {
+              tempDiv = tempDiv + `<div>${stat} </div>`
+              // tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOW </button>`;
+            } else if (stat.startsWith("FOLLOWING")) {
+              tempDiv = tempDiv + `<button class="buttons" id =${id}> UNFOLLOW </button>`;
+            } else {
+              tempDiv = tempDiv + `<button class="buttons" id =${id}> FOLLOW </button>`;
+            }
+            tempDiv = tempDiv + `<div> <button class="statsButton" onclick="changeToStat('${parsed[i].user}');"> SEE STATS </button></div> </div>`;
+            document.getElementById("searchResult").innerHTML += tempDiv;
           }
-          tempDiv = tempDiv + `<div> <button class="statsButton" onclick="changeToStat()"> SEE STATS </button></div> </div>`;
-          document.getElementById("searchResult").innerHTML += tempDiv;
         }
         updateButtons();
       })
@@ -182,33 +195,44 @@ function searchFriends() {
   }
 }
 
-var curUser;
-
-fetch('/get/curUsers/')
-  .then((res) => {
-    res.text()
-      .then((res2) => {
-        curUser = res2;
-      })
-  });
-
-function changeToStat() {
-  window.location.href = "http://localHost/app/stats.html";
+function changeToStat(user) {
+  window.location.href = `http://localHost/app/stats.html?key=${user}`;
 }
 
 function updateStatView() {
   document.getElementById('allInfo').value = "";
-
-  fetch(`/get/userSTATS/:${curUser}`)
+  let quory = new URLSearchParams(window.location.search);
+  fetch(`/get/userSTATS/${quory.get('key')}`)
     .then((res) => {
       return res.text();
     }).then((res2) => {
-      document.getElementById('allInfo').innerHTML = `<div> ${res2} </div>`;
       var p = JSON.parse(res2);
-      console.log("parsed");
+      console.log("parsed --------------------------------------------------");
       console.log(p);
-      console.log("normal");
-      console.log(res2);
+      var tempDiv = "";
+      for (let i = 0; i < p.length; i++) {
+        let usern = p[i].username;
+        let high = p[i].highScore;
+        let streak = p[i].currentWinStreak;
+        let gamePlays = p[i].gamesPlayed;
+        tempDiv = tempDiv + `<div id="currUserStat">`;
+        if (i == 0) {
+          tempDiv = tempDiv + `<div> ${usern} </div>`;
+        }
+        if (i == 0) {
+          tempDiv = tempDiv + `<div> HangMan </div>`;
+        } else if (i == 1) {
+          tempDiv = tempDiv + `<div> Boggle </div>`;
+        } else if (i == 2) {
+          tempDiv = tempDiv + `<div> BlackJack </div>`;
+        } else if (i == 3) {
+          tempDiv = tempDiv + `<div> Tic Tac Toe </div>`;
+        }
+        tempDiv = tempDiv + `<div> High Score: ${high} </div> <div> Current Win Streak: ${streak} </div> <div> Games Played: ${gamePlays} </div>`;
+      }
+      tempDiv = tempDiv + "</div>";
+      document.getElementById("allInfo").innerHTML += tempDiv;
+
     })
     .catch((err) => { console.log(err) });
 }
