@@ -56,7 +56,9 @@ function boggleHighest(){
     }).catch((err) => { console.log(err) });
 
 }
-
+function changeHTML() {
+    window.location.href = "http://localHost/app/main.html"
+}
 function boggleNum(){
     // '/boggle/highestScores/'
     fetch( '/boggle/numPlays/', {
